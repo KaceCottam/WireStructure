@@ -22,5 +22,3 @@ Dependencies
 ---
 - WxWidgets
 - Nim
-
-# TEST
