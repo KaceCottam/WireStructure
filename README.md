@@ -10,6 +10,7 @@ Wanted Features
 ---
 - Generate a grid of 'nodes'
 - GUI controls, as well as keyboard where it makes sense.
+- Panning and Zooming on 'board'
 - Toolbox for simple gates.
 - Simulate electric charge going through the circuit
 - Connect nodes on a column.
