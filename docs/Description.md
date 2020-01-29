@@ -22,4 +22,4 @@ Dependencies
 ---
 - WxWidgets
 - Nim
-
+- WxNim
