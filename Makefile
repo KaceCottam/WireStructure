@@ -1,4 +1,4 @@
-DOCS := $(sort $(wildcard docs/*.md))
+DOCS := $(sort $(wildcard docs/*-*.md))
 .PHONY: default
 default: README.md
 
