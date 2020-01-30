@@ -2,7 +2,7 @@
 
 version       = "0.1.0"
 author        = "Kace Cottam"
-description   = "A new awesome nimble package"
+description   = "This is a GUI application that allows for construction and simulation of circuits."
 license       = "MIT"
 srcDir        = "src"
 bin           = @["WireStructure"]
@@ -12,3 +12,4 @@ bin           = @["WireStructure"]
 # Dependencies
 
 requires "nim >= 1.0.4"
+requires "sdl2"

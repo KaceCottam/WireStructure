@@ -1,6 +1,11 @@
+DOCS := $(sort $(wildcard docs/*.md))
 .PHONY: default
 default: README.md
 
-README.md: docs/Description.md
+README.md: ${DOCS}
 	rm -f $@
-	cat $^ >> $@
+	for i in ${DOCS}; do \
+		echo "[$$i]($$i)" >> $@; \
+		cat $$i >> $@; \
+		echo "- - -" >> $@; \
+	done
