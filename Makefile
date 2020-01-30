@@ -7,5 +7,5 @@ README.md: ${DOCS}
 	for i in ${DOCS}; do \
 		echo "[$$i]($$i)" >> $@; \
 		cat $$i >> $@; \
-		echo "- - -" >> $@; \
+		echo "___" >> $@; \
 	done
