@@ -1,4 +1,4 @@
-[docs/1-Description.md](docs/1-Description.md) 
+[1-Description.md](docs/1-Description.md)  
 Description
 ===
 This is a GUI application that allows for construction and simulation of circuits using simple mouse and keyboard controls. The premise is that there is a grid of points, where wires can connect. The columns on these grids can be toggled to be parallel-- such as in a breadboard. Upon each grid 'node', a gate can be placed. Sub-Circuits will be supported eventually.
@@ -21,7 +21,7 @@ Dependencies
 - Nim
 - WxNim
 ___
-[docs/Grid.md](docs/Grid.md) 
+[Grid.md](docs/Grid.md)  
 Display
 ===
 
