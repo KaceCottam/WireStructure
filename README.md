@@ -21,3 +21,10 @@ Dependencies
 - Nim
 - WxNim
 ___
+[2-Technologies.md](docs/2-Technologies.md)  
+Technologies
+===
+
+I am using `SDL2` and `nim`.  SDL for graphics is simple, and
+[nim](https://nim-lang.org/) is a nice programming language.
+___
