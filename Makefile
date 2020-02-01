@@ -1,6 +1,13 @@
 DOCS := $(sort $(wildcard docs/*-*.md))
+SRCS := $(wildcard src/*.nim)
 .PHONY: default
-default: README.md
+default: build
+
+.PHONY: all
+all: build README.md
+
+build: ${SRCS}
+	nimble build
 
 README.md: ${DOCS}
 	rm -f $@
