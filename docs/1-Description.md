@@ -17,5 +17,4 @@ Wanted Features
 Dependencies
 ---
 - WxWidgets
-- Nim
-- WxNim
+- C++
