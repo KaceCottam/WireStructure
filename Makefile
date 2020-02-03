@@ -38,7 +38,7 @@ default: help
 setup-project: ## Sets up a project. Needs EXEC defined.
 
 .PHONY: all
-ifdef EXEC
+ifdef ${EXEC}
 all: ${EXEC_MAINS} ## Runs all targets
 
 setup-project:
@@ -105,7 +105,7 @@ tests: ${TEST_BINS} ## Compile all tests
 setup-project: setup-test-project
 
 .PHONY: setup-test-project
-ifdef EXEC
+ifdef ${EXEC}
 setup-test-project:
 else
 setup-test-project:
@@ -115,14 +115,12 @@ setup-test-project:
 	@echo "Making test files..."
 	@echo "#define CATCH_CONFIG_MAIN\n#include <catch.hpp>\nTEST_CASE(\"\") { REQUIRE(true); }" \
 		> ${TESTDIR}/${EXEC}-test.cxx
-	@mkdir -pv ${SRCDIR}
-	@touch ${SRCDIR}/${EXEC}-test.cpp ${SRCDIR}/${EXEC}-test.hpp
 	@echo "...Done"
 endif
 
 all: tests
 
-${INCDIR}/catch.hpp: ## Download Catch2 Library
+${INCDIR}/catch/catch.hpp: ## Download Catch2 Library
 	@echo "Installing catch2 library to $@..."
 	@mkdir -pv ${INCDIR}/catch/
 	@curl -o $@ "https://raw.githubusercontent.com/catchorg/Catch2/v2.10.2/single_include/catch2/catch.hpp" \
