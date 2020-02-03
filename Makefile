@@ -71,13 +71,13 @@ ${OBJDIR}/%.o: ${SRCDIR}/%.cpp
 	@mkdir -pv ${OBJDIR}
 	${CXX} ${CXXFLAGS} ${COMPILE_ARGS} -c -o $@ $<
 
-${BINDIR}/%: ${OBJS} ${HEADS} ${SRCDIR}/%.cxx
+${BINDIR}/%: ${SRCDIR}/%.cxx ${OBJS} ${HEADS}
 	@mkdir -pv ${BINDIR}
-	${CXX} ${CXXFLAGS} ${LINKING_ARGS} -o $@ $(filter-out %.hxx, $(filter-out %.hpp, $^))
+	${CXX} ${CXXFLAGS} ${LINKING_ARGS} -o $@ $(filter-out $(wildcard %.{h,hpp,hxx}), $^)
 
 ${BINDIR}/${EXEC}: ${OBJS} ${HEADS}
 	@mkdir -pv ${BINDIR}
-	${CXX} ${CXXFLAGS} ${LINKING_ARGS} -o $@ $(filter-out %.hxx, $(filter-out %.hpp, $^))
+	${CXX} ${CXXFLAGS} ${LINKING_ARGS} -o $@ $(filter-out $(wildcard %.{h,hpp,hxx}), $^)
 
 .PHONY: DEBUG_MAKE
 DEBUG_MAKE: ## Allows for debugging of makefile
@@ -105,18 +105,14 @@ tests: ${TEST_BINS} ## Compile all tests
 setup-project: setup-test-project
 
 .PHONY: setup-test-project
-ifdef ${EXEC}
-setup-test-project:
-else
 setup-test-project:
 	@echo "Making test directory..."
 	@mkdir -pv ${TESTDIR}
 	@echo "...Done"
 	@echo "Making test files..."
-	@echo "#define CATCH_CONFIG_MAIN\n#include <catch.hpp>\nTEST_CASE(\"\") { REQUIRE(true); }" \
-		> ${TESTDIR}/${EXEC}-test.cxx
+	@echo "//PRECOMPILED HEADER FOR CATCH\n#define CATCH_CONFIG_MAIN\n#include <catch.hpp>" \
+		> ${TESTDIR}/test.h
 	@echo "...Done"
-endif
 
 all: tests
 
@@ -126,6 +122,10 @@ ${INCDIR}/catch/catch.hpp: ## Download Catch2 Library
 	@curl -o $@ "https://raw.githubusercontent.com/catchorg/Catch2/v2.10.2/single_include/catch2/catch.hpp" \
         1>/dev/null 3>/dev/null
 	@echo "...Done"
+
+${TESTDIR}/test.h.pch: ${INCDIR}/catch/catch.hpp
+	@mkdir -pv ${TEST_BINDIR}
+	${CXX} ${CXXFLAGS} ${COMPILE_ARGS} ${TEST_INCLUDES} -o $@ $^
 
 ${TEST_BINDIR}/%: ${TESTDIR}/%.cxx ${SRCDIR}/%.hpp ${OBJDIR}/%.o ${INCDIR}/catch.hpp
 	@mkdir -pv ${TEST_BINDIR}
