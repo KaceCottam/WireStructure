@@ -58,6 +58,10 @@ setup-project:
 	@echo "...Done"
 endif
 
+define filter-hpp
+$(filter-out %.h, $(filter-out %.hpp, $(filter-out %.hxx, ${1})))
+endef
+
 .PHONY: help
 help: ## Prints usage instructions
 	@echo "usage: make [target] ... [<optional argument>=<value> ...]"
@@ -73,11 +77,7 @@ ${OBJDIR}/%.o: ${SRCDIR}/%.cpp
 
 ${BINDIR}/%: ${SRCDIR}/%.cxx ${OBJS} ${HEADS}
 	@mkdir -pv ${BINDIR}
-	${CXX} ${CXXFLAGS} ${LINKING_ARGS} -o $@ $(filter-out $(wildcard %.{h,hpp,hxx}), $^)
-
-${BINDIR}/${EXEC}: ${OBJS} ${HEADS}
-	@mkdir -pv ${BINDIR}
-	${CXX} ${CXXFLAGS} ${LINKING_ARGS} -o $@ $(filter-out $(wildcard %.{h,hpp,hxx}), $^)
+	${CXX} ${CXXFLAGS} ${LINKING_ARGS} -o $@ $(call filter-hpp, $^)
 
 .PHONY: DEBUG_MAKE
 DEBUG_MAKE: ## Allows for debugging of makefile
@@ -96,7 +96,7 @@ TESTDIR       := tests
 TEST_SRCS     := $(wildcard ${TESTDIR}/*.cpp)
 TEST_SRCS     += $(wildcard ${TESTDIR}/*.cxx)
 TEST_BINDIR   := ${BINDIR}/${TESTDIR}## Where test binaries are placed
-TEST_INCLUDES := -I${INCDIR}## Extra includes for tests
+TEST_INCLUDES := -I${INCDIR} -I${SRCDIR}## Extra includes for tests
 TEST_BINS     := ${TEST_SRCS:${TESTDIR}/%.cxx=${TEST_BINDIR}/%}
 
 .PHONY: tests
@@ -116,20 +116,20 @@ setup-test-project:
 
 all: tests
 
-${INCDIR}/catch/catch.hpp: ## Download Catch2 Library
+${INCDIR}/catch.hpp: ## Download Catch2 Library
 	@echo "Installing catch2 library to $@..."
-	@mkdir -pv ${INCDIR}/catch/
+	@mkdir -pv ${INCDIR}/
 	@curl -o $@ "https://raw.githubusercontent.com/catchorg/Catch2/v2.10.2/single_include/catch2/catch.hpp" \
         1>/dev/null 3>/dev/null
 	@echo "...Done"
 
-${TESTDIR}/test.h.pch: ${INCDIR}/catch/catch.hpp
+${TESTDIR}/test.h.pch: ${INCDIR}/catch.hpp
 	@mkdir -pv ${TEST_BINDIR}
 	${CXX} ${CXXFLAGS} ${COMPILE_ARGS} ${TEST_INCLUDES} -o $@ $^
 
-${TEST_BINDIR}/%: ${TESTDIR}/%.cxx ${SRCDIR}/%.hpp ${OBJDIR}/%.o ${INCDIR}/catch.hpp
+${TEST_BINDIR}/%: ${TESTDIR}/%.cxx ${SRCDIR}/%.h ${OBJDIR}/%.o ${INCDIR}/catch.hpp
 	@mkdir -pv ${TEST_BINDIR}
-	${CXX} ${CXXFLAGS} ${COMPILE_ARGS} ${TEST_INCLUDES} -o $@ $(filter-out %.hxx, $(filter-out %.hpp, $^))
+	${CXX} ${CXXFLAGS} ${COMPILE_ARGS} ${TEST_INCLUDES} -o $@ $(call filter-hpp, $^)
 
 # ---------- Documentation ----------------- #
 DOCS := $(sort $(wildcard docs/*-*.md))
