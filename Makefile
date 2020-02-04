@@ -123,11 +123,11 @@ ${INCDIR}/catch.hpp: ## Download Catch2 Library
         1>/dev/null 3>/dev/null
 	@echo "...Done"
 
-${TESTDIR}/test.h.pch: ${INCDIR}/catch.hpp
-	@mkdir -pv ${TEST_BINDIR}
-	${CXX} ${CXXFLAGS} ${COMPILE_ARGS} ${TEST_INCLUDES} -o $@ $^
+${OBJDIR}/test.o: ${TESTDIR}/test.cpp ${INCDIR}/catch.hpp
+	@mkdir -pv ${OBJDIR}
+	${CXX} ${CXXFLAGS} ${COMPILE_ARGS} ${TEST_INCLUDES} -c -o $@ $<
 
-${TEST_BINDIR}/%: ${TESTDIR}/%.cxx ${SRCDIR}/%.h ${OBJDIR}/%.o ${INCDIR}/catch.hpp
+${TEST_BINDIR}/%: ${TESTDIR}/%.cxx ${SRCDIR}/%.h ${OBJDIR}/%.o ${OBJDIR}/test.o
 	@mkdir -pv ${TEST_BINDIR}
 	${CXX} ${CXXFLAGS} ${COMPILE_ARGS} ${TEST_INCLUDES} -o $@ $(call filter-hpp, $^)
 
