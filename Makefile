@@ -105,7 +105,7 @@ tests: ${TEST_BINS} ## Compile all tests
 .PHONY: run-tests
 run-tests: tests
 	for i in ${TEST_BINDIR}/*; do \
-		echo "$$i" && $$i; \
+		echo "$$i" && $$i --reporter compact; \
 	 	if [ $$? != 0 ]; then \
 			exit $$?; \
 		fi; \
