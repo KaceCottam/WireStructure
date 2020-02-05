@@ -1,9 +1,17 @@
 #ifndef VEC2D_H
 #define VEC2D_H
+#include <cassert>
+#include <vector>
 struct Vec2D
 {
-  Vec2D(int x = 0, int y = 0)
-      : x{x} , y{y} { }
+  Vec2D(const int x = 0, const int y = 0)
+      : x{x} , y{y} {}
+
+  Vec2D(const int values[2])
+      : Vec2D{values[0], values[1]} { assert(values != nullptr); }
+
+  Vec2D(const std::vector<int>& values)
+      : Vec2D{values[0], values[1]} { assert(values.size() == 2); }
 
   int x, y;
 
