@@ -1,13 +1,12 @@
 #ifndef VEC2D_H
 #define VEC2D_H
 #include <cassert>
-#include <array>
 struct Vec2D
 {
   Vec2D(const int x = 0, const int y = 0)
       : x{x} , y{y} {}
 
-  template<class Container = std::array<int, 2>>
+  template<class Container>
   Vec2D(Container&& values)
       : Vec2D{values[0], values[1]} {}
 
