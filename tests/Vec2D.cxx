@@ -7,22 +7,14 @@ TEST_CASE("Vec2D can be created") {
   int y = GENERATE(123456789,87654334568,6432432,2141325,75,-123512,-32143214);
 
   SECTION("Using a pair of points") {
-    Vec2D position = Vec2D(x,y);
-    REQUIRE(position.x == x);
-    REQUIRE(position.y == y);
+    auto vec = Vec2D(x,y);
+    REQUIRE(vec.x == x);
+    REQUIRE(vec.y == y);
   }
-  SECTION("Using a std vector") {
-    Vec2D position = Vec2D(std::vector(x, y));
-    REQUIRE(position.x == x);
-    REQUIRE(position.y == y);
-  }
-  SECTION("Using a size 2 array") {
-    int array[2];
-    array[0] = x;
-    array[1] = y;
-    Vec2D position = Vec2D(array);
-    REQUIRE(position.x == x);
-    REQUIRE(position.y == y);
+  SECTION("Using an initializer list") {
+    auto vec = Vec2D({x,y});
+    REQUIRE(vec.x == x);
+    REQUIRE(vec.y == y);
   }
 }
 TEST_CASE("Vec2D can be compared") {
