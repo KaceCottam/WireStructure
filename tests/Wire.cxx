@@ -38,8 +38,8 @@ TEST_CASE("Wires can be connected if they are adjacent") {
   REQUIRE(wire2.se == nullptr);
 }
 TEST_CASE("Wires cannot be connected if they are not adjacent") {
-  Wire wire1 = Wire({-1,0});
-  Wire wire2 = Wire({1,0});
+  Wire wire1 = Wire({0,-1});
+  Wire wire2 = Wire({0, 1});
   auto valid = connect(wire1, wire2);
   REQUIRE(valid == false);
   REQUIRE(wire1.nw == nullptr);
@@ -58,4 +58,39 @@ TEST_CASE("Wires cannot be connected if they are not adjacent") {
   REQUIRE(wire2.sw == nullptr);
   REQUIRE(wire2.s  == nullptr);
   REQUIRE(wire2.se == nullptr);
+}
+TEST_CASE("Functions can be dispatched through wires") {
+  Wire wire1 = Wire({0,0});
+  Wire wire2 = Wire({0,1});
+  auto valid1 = connect(wire1, wire2);
+  REQUIRE(valid1 == true);
+  REQUIRE(wire1.powered == false);
+  REQUIRE(wire2.powered == false);
+  powerOn(wire1);
+  REQUIRE(wire1.powered == true);
+  REQUIRE(wire2.powered == true);
+  powerOff(wire1);
+  REQUIRE(wire1.powered == false);
+  REQUIRE(wire2.powered == false);
+  powerToggle(wire1);
+  REQUIRE(wire1.powered == true);
+  REQUIRE(wire2.powered == true);
+  powerOn(wire2);
+  REQUIRE(wire1.powered == true);
+  REQUIRE(wire2.powered == true);
+  powerOff(wire2);
+  REQUIRE(wire1.powered == false);
+  REQUIRE(wire2.powered == false);
+  powerToggle(wire2);
+  REQUIRE(wire1.powered == true);
+  REQUIRE(wire2.powered == true);
+
+  Wire wire3 = Wire({1, 0});
+  auto valid2 = connect(wire1, wire3);
+  REQUIRE(valid2 == true);
+  REQUIRE(wire3.powered == true);
+  powerOff(wire3);
+  REQUIRE(wire1.powered == false);
+  REQUIRE(wire2.powered == false);
+  REQUIRE(wire3.powered == false);
 }

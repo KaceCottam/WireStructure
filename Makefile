@@ -123,7 +123,7 @@ setup-test-project:
 		> ${TESTDIR}/test.h
 	@echo "...Done"
 
-all: tests
+all: run-tests
 
 ${INCDIR}/catch.hpp: ## Download Catch2 Library
 	@echo "Installing catch2 library to $@..."
@@ -136,7 +136,7 @@ ${OBJDIR}/test.o: ${TESTDIR}/test.cpp ${INCDIR}/catch.hpp
 	@mkdir -pv ${OBJDIR}
 	${CXX} ${CXXFLAGS} ${COMPILE_ARGS} ${TEST_INCLUDES} -c -o $@ $<
 
-${TEST_BINDIR}/%: ${TESTDIR}/%.cxx ${SRCDIR}/%.h ${OBJDIR}/%.o ${OBJDIR}/test.o
+${TEST_BINDIR}/%: ${TESTDIR}/%.cxx ${SRCDIR}/%.h ${OBJDIR}/test.o
 	@mkdir -pv ${TEST_BINDIR}
 	${CXX} ${CXXFLAGS} ${COMPILE_ARGS} ${TEST_INCLUDES} -o $@ $(call filter-hpp, $^)
 

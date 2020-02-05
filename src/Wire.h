@@ -1,6 +1,5 @@
 #ifndef WIRE_HPP
 #define WIRE_HPP
-#include <stdexcept>
 
 #include "Vec2D.h"
 
@@ -38,7 +37,7 @@ class Wire
 
   [[nodiscard]] friend isSuccessful connect(Wire& a, Wire& b) {
     auto relative_pos = b.pos - a.pos;
-    if(abs(relative_pos) <= Vec2D{1,1}) {
+    if(abs(relative_pos) <= Vec2D{1,1} && relative_pos != Vec2D{0,0}) {
       /**/ if(relative_pos == Vec2D{-1,  1}) {a.nw = &b; b.se = &a;}
       else if(relative_pos == Vec2D{ 0,  1}) {a.n  = &b; b.s  = &a;}
       else if(relative_pos == Vec2D{ 1,  1}) {a.ne = &b; b.sw = &a;}
@@ -47,7 +46,8 @@ class Wire
       else if(relative_pos == Vec2D{-1, -1}) {a.sw = &b; b.ne = &a;}
       else if(relative_pos == Vec2D{ 0, -1}) {a.s  = &b; b.n  = &a;}
       else if(relative_pos == Vec2D{ 1, -1}) {a.se = &b; b.nw = &a;}
-      else return false;
+      if(a.powered) b.powered = true;
+      if(b.powered) a.powered = true;
     } else return false;
     return true;
   }

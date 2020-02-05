@@ -25,7 +25,7 @@ TEST_CASE("Vec2D can be created")
 TEST_CASE("Vec2D can be compared")
 {
   auto  bigger  = GENERATE(chunk(2, values({1000, 1001, 1002, 1003})));
-  auto  smaller = GENERATE(chunk(2, values({-1000, -1001, -1002, -1003})));
+  auto  smaller = GENERATE(chunk(2, values({10, 11, 12, 13})));
   Vec2D v1      = Vec2D(bigger);
   Vec2D v2      = Vec2D(smaller);
 
@@ -33,9 +33,14 @@ TEST_CASE("Vec2D can be compared")
   REQUIRE(v1 >= v2);
   REQUIRE(v2 < v1);
   REQUIRE(v2 <= v1);
+  REQUIRE(v1 != v2);
   REQUIRE(v2 != v1);
   REQUIRE(v1 == v1);
+  REQUIRE(v1 <= v1);
+  REQUIRE(v1 >= v1);
   REQUIRE(v2 == v2);
+  REQUIRE(v2 <= v2);
+  REQUIRE(v2 >= v2);
 }
 TEST_CASE("Vec2D can be operated upon mathematically")
 {
