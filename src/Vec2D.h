@@ -3,17 +3,10 @@
 #include <cassert>
 struct Vec2D
 {
-  Vec2D(const int x = 0, const int y = 0)
-      : x{x}
-      , y{y}
-  {
-  }
+  Vec2D(const int x = 0, const int y = 0) : x{x} , y{y} { }
 
   template<class Container>
-  Vec2D(Container&& values)
-      : Vec2D{values[0], values[1]}
-  {
-  }
+  Vec2D(Container&& values) : Vec2D{values[0], values[1]} { }
 
   int x, y;
 
@@ -40,11 +33,11 @@ struct Vec2D
   }
   [[nodiscard]] friend bool operator<(const Vec2D& a, const Vec2D& b) noexcept
   {
-    return a.x < b.x && a.y < b.y;
+    return a.x < b.x || a.y < b.y;
   }
   [[nodiscard]] friend bool operator>(const Vec2D& a, const Vec2D& b) noexcept
   {
-    return a.x > b.x && a.y > b.y;
+    return a.x > b.x || a.y > b.y;
   }
   [[nodiscard]] friend bool operator<=(const Vec2D& a, const Vec2D& b) noexcept
   {
