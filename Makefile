@@ -102,6 +102,15 @@ TEST_BINS     := ${TEST_SRCS:${TESTDIR}/%.cxx=${TEST_BINDIR}/%}
 .PHONY: tests
 tests: ${TEST_BINS} ## Compile all tests
 
+.PHONY: run-tests
+run-tests: tests
+	for i in ${TEST_BINDIR}/*; do \
+		echo "$$i" && $$i; \
+	 	if [ $$? != 0 ]; then \
+			exit $$?; \
+		fi; \
+	done
+
 setup-project: setup-test-project
 
 .PHONY: setup-test-project
