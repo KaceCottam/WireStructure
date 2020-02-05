@@ -2,21 +2,14 @@
 #define WIRE_HPP
 #include <stdexcept>
 
-#include "Position.h"
-struct InvalidConnectionException : std::logic_error
-{
-} class Wire
+#include "Vec2D.h"
+
+class Wire
 {
  public:
-  union
-  {
-    Position connected[7];
-    struct
-    {
-      Position nw, n, ne, w, e, sw, s, se;
-    };
-  };
-  Position pos;
+  // Connections
+  Vec2D nw, n, ne, w, e, sw, s, se;
+  Vec2D pos;
 
  private:
 };
