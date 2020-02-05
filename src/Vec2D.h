@@ -4,11 +4,16 @@
 struct Vec2D
 {
   Vec2D(const int x = 0, const int y = 0)
-      : x{x} , y{y} {}
+      : x{x}
+      , y{y}
+  {
+  }
 
   template<class Container>
   Vec2D(Container&& values)
-      : Vec2D{values[0], values[1]} {}
+      : Vec2D{values[0], values[1]}
+  {
+  }
 
   int x, y;
 

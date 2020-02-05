@@ -1,4 +1,2 @@
 #include <catch.hpp>
-TEST_CASE("Hi") {
-  REQUIRE(true);
-}
+TEST_CASE("Hi") { REQUIRE(true); }
