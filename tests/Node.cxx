@@ -8,7 +8,7 @@ TEST_CASE("Nodes can be created") {
     Node node = Node();
 
     REQUIRE(node.pos == Vec2D{0,0});
-    REQUIRE(node.powered == false);
+    REQUIRE(node.powered() == false);
     REQUIRE(node.nw == nullptr);
     REQUIRE(node.n  == nullptr);
     REQUIRE(node.ne == nullptr);
@@ -23,7 +23,7 @@ TEST_CASE("Nodes can be created") {
     Node node = Node({0,0});
 
     REQUIRE(node.pos == Vec2D{0,0});
-    REQUIRE(node.powered == false);
+    REQUIRE(node.powered() == false);
     REQUIRE(node.nw == nullptr);
     REQUIRE(node.n  == nullptr);
     REQUIRE(node.ne == nullptr);
@@ -41,7 +41,7 @@ TEST_CASE("Nodes can be connected if they are adjacent") {
 
   REQUIRE(valid == true);
   REQUIRE(node1.pos == Vec2D{0,0});
-  REQUIRE(node1.powered == false);
+  REQUIRE(node1.powered() == false);
   REQUIRE(node1.nw == nullptr);
   REQUIRE(node1.n  == &node2);
   REQUIRE(node1.ne == nullptr);
@@ -52,7 +52,7 @@ TEST_CASE("Nodes can be connected if they are adjacent") {
   REQUIRE(node1.se == nullptr);
 
   REQUIRE(node2.pos == Vec2D{0,1});
-  REQUIRE(node2.powered == false);
+  REQUIRE(node2.powered() == false);
   REQUIRE(node2.nw == nullptr);
   REQUIRE(node2.n  == nullptr);
   REQUIRE(node2.ne == nullptr);
@@ -144,7 +144,7 @@ TEST_CASE("Nodes cannot be connected if they are not adjacent") {
 
   REQUIRE(valid == false);
   REQUIRE(node1.pos == Vec2D{0,-1});
-  REQUIRE(node1.powered == false);
+  REQUIRE(node1.powered() == false);
   REQUIRE(node1.nw == nullptr);
   REQUIRE(node1.n  == nullptr);
   REQUIRE(node1.ne == nullptr);
@@ -155,7 +155,7 @@ TEST_CASE("Nodes cannot be connected if they are not adjacent") {
   REQUIRE(node1.se == nullptr);
 
   REQUIRE(node2.pos == Vec2D{0, 1});
-  REQUIRE(node2.powered == false);
+  REQUIRE(node2.powered() == false);
   REQUIRE(node2.nw == nullptr);
   REQUIRE(node2.n  == nullptr);
   REQUIRE(node2.ne == nullptr);
@@ -169,74 +169,74 @@ TEST_CASE("Functions can be dispatched through connected wires") {
   Node node1 = Node({0,0});
   Node node2 = Node({0,1});
   Node node3 = Node({1,0});
-  auto togglePower = [](auto& n){n.powered = !n.powered;};
+  //auto togglePower = [](auto& n){n.powered() = !n.powered;};
 
-  REQUIRE(node1.powered == false);
-  node1.dispatch(togglePower);
-  REQUIRE(node1.powered == true);
-  node1.dispatch(togglePower);
-  REQUIRE(node1.powered == false);
+  REQUIRE(node1.powered() == false);
+  //node1.dispatch(togglePower);
+  REQUIRE(node1.powered() == true);
+  //node1.dispatch(togglePower);
+  REQUIRE(node1.powered() == false);
 
   auto valid1 = connect(node1, node2);
   REQUIRE(valid1 == true);
-  REQUIRE(node1.powered == false);
-  REQUIRE(node2.powered == false);
+  REQUIRE(node1.powered() == false);
+  REQUIRE(node2.powered() == false);
 
-  node1.dispatch(togglePower); // dispatch from node1
-  REQUIRE(node1.powered == true);
-  REQUIRE(node2.powered == true);
+  //node1.dispatch(togglePower); // dispatch from node1
+  REQUIRE(node1.powered() == true);
+  REQUIRE(node2.powered() == true);
 
-  node2.dispatch(togglePower); // dispatch from node2
-  REQUIRE(node1.powered == false);
-  REQUIRE(node2.powered == false);
+  //node2.dispatch(togglePower); // dispatch from node2
+  REQUIRE(node1.powered() == false);
+  REQUIRE(node2.powered() == false);
 
   auto valid2 = connect(node1, node3);
   REQUIRE(valid2 == true);
-  node3.dispatch(togglePower);
-  REQUIRE(node1.powered == true);
-  REQUIRE(node2.powered == true);
-  REQUIRE(node3.powered == true);
+  //node3.dispatch(togglePower);
+  REQUIRE(node1.powered() == true);
+  REQUIRE(node2.powered() == true);
+  REQUIRE(node3.powered() == true);
 
-  node2.dispatch(togglePower);
-  REQUIRE(node1.powered == false);
-  REQUIRE(node2.powered == false);
-  REQUIRE(node3.powered == false);
+  //node2.dispatch(togglePower);
+  REQUIRE(node1.powered() == false);
+  REQUIRE(node2.powered() == false);
+  REQUIRE(node3.powered() == false);
 
   SECTION("Testing circular connections") {
     auto valid3 = connect(node2, node3);
     REQUIRE(valid3 == true);
 
-    REQUIRE(node1.powered == false);
-    REQUIRE(node2.powered == false);
-    REQUIRE(node3.powered == false);
-    node1.dispatch(togglePower);
-    REQUIRE(node1.powered == true);
-    REQUIRE(node2.powered == true);
-    REQUIRE(node3.powered == true);
+    REQUIRE(node1.powered() == false);
+    REQUIRE(node2.powered() == false);
+    REQUIRE(node3.powered() == false);
+    //node1.dispatch(togglePower);
+    REQUIRE(node1.powered() == true);
+    REQUIRE(node2.powered() == true);
+    REQUIRE(node3.powered() == true);
 
-    node2.dispatch(togglePower);
-    REQUIRE(node1.powered == false);
-    REQUIRE(node2.powered == false);
-    REQUIRE(node3.powered == false);
+    //node2.dispatch(togglePower);
+    REQUIRE(node1.powered() == false);
+    REQUIRE(node2.powered() == false);
+    REQUIRE(node3.powered() == false);
 
-    node3.dispatch(togglePower);
-    REQUIRE(node1.powered == true);
-    REQUIRE(node2.powered == true);
-    REQUIRE(node3.powered == true);
+    //node3.dispatch(togglePower);
+    REQUIRE(node1.powered() == true);
+    REQUIRE(node2.powered() == true);
+    REQUIRE(node3.powered() == true);
   }
 }
-TEST_CASE("Wires that are connected to powered wires automatically become powered") {
+TEST_CASE("Wires that are connected to powered() wires automatically become powered") {
   Node node1 = Node({0,0});
   Node node2 = Node({0,1});
 
-  node1.dispatch([](auto& n){n.powered = true;});
-  REQUIRE(node1.powered == true);
-  REQUIRE(node2.powered == false);
+  //node1.dispatch([](auto& n){n.powered() = true;});
+  REQUIRE(node1.powered() == true);
+  REQUIRE(node2.powered() == false);
 
   auto valid = connect(node1, node2);
   REQUIRE(valid == true);
-  REQUIRE(node1.powered == true);
-  REQUIRE(node2.powered == true);
+  REQUIRE(node1.powered() == true);
+  REQUIRE(node2.powered() == true);
 
   SECTION("This connection is dispatched") {
     Node node3 = Node({1,0});
@@ -247,20 +247,20 @@ TEST_CASE("Wires that are connected to powered wires automatically become powere
 
     auto valid2 = connect(node1, node3);
     REQUIRE(valid2 == true);
-    REQUIRE(node3.powered == true);
-    REQUIRE(node4.powered == true);
+    REQUIRE(node3.powered() == true);
+    REQUIRE(node4.powered() == true);
   }
 }
-//TEST_CASE("Wires that are disconnected from powered wires automatically become unpowered (if there is not another source of power)") {
+//TEST_CASE("Wires that are disconnected from powered() wires automatically become unpowered (if there is not another source of power)") {
   //Node node1 = Node({0,0});
   //Node node2 = Node({0,1});
   //auto valid1 = connect(node1, node2);
   //REQUIRE(valid1 == true);
 
-  //node1.dispatch([](auto& n){n.powered = true;});
-  //REQUIRE(node1.powered == true);
-  //REQUIRE(node2.powered == true);
+  //node1.dispatch([](auto& n){n.powered() = true;});
+  //REQUIRE(node1.powered() == true);
+  //REQUIRE(node2.powered() == true);
 
-  //REQUIRE(node1.powered == true);
-  //REQUIRE(node2.powered == true);
+  //REQUIRE(node1.powered() == true);
+  //REQUIRE(node2.powered() == true);
 //}

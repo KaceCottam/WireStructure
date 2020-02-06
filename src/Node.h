@@ -36,14 +36,25 @@ class Node
            sw{nullptr}, s{nullptr}, se{nullptr};
 
   Vec2D pos;
-  bool powered{false};
+
+  // reformat into recursive function
+  [[nodiscard]] virtual bool powered() {
+    auto visited_nodes = std::unordered_set<node_ptr>();
+    visited_nodes.emplace(this);
+    if(nw && nw->powered(NW, visited_nodes)) { return true; }
+    if(n && n->powered(N, visited_nodes)) { return true; }
+    if(ne && ne->powered(NE, visited_nodes)) { return true; }
+    if(w && w->powered(W, visited_nodes)) { return true; }
+    if(e && e->powered(E, visited_nodes)) { return true; }
+    if(sw && sw->powered(SW, visited_nodes)) { return true; }
+    if(s && s->powered(S, visited_nodes)) { return true; }
+    if(se && se->powered(SE, visited_nodes)) { return true; }
+    return false;
+  }
 
   [[nodiscard]] friend isSuccessful connect(Node& a, Node& b) {
     auto relative_pos = b.pos - a.pos;
     if(abs(relative_pos) <= Vec2D{1,1} && relative_pos != Vec2D{0,0}) {
-      auto powerOn = [](auto& n){n.powered = true;};
-      if(a.powered) b.dispatch(powerOn);
-      if(b.powered) a.dispatch(powerOn);
       /**/ if(relative_pos == Vec2D{-1,  1}) {a.nw = &b; b.se = &a;}
       else if(relative_pos == Vec2D{ 0,  1}) {a.n  = &b; b.s  = &a;}
       else if(relative_pos == Vec2D{ 1,  1}) {a.ne = &b; b.sw = &a;}
@@ -87,6 +98,23 @@ class Node
   }
 
  protected:
+  [[nodiscard]] virtual bool powered(const Direction incoming, std::unordered_set<node_ptr>& visited_nodes) {
+    if(visited_nodes.find(this) != visited_nodes.end()) return false;
+
+    visited_nodes.emplace(this);
+
+    auto from = reverse(incoming);
+    if(nw && from != NW && nw->powered(NW, visited_nodes)) { return true; }
+    if(n && from != N && n->powered(N, visited_nodes)) { return true; }
+    if(ne && from != NE && ne->powered(NE, visited_nodes)) { return true; }
+    if(w && from != W && w->powered(W, visited_nodes)) { return true; }
+    if(e && from != E && e->powered(E, visited_nodes)) { return true; }
+    if(sw && from != SW && sw->powered(SW, visited_nodes)) { return true; }
+    if(s && from != S && s->powered(S, visited_nodes)) { return true; }
+    if(se && from != SE && se->powered(SE, visited_nodes)) { return true; }
+    return false;
+  }
+
   template<class Callable>
   void dispatch(Callable&& func, const Direction incoming, std::unordered_set<node_ptr>& visited_nodes) {
     if(visited_nodes.find(this) != visited_nodes.end()) return;
