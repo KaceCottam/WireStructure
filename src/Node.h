@@ -1,5 +1,5 @@
-#ifndef WIRE_HPP
-#define WIRE_HPP
+#ifndef NODE_H
+#define NODE_H
 
 #include "Vec2D.h"
 
@@ -23,19 +23,20 @@ Direction reverse(const Direction from) {
 
 using isSuccessful = bool;
 
-class Wire
+class Node
 {
-  using wire_ptr = Wire*;
+  using node_ptr = Node*;
  public:
-  explicit Wire(const Vec2D& pos = Vec2D{0,0}) : pos{pos} {}
+  explicit Node(const Vec2D& pos = Vec2D{0,0}) : pos{pos} {}
 
   // Connections
-  wire_ptr nw{nullptr}, n{nullptr}, ne{nullptr}, w{nullptr}, e{nullptr}, sw{nullptr}, s{nullptr}, se{nullptr};
+  node_ptr nw{nullptr}, n{nullptr}, ne{nullptr},
+           w{nullptr}, e{nullptr},
+           sw{nullptr}, s{nullptr}, se{nullptr};
 
   Vec2D pos;
-  bool powered{false};
 
-  [[nodiscard]] friend isSuccessful connect(Wire& a, Wire& b) {
+  [[nodiscard]] friend isSuccessful connect(Node& a, Node& b) {
     auto relative_pos = b.pos - a.pos;
     if(abs(relative_pos) <= Vec2D{1,1} && relative_pos != Vec2D{0,0}) {
       /**/ if(relative_pos == Vec2D{-1,  1}) {a.nw = &b; b.se = &a;}
@@ -46,8 +47,6 @@ class Wire
       else if(relative_pos == Vec2D{-1, -1}) {a.sw = &b; b.ne = &a;}
       else if(relative_pos == Vec2D{ 0, -1}) {a.s  = &b; b.n  = &a;}
       else if(relative_pos == Vec2D{ 1, -1}) {a.se = &b; b.nw = &a;}
-      if(a.powered) b.powered = true;
-      if(b.powered) a.powered = true;
     } else return false;
     return true;
   }
@@ -65,7 +64,7 @@ class Wire
     if(s)  { s->dispatch(func, S);   }
     if(se) { se->dispatch(func, SE); }
   }
- private:
+ protected:
   template<class Callable>
   void dispatch(Callable&& func, const Direction incoming) {
     func(*this);
@@ -81,14 +80,4 @@ class Wire
     if(se && from != SE) { se->dispatch(func, SE); }
   }
 };
-
-void powerOn(Wire& wire) {
-  wire.dispatch([](Wire& wire){wire.powered = true;});
-}
-void powerOff(Wire& wire) {
-  wire.dispatch([](Wire& wire){wire.powered = false;});
-}
-void powerToggle(Wire& wire) {
-  wire.dispatch([](Wire& wire){wire.powered = !wire.powered;});
-}
-#endif  // ! WIRE_HPP
+#endif  // ! NODE_H
