@@ -135,11 +135,11 @@ ${INCDIR}/catch.hpp: ## Download Catch2 Library
 
 ${OBJDIR}/test.o: ${TESTDIR}/test.cpp ${INCDIR}/catch.hpp
 	@mkdir -pv ${OBJDIR}
-	${CXX} ${CXXFLAGS} ${COMPILE_ARGS} ${TEST_INCLUDES} -c -o $@ $<
+	${CXX} ${CXXFLAGS} ${COMPILE_ARGS} ${TEST_INCLUDES} -g -c -o $@ $<
 
 ${TEST_BINDIR}/%: ${TESTDIR}/%.cxx ${SRCDIR}/%.h ${OBJDIR}/test.o
 	@mkdir -pv ${TEST_BINDIR}
-	${CXX} ${CXXFLAGS} ${COMPILE_ARGS} ${TEST_INCLUDES} -o $@ $(call filter-hpp, $^)
+	${CXX} ${CXXFLAGS} ${COMPILE_ARGS} ${TEST_INCLUDES} -g -o $@ $(call filter-hpp, $^)
 
 # ---------- Documentation ----------------- #
 DOCS := $(sort $(wildcard docs/*-*.md))

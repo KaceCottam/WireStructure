@@ -2,6 +2,7 @@
 #define NODE_H
 
 #include "Vec2D.h"
+#include <unordered_set>
 
 enum Direction {
   NW,N,NE,W,E,SW,S,SE
@@ -35,10 +36,14 @@ class Node
            sw{nullptr}, s{nullptr}, se{nullptr};
 
   Vec2D pos;
+  bool powered{false};
 
   [[nodiscard]] friend isSuccessful connect(Node& a, Node& b) {
     auto relative_pos = b.pos - a.pos;
     if(abs(relative_pos) <= Vec2D{1,1} && relative_pos != Vec2D{0,0}) {
+      auto powerOn = [](auto& n){n.powered = true;};
+      if(a.powered) b.dispatch(powerOn);
+      if(b.powered) a.dispatch(powerOn);
       /**/ if(relative_pos == Vec2D{-1,  1}) {a.nw = &b; b.se = &a;}
       else if(relative_pos == Vec2D{ 0,  1}) {a.n  = &b; b.s  = &a;}
       else if(relative_pos == Vec2D{ 1,  1}) {a.ne = &b; b.sw = &a;}
@@ -51,33 +56,53 @@ class Node
     return true;
   }
 
+  [[nodiscard]] friend isSuccessful disconnect(Node& a, Node& b) {
+    auto relative_pos = b.pos - a.pos;
+    if(abs(relative_pos) <= Vec2D{1,1} && relative_pos != Vec2D{0,0}) {
+      /**/ if(relative_pos == Vec2D{-1,  1}) {a.nw = nullptr; b.se = nullptr;}
+      else if(relative_pos == Vec2D{ 0,  1}) {a.n  = nullptr; b.s  = nullptr;}
+      else if(relative_pos == Vec2D{ 1,  1}) {a.ne = nullptr; b.sw = nullptr;}
+      else if(relative_pos == Vec2D{-1,  0}) {a.w  = nullptr; b.e  = nullptr;}
+      else if(relative_pos == Vec2D{ 1,  0}) {a.e  = nullptr; b.w  = nullptr;}
+      else if(relative_pos == Vec2D{-1, -1}) {a.sw = nullptr; b.ne = nullptr;}
+      else if(relative_pos == Vec2D{ 0, -1}) {a.s  = nullptr; b.n  = nullptr;}
+      else if(relative_pos == Vec2D{ 1, -1}) {a.se = nullptr; b.nw = nullptr;}
+    } else return false;
+    return true;
+  }
+
   template<class Callable>
   void dispatch(Callable&& func) {
     func(*this);
-
-    if(nw) { nw->dispatch(func, NW); }
-    if(n)  { n->dispatch(func, N);   }
-    if(ne) { ne->dispatch(func, NE); }
-    if(w)  { w->dispatch(func, W);   }
-    if(e)  { e->dispatch(func, E);   }
-    if(sw) { sw->dispatch(func, SW); }
-    if(s)  { s->dispatch(func, S);   }
-    if(se) { se->dispatch(func, SE); }
+    auto visited_nodes = std::unordered_set<node_ptr>();
+    visited_nodes.emplace(this);
+    if(nw) { nw->dispatch(func, NW, visited_nodes); }
+    if(n)  { n->dispatch(func, N, visited_nodes);   }
+    if(ne) { ne->dispatch(func, NE, visited_nodes); }
+    if(w)  { w->dispatch(func, W, visited_nodes);   }
+    if(e)  { e->dispatch(func, E, visited_nodes);   }
+    if(sw) { sw->dispatch(func, SW, visited_nodes); }
+    if(s)  { s->dispatch(func, S, visited_nodes);   }
+    if(se) { se->dispatch(func, SE, visited_nodes); }
   }
+
  protected:
   template<class Callable>
-  void dispatch(Callable&& func, const Direction incoming) {
+  void dispatch(Callable&& func, const Direction incoming, std::unordered_set<node_ptr>& visited_nodes) {
+    if(visited_nodes.find(this) != visited_nodes.end()) return;
+
     func(*this);
+    visited_nodes.emplace(this);
 
     auto from = reverse(incoming);
-    if(nw && from != NW) { nw->dispatch(func, NW); }
-    if(n && from != N)   { n->dispatch(func, N);   }
-    if(ne && from != NE) { ne->dispatch(func, NE); }
-    if(w && from != W)   { w->dispatch(func, W);   }
-    if(e && from != E)   { e->dispatch(func, E);   }
-    if(sw && from != SW) { sw->dispatch(func, SW); }
-    if(s && from != S)   { s->dispatch(func, S);   }
-    if(se && from != SE) { se->dispatch(func, SE); }
+    if(nw && from != NW) { nw->dispatch(func, NW, visited_nodes); }
+    if(n && from != N)   { n->dispatch(func, N, visited_nodes);   }
+    if(ne && from != NE) { ne->dispatch(func, NE, visited_nodes); }
+    if(w && from != W)   { w->dispatch(func, W, visited_nodes);   }
+    if(e && from != E)   { e->dispatch(func, E, visited_nodes);   }
+    if(sw && from != SW) { sw->dispatch(func, SW, visited_nodes); }
+    if(s && from != S)   { s->dispatch(func, S, visited_nodes);   }
+    if(se && from != SE) { se->dispatch(func, SE, visited_nodes); }
   }
 };
 #endif  // ! NODE_H
