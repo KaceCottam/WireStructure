@@ -132,12 +132,17 @@ Some examples of simple gates: (ideas from <https://en.wikipedia.org/wiki/Logic_
 - NAND: opposite of AND gate
 - NOR: opposite of OR gate
 - XOR: outputs a signal if only _one_ of the connected inputs are on
-- XNOR: opposite of XOR gate.
+- XNOR: opposite of XOR gate
 - LEVER: has no inputs but can set the power state with mouse control
+- TIMER: has no inputs but can set the power state after time intervals
 
 And we can also make multi-nodal gate with sub-circuits in order to expand upon
 our capabilities.
 
 Some examples of complex gates:
-- MULTIPLEXER: takes multiple inputs and allows picking of an input to output.
+- MULTIPLEXER: takes multiple inputs and allows picking of an input to output
+- MONOSTABLE: upon recieving a signal converts it into a pulse
+- PULSE_EXTENDER: extends a pulse; can be used to convert a constant pulse into  
+  a constant powering state
+- various latches and flip-flops for storing information
 
