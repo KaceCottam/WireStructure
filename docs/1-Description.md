@@ -13,9 +13,3 @@ Wanted Features
 - Sub-circuits
 - Cross-Platform, including Web
 - Export to picture and video
-
-Dependencies
----
-- WxWidgets
-- Nim
-- WxNim

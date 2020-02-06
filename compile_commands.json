@@ -1,0 +1,73 @@
+[
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "build/Wire.o",
+            "-o",
+            "bin/WireStructure",
+            "src/WireStructure.cxx"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "src/WireStructure.cxx"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-o",
+            "build/Wire.o",
+            "src/Wire.cpp"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "src/Wire.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-Iinclude",
+            "-Isrc",
+            "-o",
+            "build/test.o",
+            "tests/test.cpp"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "tests/test.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-Iinclude",
+            "-Isrc",
+            "build/Wire.o",
+            "build/test.o",
+            "-o",
+            "bin/tests/Wire",
+            "tests/Wire.cxx"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "tests/Wire.cxx"
+    }
+]
