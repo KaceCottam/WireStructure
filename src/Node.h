@@ -26,7 +26,8 @@ using isSuccessful = bool;
 
 class Node
 {
-  using node_ptr = Node*;
+  protected:
+    using node_ptr = Node*;
  public:
   explicit Node(const Vec2D& pos = Vec2D{0,0}) : pos{pos} {}
 
@@ -97,6 +98,7 @@ class Node
     if(se) { se->dispatch(func, SE, visited_nodes); }
   }
 
+  virtual ~Node() = default;
  protected:
   [[nodiscard]] virtual bool powered(const Direction incoming, std::unordered_set<node_ptr>& visited_nodes) {
     if(visited_nodes.find(this) != visited_nodes.end()) return false;
