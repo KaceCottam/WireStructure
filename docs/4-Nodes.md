@@ -36,6 +36,6 @@ our capabilities.
 Some examples of complex gates:
 - [ ] MULTIPLEXER: takes multiple inputs and allows picking of an input to output
 - [ ] MONOSTABLE: upon recieving a signal converts it into a pulse
-- [ ] PULSE_EXTENDER: extends a pulse; can be used to convert a constant pulse into  
-  a constant powering state
+- [ ] PULSE_EXTENDER: extends a pulse; can be used to convert a constant pulse  
+  into a constant powering state
 - [ ] various latches and flip-flops for storing information
