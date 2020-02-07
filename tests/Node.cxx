@@ -1,7 +1,7 @@
 #include <catch.hpp>
 
 #include <Node.h>
-#include <Switch.h>
+#include <Lever.h>
 
 TEST_CASE("Nodes can be created") {
   SECTION("Using default values")
@@ -167,16 +167,16 @@ TEST_CASE("Nodes cannot be connected if they are not adjacent") {
   REQUIRE(node2.se == nullptr);
 }
 TEST_CASE("Functions can be dispatched through connected wires") {
-  Switch button = Switch(Vec2D{-1, 0});
+  Lever lever = Lever(Vec2D{-1, 0});
   Node node1 = Node({0,0});
   Node node2 = Node({0,1});
   Node node3 = Node({1,0});
 
-  REQUIRE(connect(button, node1) == true);
+  REQUIRE(connect(lever, node1) == true);
   REQUIRE(node1.powered() == false);
-  button.on();
+  lever.on();
   REQUIRE(node1.powered() == true);
-  button.off();
+  lever.off();
   REQUIRE(node1.powered() == false);
 
   auto valid1 = connect(node1, node2);
@@ -184,20 +184,20 @@ TEST_CASE("Functions can be dispatched through connected wires") {
   REQUIRE(node1.powered() == false);
   REQUIRE(node2.powered() == false);
 
-  button.on();
+  lever.on();
   REQUIRE(node1.powered() == true);
   REQUIRE(node2.powered() == true);
-  button.off();
+  lever.off();
 
   auto valid2 = connect(node1, node3);
   REQUIRE(valid2 == true);
   
-  button.toggle();
+  lever.toggle();
   REQUIRE(node1.powered() == true);
   REQUIRE(node2.powered() == true);
   REQUIRE(node3.powered() == true);
 
-  button.toggle();
+  lever.toggle();
   REQUIRE(node1.powered() == false);
   REQUIRE(node2.powered() == false);
   REQUIRE(node3.powered() == false);
@@ -206,25 +206,25 @@ TEST_CASE("Functions can be dispatched through connected wires") {
     auto valid3 = connect(node2, node3);
     REQUIRE(valid3 == true);
 
-    button.on();
+    lever.on();
     REQUIRE(node1.powered() == true);
     REQUIRE(node2.powered() == true);
     REQUIRE(node3.powered() == true);
 
-    button.off();
+    lever.off();
     REQUIRE(node1.powered() == false);
     REQUIRE(node2.powered() == false);
     REQUIRE(node3.powered() == false);
   }
 }
 TEST_CASE("Wires that are connected to powered() wires automatically become powered") {
-  Switch button = Switch(Vec2D{0,-1});
+  Lever lever = Lever(Vec2D{0,-1});
   Node node1 = Node({0,0});
   Node node2 = Node({0,1});
 
-  REQUIRE(connect(button, node1) == true);
+  REQUIRE(connect(lever, node1) == true);
 
-  button.on();
+  lever.on();
   REQUIRE(node1.powered() == true);
   REQUIRE(node2.powered() == false);
 
@@ -247,14 +247,14 @@ TEST_CASE("Wires that are connected to powered() wires automatically become powe
   }
 }
 TEST_CASE("Wires that are disconnected from powered() wires automatically become unpowered (if there is not another source of power)") {
-  Switch button = Switch(Vec2D{0,-1});
+  Lever lever = Lever(Vec2D{0,-1});
   Node node1 = Node({0,0});
   Node node2 = Node({0,1});
-  REQUIRE(connect(button, node1) == true);
+  REQUIRE(connect(lever, node1) == true);
   auto valid1 = connect(node1, node2);
   REQUIRE(valid1 == true);
 
-  button.on();
+  lever.on();
   REQUIRE(node1.powered() == true);
   REQUIRE(node2.powered() == true);
 

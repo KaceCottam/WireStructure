@@ -1,10 +1,10 @@
-#ifndef SWITCH_H
-#define SWITCH_H
+#ifndef LEVER_H
+#define LEVER_H
 #include "Gate.h"
-class Switch : public Gate {
+class Lever : public Gate {
   public:
     template<class ...Args>
-    explicit Switch(Args&&... args) : Gate{std::forward<Args...>(args...)} {}
+    explicit Lever(Args&&... args) : Gate{std::forward<Args...>(args...)} {}
 
     [[nodiscard]] virtual bool powered() final {
       return activated;
@@ -21,5 +21,5 @@ class Switch : public Gate {
     }
     bool activated{false};
 };
-#endif // ! SWITCH_H
+#endif // ! LEVER_H
 
