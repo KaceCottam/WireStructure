@@ -130,7 +130,6 @@ ${INCDIR}/catch.hpp: ## Download Catch2 Library
 	@mkdir -pv ${INCDIR}/
 	@curl -o $@ "https://raw.githubusercontent.com/catchorg/Catch2/v2.10.2/single_include/catch2/catch.hpp" \
         1>/dev/null 3>/dev/null
-	@chmod -w $@
 	@echo "...Done"
 
 ${OBJDIR}/test.o: ${TESTDIR}/test.cpp ${INCDIR}/catch.hpp

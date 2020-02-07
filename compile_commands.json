@@ -8,7 +8,6 @@
             "-Wextra",
             "-Wpedantic",
             "-Werror",
-            "build/Wire.o",
             "-o",
             "bin/WireStructure",
             "src/WireStructure.cxx"
@@ -25,12 +24,16 @@
             "-Wextra",
             "-Wpedantic",
             "-Werror",
+            "-Iinclude",
+            "-Isrc",
+            "-g",
+            "build/test.o",
             "-o",
-            "build/Wire.o",
-            "src/Wire.cpp"
+            "bin/tests/Switch",
+            "tests/Switch.cxx"
         ],
         "directory": "/home/kc/Dev/WireStructure",
-        "file": "src/Wire.cpp"
+        "file": "tests/Switch.cxx"
     },
     {
         "arguments": [
@@ -43,6 +46,27 @@
             "-Werror",
             "-Iinclude",
             "-Isrc",
+            "-g",
+            "build/test.o",
+            "-o",
+            "bin/tests/Node",
+            "tests/Node.cxx"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "tests/Node.cxx"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-Iinclude",
+            "-Isrc",
+            "-g",
             "-o",
             "build/test.o",
             "tests/test.cpp"
@@ -61,13 +85,33 @@
             "-Werror",
             "-Iinclude",
             "-Isrc",
-            "build/Wire.o",
+            "-g",
             "build/test.o",
             "-o",
-            "bin/tests/Wire",
-            "tests/Wire.cxx"
+            "bin/tests/Not",
+            "tests/Not.cxx"
         ],
         "directory": "/home/kc/Dev/WireStructure",
-        "file": "tests/Wire.cxx"
+        "file": "tests/Not.cxx"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-Iinclude",
+            "-Isrc",
+            "-g",
+            "build/test.o",
+            "-o",
+            "bin/tests/Vec2D",
+            "tests/Vec2D.cxx"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "tests/Vec2D.cxx"
     }
 ]
