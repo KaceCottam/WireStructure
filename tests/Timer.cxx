@@ -1,76 +1,76 @@
 #include <catch.hpp>
 
-#include <Lever.h>
+#include <Timer.h>
 #include <Node.h>
 
-TEST_CASE("Levers can be connected to nodes") {
-  Lever lever = Lever(Vec2D{0,0}); // TODO: Vec2D needed -- fix
+TEST_CASE("Timers can be connected to nodes") {
+  Timer timer = Timer(Vec2D{0,0}); // TODO: Vec2D needed -- fix
   Node node = Node({0,1});
-  REQUIRE(connect(node, lever) == true);
+  REQUIRE(connect(node, timer) == true);
 }
-TEST_CASE("Levers can affect Nodes") {
-  Lever lever = Lever(Vec2D{0,0}); // TODO: Vec2D needed -- fix
+TEST_CASE("Timers can affect Nodes") {
+  Timer timer = Timer(Vec2D{0,0});
   Node node = Node({0,1});
-  REQUIRE(connect(node, lever) == true);
+  REQUIRE(connect(node, timer) == true);
   REQUIRE(node.powered() == false);
-  lever.on();
+  timer.tick();
   REQUIRE(node.powered() == true);
-  lever.off();
+  timer.tick();
   REQUIRE(node.powered() == false);
-  lever.toggle();
+  timer.tick();
   REQUIRE(node.powered() == true);
-  lever.toggle();
+  timer.tick();
   REQUIRE(node.powered() == false);
 }
-TEST_CASE("Multiple switches do not affect each other.") {
-  Lever lever1 = Lever(Vec2D{-1,1});
-  Lever lever2 = Lever(Vec2D{ 0,1});
-  Lever lever3 = Lever(Vec2D{ 1,1});
+TEST_CASE("Multiple timers do not affect each other.") {
+  Timer timer1 = Timer(Vec2D{-1,1});
+  Timer timer2 = Timer(Vec2D{ 0,1});
+  Timer timer3 = Timer(Vec2D{ 1,1});
   Node nodes[] = {
     Node({-1,  0}), Node({ 0,  0}), Node({ 1,  0}),
                     Node({ 0, -1})
   };
   Node& node = nodes[3];
-  REQUIRE(connect(nodes[0],lever1) == true);
-  REQUIRE(connect(nodes[1],lever2) == true);
-  REQUIRE(connect(nodes[2],lever3) == true);
+  REQUIRE(connect(nodes[0], timer1) == true);
+  REQUIRE(connect(nodes[1], timer2) == true);
+  REQUIRE(connect(nodes[2], timer3) == true);
   REQUIRE(connect(nodes[1], nodes[0]) == true);
   REQUIRE(connect(nodes[1], nodes[2]) == true);
   REQUIRE(connect(nodes[1], nodes[3]) == true);
 
   REQUIRE(node.powered() == false);
-  lever1.on();
+  timer1.tick();
   REQUIRE(node.powered() == true);
-  lever1.off();
+  timer1.tick();
   REQUIRE(node.powered() == false);
-  lever1.toggle();
+  timer1.tick();
   REQUIRE(node.powered() == true);
-  lever1.toggle();
-  REQUIRE(node.powered() == false);
-
-  lever2.on();
-  REQUIRE(node.powered() == true);
-  lever2.off();
-  REQUIRE(node.powered() == false);
-  lever2.toggle();
-  REQUIRE(node.powered() == true);
-  lever2.toggle();
+  timer1.tick();
   REQUIRE(node.powered() == false);
 
-  lever3.on();
+  timer2.tick();
   REQUIRE(node.powered() == true);
-  lever3.off();
+  timer2.tick();
   REQUIRE(node.powered() == false);
-  lever3.toggle();
+  timer2.tick();
   REQUIRE(node.powered() == true);
-  lever3.toggle();
+  timer2.tick();
   REQUIRE(node.powered() == false);
 
-  lever1.on();
-  lever2.on();
+  timer3.tick();
   REQUIRE(node.powered() == true);
-  lever2.off();
+  timer3.tick();
+  REQUIRE(node.powered() == false);
+  timer3.tick();
   REQUIRE(node.powered() == true);
-  lever1.off();
+  timer3.tick();
+  REQUIRE(node.powered() == false);
+
+  timer1.tick();
+  timer2.tick();
+  REQUIRE(node.powered() == true);
+  timer2.tick();
+  REQUIRE(node.powered() == true);
+  timer1.tick();
   REQUIRE(node.powered() == false);
 }
