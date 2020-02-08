@@ -1,7 +1,7 @@
-#ifndef AND_H
-#define AND_H
+#ifndef NAND_H
+#define NAND_H
 #include "Node.h"
-class And : public Node {
+class Nand : public Node {
  protected:
   using Node::pointers;
   virtual bool wantConnectionFromNW() const noexcept override { return false; }
@@ -14,10 +14,10 @@ class And : public Node {
   virtual bool wantConnectionFromSE() const noexcept override { return false; }
 
   virtual bool powered(unordered_set<const Node*> visited_nodes) const noexcept override {
-    return numberPowered(visited_nodes) == numberConnected();
+    return numberPowered(visited_nodes) != numberConnected();
   }
  public:
   using Node::Node;
 };
-#endif // ! AND_H
+#endif // ! NAND_H
 

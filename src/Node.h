@@ -39,6 +39,19 @@ class Node {
   virtual bool wantConnectionFromSE() const noexcept = 0;
 
  public:
+  auto numberConnected() const noexcept -> unsigned {
+    auto sum = 0u;
+    if(pointers.nw) sum++;
+    if(pointers.n ) sum++;
+    if(pointers.ne) sum++;
+    if(pointers.w ) sum++;
+    if(pointers.e ) sum++;
+    if(pointers.sw) sum++;
+    if(pointers.s ) sum++;
+    if(pointers.se) sum++;
+    return sum;
+  }
+
   auto powered() const noexcept
     -> bool { return powered(unordered_set<const Node*>()); }
 

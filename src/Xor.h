@@ -1,7 +1,7 @@
-#ifndef AND_H
-#define AND_H
+#ifndef OR_H
+#define OR_H
 #include "Node.h"
-class And : public Node {
+class Xor : public Node {
  protected:
   using Node::pointers;
   virtual bool wantConnectionFromNW() const noexcept override { return false; }
@@ -14,10 +14,10 @@ class And : public Node {
   virtual bool wantConnectionFromSE() const noexcept override { return false; }
 
   virtual bool powered(unordered_set<const Node*> visited_nodes) const noexcept override {
-    return numberPowered(visited_nodes) == numberConnected();
+    return numberPowered(visited_nodes) == 1;
   }
  public:
   using Node::Node;
 };
-#endif // ! AND_H
+#endif // ! OR_H
 

@@ -128,8 +128,8 @@ Some examples of simple gates: (ideas from <https://en.wikipedia.org/wiki/Logic_
 - [X] NOT: inverts the power state and dispatches it to connected nodes
 - [X] AND: outputs a signal if and only if all connected inputs are on
 - [X] OR: outputs a signal if any of the connected inputs are on
-- [ ] NAND: opposite of AND gate
-- [ ] NOR: opposite of OR gate
+- [X] NAND: opposite of AND gate
+- [X] NOR: opposite of OR gate
 - [ ] XOR: outputs a signal if only _one_ of the connected inputs are on
 - [ ] XNOR: opposite of XOR gate
 - [X] LEVER: has no inputs but can set the power state with mouse control
