@@ -2,15 +2,16 @@
 #define VEC2D_H
 #include <utility>
 #include <functional>
+
 template<class T>
 class Vec2D {
   using base = std::pair<T, T>;
-  base pair;
 
  public:
   template<class... Args>
   Vec2D(Args&&... args) : pair{std::forward<Args>(args)...} {}
 
+  base pair;
   T& x = pair.first;
   T& y = pair.second;
 
