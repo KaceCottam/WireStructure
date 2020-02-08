@@ -16,3 +16,4 @@ Wanted Features
 - [ ] Sub-circuits
 - [ ] Cross-Platform, including Web
 - [ ] Export to picture, video, and code
+- [ ] Wires that can go 'underneath' other wires

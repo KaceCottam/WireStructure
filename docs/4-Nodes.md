@@ -4,6 +4,14 @@ Nodes can be connected to the 8 adjacent nodes. This connection goes both ways;
 think of an 8-way doubly-linked list. Nodes will be a root type that can be
 expanded upon using Object Oriented Programming.
 
+Wire nodes will be able to go 'underneath' other wire nodes by creating a wire
+node at the same position as other node, and not connecting to it. This will
+require one node for every sublevel. Using this strategy, we can make
+connections up to four levels deep (since every wire needs 2 connections to be
+useful)! How this will be handled in the gui is either going to be a modified
+button press sequence or cocentric circles of varying radii, where the smallest
+radius is the uppermost level.
+
 Gates
 ===
 Gates will be an expansion upon nodes.
@@ -29,15 +37,18 @@ our capabilities.
 Some examples of complex gates:
 - [ ] MULTIPLEXER: takes multiple inputs and allows picking of an input to output
 - [ ] MONOSTABLE: upon recieving a signal converts it into a pulse
-- [ ] PULSE_EXTENDER: extends a pulse; can be used to convert a constant pulse  
-  into a constant powering state
+- [ ] PULSE_EXTENDER: extends a pulse; can be used to convert a constant pulse
+into a constant powering state
 - [ ] various latches and flip-flops for storing information
 
 Directionality
 ===
 All nodes will have 8 possible connections. All nodes have a function wherein
-it is defined whether or not that node can be connected to from a given
+it is defined whether or not that node 'can be connected to' from a given
 direction.
+
+For now all nodes cannot be rotated, but this may change. The default 'output'
+of a simple gate is to the east (right).
 
 Grid of 3x3 centered on a node where `connectFromN` is true
 ---
