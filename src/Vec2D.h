@@ -45,6 +45,11 @@ class Vec2D {
   friend inline auto operator>=(const Vec2D<T>& a, const Vec2D<T>& b) noexcept
     -> Vec2D<bool> { return mapIt([](bool a){return !a;}, a < b); }
 };
+inline auto closestPoint(const Vec2D<double>& a) noexcept
+  -> Vec2D<int> {
+    return mapIt([](auto a){return (int)round(a);}, a);
+}
 using Position = Vec2D<int>;
 using Magnitude = Vec2D<double>;
+
 #endif // ! VEC2D_H

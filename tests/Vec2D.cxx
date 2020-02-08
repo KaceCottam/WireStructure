@@ -47,3 +47,7 @@ TEMPLATE_TEST_CASE("Vec2D can be operated upon logically", "", int, double) {
   REQUIRE((a <= (a + b)) == Vec2D<bool>{true, true});
   REQUIRE((b <= (b + a)) == Vec2D<bool>{true, true});
 }
+TEST_CASE("A Vec2D<double> can be rounded to make a Vec2D<int>", "") {
+  Vec2D<double> db = {4312.162134, -314321.5321632642};
+  REQUIRE(closestPoint(db) == Position{4312, -314322});
+}
