@@ -42,21 +42,27 @@ class Node {
   auto powered() const noexcept
     -> bool { return powered(unordered_set<const Node*>()); }
 
+  auto numberPowered(unordered_set<const Node*> visited_nodes) const noexcept
+    -> unsigned {
+      auto sum = 0u;
+      if(visited_nodes.count(this) >= 1) return false;
+
+      visited_nodes.emplace(this);
+
+      if(pointers.nw && pointers.nw->powered(visited_nodes)) { sum++; }
+      if(pointers.n  && pointers.n->powered(visited_nodes)) { sum++; }
+      if(pointers.ne && pointers.ne->powered(visited_nodes)) { sum++; }
+      if(pointers.w  && pointers.w->powered(visited_nodes)) { sum++; }
+      if(pointers.e  && pointers.e->powered(visited_nodes)) { sum++; }
+      if(pointers.sw && pointers.sw->powered(visited_nodes)) { sum++; }
+      if(pointers.s  && pointers.s->powered(visited_nodes)) { sum++; }
+      if(pointers.se && pointers.se->powered(visited_nodes)) { sum++; }
+      return sum;
+    }
+
   virtual auto powered(unordered_set<const Node*> visited_nodes) const noexcept
     -> bool {
-    if(visited_nodes.count(this) >= 1) return false;
-
-    visited_nodes.emplace(this);
-
-    if(pointers.nw && pointers.nw->powered(visited_nodes)) { return true; }
-    if(pointers.n  && pointers.n->powered(visited_nodes)) { return true; }
-    if(pointers.ne && pointers.ne->powered(visited_nodes)) { return true; }
-    if(pointers.w  && pointers.w->powered(visited_nodes)) { return true; }
-    if(pointers.e  && pointers.e->powered(visited_nodes)) { return true; }
-    if(pointers.sw && pointers.sw->powered(visited_nodes)) { return true; }
-    if(pointers.s  && pointers.s->powered(visited_nodes)) { return true; }
-    if(pointers.se && pointers.se->powered(visited_nodes)) { return true; }
-    return false;
+    return numberPowered(visited_nodes) >= 1;
   }
   struct {
     // These will be used when finding if something is powered
