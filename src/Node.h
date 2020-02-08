@@ -102,40 +102,41 @@ class Node {
 
   friend auto connect(Node& a, Node& b) noexcept
     -> bool {
-    auto relative_pos = a.pos - b.pos;
     auto result = false;
+    auto relative_pos = a.pos - b.pos;
+    auto magnitu = magnitude(Position{1,1});
+    if(magnitu == 0) return false;
     if(relative_pos != Position{0,0}
-      && magnitude(relative_pos) <= magnitude(Position{1, 1})) {
+      && magnitude(relative_pos) <= magnitude(Position{1,1})) {
       if(relative_pos == Position{-1, 1} || relative_pos == Position{-1,0} ||
          relative_pos == Position{-1,-1} || relative_pos == Position{0,-1}) {
         return connect(b, a);
       }
 
-      /**/ if(relative_pos == Position{ 0, 1}) {
+      /**/ if(relative_pos == Position{0, 1}) {
         if(a.wantConnectionFromN()) { b.pointers.s = &a; result = true; }
         if(b.wantConnectionFromS()) { a.pointers.n = &b; result = true; }
       }
-      else if(relative_pos == Position{ 1, 1}) {
+      else if(relative_pos == Position{1, 1}) {
         if(a.wantConnectionFromNE()) { b.pointers.sw = &a; result = true; }
         if(b.wantConnectionFromSW()) { a.pointers.ne = &b; result = true; }
       }
-      else if(relative_pos == Position{ 1, 0}) {
-        if(a.wantConnectionFromW()) { b.pointers.e = &a; result = true; }
-        if(b.wantConnectionFromE()) { a.pointers.w = &b; result = true; }
+      else if(relative_pos == Position{1, 0}) {
+        if(a.wantConnectionFromE()) { b.pointers.w = &a; result = true; }
+        if(b.wantConnectionFromW()) { a.pointers.e = &b; result = true; }
       }
-      else if(relative_pos == Position{ 1,-1}) {
-        if(a.wantConnectionFromSE()) { b.pointers.se = &a; result = true; }
-        if(b.wantConnectionFromNW()) { a.pointers.nw = &b; result = true; }
+      else if(relative_pos == Position{1,-1}) {
+        if(a.wantConnectionFromSE()) { b.pointers.nw = &a; result = true; }
+        if(b.wantConnectionFromNW()) { a.pointers.se = &b; result = true; }
       }
-      return result;
     }
-    return false;
+    return result;
   }
 
   friend auto disconnect(Node& a, Node& b) noexcept
     -> bool {
-    auto relative_pos = a.pos - b.pos;
     auto result = false;
+    auto relative_pos = a.pos - b.pos;
     if(relative_pos != Position{0,0} &&
        magnitude(relative_pos) <= magnitude(Position{1, 1})) {
       if(relative_pos == Position{-1, 1} || relative_pos == Position{-1,0} ||
@@ -143,21 +144,21 @@ class Node {
         return disconnect(b, a);
       }
 
-      /**/ if(relative_pos == Position{ 0, 1}) {
-        if(a.wantConnectionFromN()) { b.pointers.s = nullptr; result = true; }
-        if(b.wantConnectionFromS()) { a.pointers.n = nullptr; result = true; }
+      /**/ if(relative_pos == Position{0, 1}) {
+        if(b.pointers.s && a.wantConnectionFromN()) { b.pointers.s = nullptr; result = true; }
+        if(a.pointers.n && b.wantConnectionFromS()) { a.pointers.n = nullptr; result = true; }
       }
-      else if(relative_pos == Position{ 1, 1}) {
-        if(a.wantConnectionFromNE()) { b.pointers.sw = nullptr; result = true; }
-        if(b.wantConnectionFromSW()) { a.pointers.ne = nullptr; result = true; }
+      else if(relative_pos == Position{1, 1}) {
+        if(b.pointers.sw && a.wantConnectionFromNE()) { b.pointers.sw = nullptr; result = true; }
+        if(a.pointers.ne && b.wantConnectionFromSW()) { a.pointers.ne = nullptr; result = true; }
       }
-      else if(relative_pos == Position{ 1, 0}) {
-        if(a.wantConnectionFromW()) { b.pointers.e = nullptr; result = true; }
-        if(b.wantConnectionFromE()) { a.pointers.w = nullptr; result = true; }
+      else if(relative_pos == Position{1, 0}) {
+        if(b.pointers.w && a.wantConnectionFromE()) { b.pointers.w = nullptr; result = true; }
+        if(a.pointers.e && b.wantConnectionFromW()) { a.pointers.e = nullptr; result = true; }
       }
-      else if(relative_pos == Position{ 1,-1}) {
-        if(a.wantConnectionFromSE()) { b.pointers.se = nullptr; result = true; }
-        if(b.wantConnectionFromNW()) { a.pointers.nw = nullptr; result = true; }
+      else if(relative_pos == Position{1,-1}) {
+        if(b.pointers.nw && a.wantConnectionFromSE()) { b.pointers.nw = nullptr; result = true; }
+        if(a.pointers.sw && b.wantConnectionFromNW()) { a.pointers.se = nullptr; result = true; }
       }
     }
     return result;

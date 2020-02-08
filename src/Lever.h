@@ -12,6 +12,14 @@ class Lever : public Node {
   virtual bool wantConnectionFromSW() const noexcept override { return true; }
   virtual bool wantConnectionFromS() const noexcept  override { return true; }
   virtual bool wantConnectionFromSE() const noexcept override { return true; }
+  //virtual bool wantConnectionToNW() const noexcept override { return false; }
+  //virtual bool wantConnectionToN() const noexcept  override { return false; }
+  //virtual bool wantConnectionToNE() const noexcept override { return false; }
+  //virtual bool wantConnectionToW() const noexcept  override { return false; }
+  //virtual bool wantConnectionToE() const noexcept  override { return false; }
+  //virtual bool wantConnectionToSW() const noexcept override { return false; }
+  //virtual bool wantConnectionToS() const noexcept  override { return false; }
+  //virtual bool wantConnectionToSE() const noexcept override { return false; }
 
   bool activated = false;
 

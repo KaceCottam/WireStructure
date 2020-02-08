@@ -13,7 +13,7 @@ TEST_CASE("Vec2D can be constructed of multiple types") {
 TEMPLATE_TEST_CASE("Vec2D can be operated upon mathematically", "", int, double) {
   Vec2D<TestType> a = {1, 0};
   Vec2D<TestType> b = {0, 1};
-  TestType scal = GENERATE(nl<TestType>::min(), -1, 0, 1, nl<TestType>::max());
+  TestType scal = GENERATE(-1, 0, 1);
   REQUIRE(a + b == Vec2D<TestType>{1, 1});
   REQUIRE(b + a == Vec2D<TestType>{1, 1});
   REQUIRE(a - b == Vec2D<TestType>{1,-1});
@@ -24,8 +24,9 @@ TEMPLATE_TEST_CASE("Vec2D can be operated upon mathematically", "", int, double)
   REQUIRE(b * scal == Vec2D<TestType>{0, scal});
   REQUIRE(magnitude(a) == 1.0);
   REQUIRE(magnitude(b) == 1.0);
-  REQUIRE(normal(a) == Vec2D<double>(1.0, 0));
-  REQUIRE(normal(b) == Vec2D<double>(0, 1.0));
+  REQUIRE((foldIt(std::plus<TestType>{}, a + b)) == 2);
+  REQUIRE((mapIt([](auto a){return a - 1;}, a + b)) == Vec2D<TestType>{0, 0});
+  REQUIRE((Position{0,0} - Position{0,1}) == Position{0,-1});
 }
 TEMPLATE_TEST_CASE("Vec2D can be operated upon logically", "", int, double) {
   Vec2D<TestType> a = {1, 0};
@@ -43,6 +44,6 @@ TEMPLATE_TEST_CASE("Vec2D can be operated upon logically", "", int, double) {
   REQUIRE((b >= b) == Vec2D<bool>{true, true});
   REQUIRE((b <= a) == Vec2D<bool>{true, false});
   REQUIRE((b >= a) == Vec2D<bool>{false, true});
-  REQUIRE((a < (a + b)) == Vec2D<bool>{true, true});
-  REQUIRE((b < (b + a)) == Vec2D<bool>{true, true});
+  REQUIRE((a <= (a + b)) == Vec2D<bool>{true, true});
+  REQUIRE((b <= (b + a)) == Vec2D<bool>{true, true});
 }
