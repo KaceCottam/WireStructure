@@ -4,12 +4,6 @@ Nodes can be connected to the 8 adjacent nodes. This connection goes both ways;
 think of an 8-way doubly-linked list. Nodes will be a root type that can be
 expanded upon using Object Oriented Programming.
 
-Because nodes will have a way to `dispatch` a command that can be modified, it
-will be useful to think of these nodes as a "functor" as in graph theory.
-Imagine a node as a box that contains something, most likely containing some
-indicator that power to the node is on. The `dispatch` function will allow
-the contained item to be modified.
-
 Gates
 ===
 Gates will be an expansion upon nodes.
@@ -19,9 +13,8 @@ scalable and customizable.  I will most likely create logic for gates using
 methods already mentioned.
 
 Some examples of simple gates: (ideas from <https://en.wikipedia.org/wiki/Logic_gate>)
-- [ ] BUFFER: provides one-way signals
 - [X] NOT: inverts the power state and dispatches it to connected nodes
-- [ ] AND: outputs a signal if and only if all connected inputs are on
+- [X] AND: outputs a signal if and only if all connected inputs are on
 - [ ] OR: outputs a signal if any of the connected inputs are on
 - [ ] NAND: opposite of AND gate
 - [ ] NOR: opposite of OR gate
@@ -39,3 +32,21 @@ Some examples of complex gates:
 - [ ] PULSE_EXTENDER: extends a pulse; can be used to convert a constant pulse  
   into a constant powering state
 - [ ] various latches and flip-flops for storing information
+
+Directionality
+===
+All nodes will have 8 possible connections. All nodes have a function wherein
+it is defined whether or not that node can be connected to from a given
+direction.
+
+Grid of 3x3 centered on a node where `connectFromN` is true
+---
+The node can be checked if it is powered from the top, but from the bottom it
+cannot check if it is powered from the bottom
+```
+* * *
+  v  
+* o *
+  v  
+* * *
+```

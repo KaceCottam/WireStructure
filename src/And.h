@@ -1,8 +1,9 @@
-#ifndef NOT_H
-#define NOT_H
+#ifndef AND_H
+#define AND_H
 #include "Node.h"
-class Not : public Node {
+class And : public Node {
  protected:
+  using Node::pointers;
   virtual bool wantConnectionFromNW() const noexcept override { return false; }
   virtual bool wantConnectionFromN() const noexcept  override { return false; }
   virtual bool wantConnectionFromNE() const noexcept override { return false; }
@@ -13,10 +14,23 @@ class Not : public Node {
   virtual bool wantConnectionFromSE() const noexcept override { return false; }
 
   virtual bool powered(unordered_set<const Node*> visited_nodes) const noexcept override {
-    return !Node::powered(visited_nodes);
+    if(visited_nodes.count(this) >= 1) return false;
+
+    visited_nodes.emplace(this);
+
+    auto sum = 0;
+    if(pointers.nw && pointers.nw->powered(visited_nodes)) { sum++; }
+    if(pointers.n  && pointers.n->powered(visited_nodes)) { sum++; }
+    if(pointers.ne && pointers.ne->powered(visited_nodes)) { sum++; }
+    if(pointers.w  && pointers.w->powered(visited_nodes)) { sum++; }
+    if(pointers.e  && pointers.e->powered(visited_nodes)) { sum++; }
+    if(pointers.sw && pointers.sw->powered(visited_nodes)) { sum++; }
+    if(pointers.s  && pointers.s->powered(visited_nodes)) { sum++; }
+    if(pointers.se && pointers.se->powered(visited_nodes)) { sum++; }
+    return sum == 2;
   }
  public:
   using Node::Node;
 };
-#endif // ! NOT_H
+#endif // ! AND_H
 

@@ -12,23 +12,15 @@ class Lever : public Node {
   virtual bool wantConnectionFromSW() const noexcept override { return true; }
   virtual bool wantConnectionFromS() const noexcept  override { return true; }
   virtual bool wantConnectionFromSE() const noexcept override { return true; }
-  //virtual bool wantConnectionToNW() const noexcept override { return false; }
-  //virtual bool wantConnectionToN() const noexcept  override { return false; }
-  //virtual bool wantConnectionToNE() const noexcept override { return false; }
-  //virtual bool wantConnectionToW() const noexcept  override { return false; }
-  //virtual bool wantConnectionToE() const noexcept  override { return false; }
-  //virtual bool wantConnectionToSW() const noexcept override { return false; }
-  //virtual bool wantConnectionToS() const noexcept  override { return false; }
-  //virtual bool wantConnectionToSE() const noexcept override { return false; }
 
   bool activated = false;
 
-  virtual bool powered() const noexcept override {return activated;}
-  virtual bool powered(const DirectionTo, unordered_set<const Node*>& visited_nodes) const noexcept override {
+  virtual bool powered(unordered_set<const Node*> visited_nodes) const noexcept override {
     if(visited_nodes.count(this) >= 1) return false;
     visited_nodes.emplace(this);
     return activated;
   }
+
  public:
   template<class... Args>
   explicit Lever(const std::string& id, Args&&... args) noexcept

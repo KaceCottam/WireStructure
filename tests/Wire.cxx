@@ -19,15 +19,13 @@ TEST_CASE("Wires can be connected if they are adjacent") {
     REQUIRE(connect(wire2, wire3) == true);
   }
 }
-TEST_CASE("Wires can be disconnected") {
+TEST_CASE("Wires can be disconnected if they are connected") {
   Wire wire1 = Wire({0,0});
   Wire wire2 = Wire({0,1});
+  REQUIRE(disconnect(wire1, wire2) == false);
   REQUIRE(connect(wire1, wire2) == true);
 
   REQUIRE(disconnect(wire1, wire2) == true);
-  SECTION("Wires cannot be disconnected if they are not connected") {
-    REQUIRE(disconnect(wire1, wire2) == false);
-  }
 }
 TEST_CASE("Wires cannot be connected if they are not adjacent") {
   Wire wire1 = Wire({0,-1});
