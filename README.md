@@ -130,10 +130,10 @@ Some examples of simple gates: (ideas from <https://en.wikipedia.org/wiki/Logic_
 - [X] OR: outputs a signal if any of the connected inputs are on
 - [X] NAND: opposite of AND gate
 - [X] NOR: opposite of OR gate
-- [ ] XOR: outputs a signal if only _one_ of the connected inputs are on
-- [ ] XNOR: opposite of XOR gate
+- [X] XOR: outputs a signal if only _one_ of the connected inputs are on
+- [X] XNOR: opposite of XOR gate
 - [X] LEVER: has no inputs but can set the power state with mouse control
-- [ ] TIMER: has no inputs but can set the power state after time intervals
+- [X] TIMER: has no inputs but can set the power state after time intervals
 
 And we can also make multi-nodal gate with sub-circuits in order to expand upon
 our capabilities.
