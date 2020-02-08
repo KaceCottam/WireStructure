@@ -1,24 +1,31 @@
-#ifndef TIMER_H
-#define TIMER_H
-#include "Gate.h"
-class Timer : public Gate {
-  public:
-    template<class ...Args>
-    explicit Timer(Args&&... args) : Gate{std::forward<Args...>(args...)} {}
+#ifndef LEVER_H
+#define LEVER_H
+#include "Node.h"
+#include <string>
+class Timer : public Node {
+ protected:
+  virtual bool wantConnectionFromNW() const noexcept override { return true; }
+  virtual bool wantConnectionFromN() const noexcept  override { return true; }
+  virtual bool wantConnectionFromNE() const noexcept override { return true; }
+  virtual bool wantConnectionFromW() const noexcept  override { return true; }
+  virtual bool wantConnectionFromE() const noexcept  override { return true; }
+  virtual bool wantConnectionFromSW() const noexcept override { return true; }
+  virtual bool wantConnectionFromS() const noexcept  override { return true; }
+  virtual bool wantConnectionFromSE() const noexcept override { return true; }
 
-    [[nodiscard]] virtual bool powered() final {
-      return activated;
-    }
-    void tick() { activated = !activated; }
-  private:
-    [[nodiscard]] virtual bool powered(const Direction, std::unordered_set<Node*>& visited_nodes) final {
-      if(visited_nodes.find(this) != visited_nodes.end()) return false;
+  bool activated = false;
 
-      visited_nodes.emplace(this);
-      return activated;
-    }
-    bool activated{false};
+  virtual bool powered(unordered_set<const Node*> visited_nodes) const noexcept override {
+    if(visited_nodes.count(this) >= 1) return false;
+    visited_nodes.emplace(this);
+    return activated;
+  }
+
+ public:
+  using Node::Node;
+
+  void tick() noexcept { activated = !activated; }
 };
 
-#endif // ! TIMER_H
+#endif // ! LEVER_H
 

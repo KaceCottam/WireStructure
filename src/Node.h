@@ -2,137 +2,148 @@
 #define NODE_H
 
 #include "Vec2D.h"
-#include <unordered_set>
 
-enum Direction {
-  NW,N,NE,W,E,SW,S,SE
+#include <optional>
+#include <unordered_set>
+#include <utility>
+
+using std::optional;
+using std::pair;
+using std::unordered_set;
+
+enum class DirectionTo : int {
+  NW = 0, N, NE,
+   W,         E,
+  SW,     S, SE,
+  None = -1
+};
+enum class DirectionFrom : int {
+  SE = 0, S, SW,
+   E,         W,
+  NE,     N, NW,
+  None = -1
 };
 
-Direction reverse(const Direction from) {
-  switch(from) {
-    case NW:  return SE;
-    case N:   return S;
-    case NE:  return SW;
-    case W:   return E;
-    case E:   return W;
-    case SW:  return NE;
-    case S:   return N;
-    case SE:  return NW;
-  }
-  throw from;
-}
-
-using isSuccessful = bool;
-
-class Node
-{
-  protected:
-    using node_ptr = Node*;
- public:
-  explicit Node(const Vec2D& pos = Vec2D{0,0}) : pos{pos} {}
-
-  // Connections
-  node_ptr nw{nullptr}, n{nullptr}, ne{nullptr},
-           w{nullptr}, e{nullptr},
-           sw{nullptr}, s{nullptr}, se{nullptr};
-
-  Vec2D pos;
-
-  // reformat into recursive function
-  [[nodiscard]] virtual bool powered() {
-    auto visited_nodes = std::unordered_set<node_ptr>();
-    visited_nodes.emplace(this);
-    if(nw && nw->powered(NW, visited_nodes)) { return true; }
-    if(n && n->powered(N, visited_nodes)) { return true; }
-    if(ne && ne->powered(NE, visited_nodes)) { return true; }
-    if(w && w->powered(W, visited_nodes)) { return true; }
-    if(e && e->powered(E, visited_nodes)) { return true; }
-    if(sw && sw->powered(SW, visited_nodes)) { return true; }
-    if(s && s->powered(S, visited_nodes)) { return true; }
-    if(se && se->powered(SE, visited_nodes)) { return true; }
-    return false;
-  }
-
-  [[nodiscard]] friend isSuccessful connect(Node& a, Node& b) {
-    auto relative_pos = b.pos - a.pos;
-    if(abs(relative_pos) <= Vec2D{1,1} && relative_pos != Vec2D{0,0}) {
-      /**/ if(relative_pos == Vec2D{-1,  1}) {a.nw = &b; b.se = &a;}
-      else if(relative_pos == Vec2D{ 0,  1}) {a.n  = &b; b.s  = &a;}
-      else if(relative_pos == Vec2D{ 1,  1}) {a.ne = &b; b.sw = &a;}
-      else if(relative_pos == Vec2D{-1,  0}) {a.w  = &b; b.e  = &a;}
-      else if(relative_pos == Vec2D{ 1,  0}) {a.e  = &b; b.w  = &a;}
-      else if(relative_pos == Vec2D{-1, -1}) {a.sw = &b; b.ne = &a;}
-      else if(relative_pos == Vec2D{ 0, -1}) {a.s  = &b; b.n  = &a;}
-      else if(relative_pos == Vec2D{ 1, -1}) {a.se = &b; b.nw = &a;}
-    } else return false;
-    return true;
-  }
-
-  [[nodiscard]] friend isSuccessful disconnect(Node& a, Node& b) {
-    auto relative_pos = b.pos - a.pos;
-    if(abs(relative_pos) <= Vec2D{1,1} && relative_pos != Vec2D{0,0}) {
-      /**/ if(relative_pos == Vec2D{-1,  1}) {a.nw = nullptr; b.se = nullptr;}
-      else if(relative_pos == Vec2D{ 0,  1}) {a.n  = nullptr; b.s  = nullptr;}
-      else if(relative_pos == Vec2D{ 1,  1}) {a.ne = nullptr; b.sw = nullptr;}
-      else if(relative_pos == Vec2D{-1,  0}) {a.w  = nullptr; b.e  = nullptr;}
-      else if(relative_pos == Vec2D{ 1,  0}) {a.e  = nullptr; b.w  = nullptr;}
-      else if(relative_pos == Vec2D{-1, -1}) {a.sw = nullptr; b.ne = nullptr;}
-      else if(relative_pos == Vec2D{ 0, -1}) {a.s  = nullptr; b.n  = nullptr;}
-      else if(relative_pos == Vec2D{ 1, -1}) {a.se = nullptr; b.nw = nullptr;}
-    } else return false;
-    return true;
-  }
-
-  template<class Callable>
-  void dispatch(Callable&& func) {
-    func(*this);
-    auto visited_nodes = std::unordered_set<node_ptr>();
-    visited_nodes.emplace(this);
-    if(nw) { nw->dispatch(func, NW, visited_nodes); }
-    if(n)  { n->dispatch(func, N, visited_nodes);   }
-    if(ne) { ne->dispatch(func, NE, visited_nodes); }
-    if(w)  { w->dispatch(func, W, visited_nodes);   }
-    if(e)  { e->dispatch(func, E, visited_nodes);   }
-    if(sw) { sw->dispatch(func, SW, visited_nodes); }
-    if(s)  { s->dispatch(func, S, visited_nodes);   }
-    if(se) { se->dispatch(func, SE, visited_nodes); }
-  }
-
-  virtual ~Node() = default;
+class Node {
  protected:
-  [[nodiscard]] virtual bool powered(const Direction incoming, std::unordered_set<node_ptr>& visited_nodes) {
-    if(visited_nodes.find(this) != visited_nodes.end()) return false;
+  using node_ptr = Node*;
+  using Position = Vec2D<int>;
 
-    visited_nodes.emplace(this);
+  virtual bool wantConnectionFromNW() const noexcept = 0;
+  virtual bool wantConnectionFromN() const noexcept = 0;
+  virtual bool wantConnectionFromNE() const noexcept = 0;
+  virtual bool wantConnectionFromW() const noexcept = 0;
+  virtual bool wantConnectionFromE() const noexcept = 0;
+  virtual bool wantConnectionFromSW() const noexcept = 0;
+  virtual bool wantConnectionFromS() const noexcept = 0;
+  virtual bool wantConnectionFromSE() const noexcept = 0;
 
-    auto from = reverse(incoming);
-    if(nw && from != NW && nw->powered(NW, visited_nodes)) { return true; }
-    if(n && from != N && n->powered(N, visited_nodes)) { return true; }
-    if(ne && from != NE && ne->powered(NE, visited_nodes)) { return true; }
-    if(w && from != W && w->powered(W, visited_nodes)) { return true; }
-    if(e && from != E && e->powered(E, visited_nodes)) { return true; }
-    if(sw && from != SW && sw->powered(SW, visited_nodes)) { return true; }
-    if(s && from != S && s->powered(S, visited_nodes)) { return true; }
-    if(se && from != SE && se->powered(SE, visited_nodes)) { return true; }
-    return false;
+ public:
+  auto numberConnected() const noexcept -> unsigned {
+    auto sum = 0u;
+    if(pointers.nw) sum++;
+    if(pointers.n ) sum++;
+    if(pointers.ne) sum++;
+    if(pointers.w ) sum++;
+    if(pointers.e ) sum++;
+    if(pointers.sw) sum++;
+    if(pointers.s ) sum++;
+    if(pointers.se) sum++;
+    return sum;
   }
 
-  template<class Callable>
-  void dispatch(Callable&& func, const Direction incoming, std::unordered_set<node_ptr>& visited_nodes) {
-    if(visited_nodes.find(this) != visited_nodes.end()) return;
+  auto powered() const noexcept
+    -> bool { return powered(unordered_set<const Node*>()); }
 
-    func(*this);
-    visited_nodes.emplace(this);
+  auto numberPowered(unordered_set<const Node*> visited_nodes) const noexcept
+    -> unsigned {
+      auto sum = 0u;
+      if(visited_nodes.count(this) >= 1) return false;
 
-    auto from = reverse(incoming);
-    if(nw && from != NW) { nw->dispatch(func, NW, visited_nodes); }
-    if(n && from != N)   { n->dispatch(func, N, visited_nodes);   }
-    if(ne && from != NE) { ne->dispatch(func, NE, visited_nodes); }
-    if(w && from != W)   { w->dispatch(func, W, visited_nodes);   }
-    if(e && from != E)   { e->dispatch(func, E, visited_nodes);   }
-    if(sw && from != SW) { sw->dispatch(func, SW, visited_nodes); }
-    if(s && from != S)   { s->dispatch(func, S, visited_nodes);   }
-    if(se && from != SE) { se->dispatch(func, SE, visited_nodes); }
+      visited_nodes.emplace(this);
+
+      if(pointers.nw && pointers.nw->powered(visited_nodes)) { sum++; }
+      if(pointers.n  && pointers.n->powered(visited_nodes)) { sum++; }
+      if(pointers.ne && pointers.ne->powered(visited_nodes)) { sum++; }
+      if(pointers.w  && pointers.w->powered(visited_nodes)) { sum++; }
+      if(pointers.e  && pointers.e->powered(visited_nodes)) { sum++; }
+      if(pointers.sw && pointers.sw->powered(visited_nodes)) { sum++; }
+      if(pointers.s  && pointers.s->powered(visited_nodes)) { sum++; }
+      if(pointers.se && pointers.se->powered(visited_nodes)) { sum++; }
+      return sum;
+    }
+
+  virtual auto powered(unordered_set<const Node*> visited_nodes) const noexcept
+    -> bool {
+    return numberPowered(visited_nodes) >= 1;
+  }
+  struct {
+    // These will be used when finding if something is powered
+    node_ptr nw{nullptr}, n{nullptr}, ne{nullptr},
+              w{nullptr},              e{nullptr},
+             sw{nullptr}, s{nullptr}, se{nullptr};
+  } pointers;
+
+  const Position pos;
+
+  explicit Node(const Position& position = Position{0,0}) noexcept
+    : pos{position} {}
+
+  virtual ~Node() noexcept = default;
+
+  friend auto connect(Node& a, Node& b) noexcept
+    -> bool {
+    auto result = false;
+    auto relative_pos = a.pos - b.pos;
+    if(relative_pos != Position{0,0} && magnitude(relative_pos) <= magnitude(Position{1,1})) {
+      if(relative_pos.x == -1 || relative_pos == Position{0,-1}) { return connect(b, a); }
+
+      if(relative_pos == Position{0, 1}) {
+        if(a.wantConnectionFromS()) { b.pointers.n = &a; result = true; }
+        if(b.wantConnectionFromN()) { a.pointers.s = &b; result = true; }
+      }
+      else if(relative_pos == Position{1, 1}) {
+        if(a.wantConnectionFromSW()) { b.pointers.ne = &a; result = true; }
+        if(b.wantConnectionFromNE()) { a.pointers.sw = &b; result = true; }
+      }
+      else if(relative_pos == Position{1, 0}) {
+        if(a.wantConnectionFromW()) { b.pointers.e = &a; result = true; }
+        if(b.wantConnectionFromE()) { a.pointers.w = &b; result = true; }
+      }
+      else if(relative_pos == Position{1,-1}) {
+        if(a.wantConnectionFromNW()) { b.pointers.se = &a; result = true; }
+        if(b.wantConnectionFromSE()) { a.pointers.nw = &b; result = true; }
+      }
+    }
+    return result;
+  }
+
+  friend auto disconnect(Node& a, Node& b) noexcept
+    -> bool {
+    auto result = false;
+    auto relative_pos = a.pos - b.pos;
+    if(relative_pos != Position{0,0} && magnitude(relative_pos) <= magnitude(Position{1,1})) {
+      if(relative_pos.x == -1 || relative_pos == Position{0,-1}) { return disconnect(b, a); }
+
+      if(relative_pos == Position{0, 1}) {
+        if(b.pointers.n != nullptr && a.wantConnectionFromS()) { b.pointers.n = nullptr; result = true; }
+        if(a.pointers.s != nullptr && b.wantConnectionFromN()) { a.pointers.s = nullptr; result = true; }
+      }
+      else if(relative_pos == Position{1, 1}) {
+        if(b.pointers.ne != nullptr && a.wantConnectionFromSW()) { b.pointers.ne = nullptr; result = true; }
+        if(a.pointers.sw != nullptr && b.wantConnectionFromNE()) { a.pointers.sw = nullptr; result = true; }
+      }
+      else if(relative_pos == Position{1, 0}) {
+        if(b.pointers.e != nullptr && a.wantConnectionFromW()) { b.pointers.e = nullptr; result = true; }
+        if(a.pointers.w != nullptr && b.wantConnectionFromE()) { a.pointers.w = nullptr; result = true; }
+      }
+      else if(relative_pos == Position{1,-1}) {
+        if(b.pointers.se != nullptr && a.wantConnectionFromNW()) { b.pointers.se = nullptr; result = true; }
+        if(a.pointers.nw != nullptr && b.wantConnectionFromSE()) { a.pointers.nw = nullptr; result = true; }
+      }
+    }
+  return result;
   }
 };
 #endif  // ! NODE_H
+

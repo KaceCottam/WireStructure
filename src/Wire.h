@@ -1,8 +1,7 @@
-#ifndef LEVER_H
-#define LEVER_H
+#ifndef WIRE_H
+#define WIRE_H
 #include "Node.h"
-#include <string>
-class Lever : public Node {
+class Wire : public Node {
  protected:
   virtual bool wantConnectionFromNW() const noexcept override { return true; }
   virtual bool wantConnectionFromN() const noexcept  override { return true; }
@@ -13,25 +12,8 @@ class Lever : public Node {
   virtual bool wantConnectionFromS() const noexcept  override { return true; }
   virtual bool wantConnectionFromSE() const noexcept override { return true; }
 
-  bool activated = false;
-
-  virtual bool powered(unordered_set<const Node*> visited_nodes) const noexcept override {
-    if(visited_nodes.count(this) >= 1) return false;
-    visited_nodes.emplace(this);
-    return activated;
-  }
-
  public:
-  template<class... Args>
-  explicit Lever(const std::string& id, Args&&... args) noexcept
-    : Node(std::forward<Args>(args)...), id{id} {}
-
-  const std::string id;
-
-  void on() noexcept { activated = true; }
-  void off() noexcept { activated = false; }
-  void toggle() noexcept { activated = !activated; }
+  using Node::Node;
 };
-
-#endif // ! LEVER_H
+#endif // ! WIRE_H
 

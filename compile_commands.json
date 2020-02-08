@@ -8,62 +8,6 @@
             "-Wextra",
             "-Wpedantic",
             "-Werror",
-            "-o",
-            "bin/WireStructure",
-            "src/WireStructure.cxx"
-        ],
-        "directory": "/home/kc/Dev/WireStructure",
-        "file": "src/WireStructure.cxx"
-    },
-    {
-        "arguments": [
-            "g++",
-            "-c",
-            "-std=c++17",
-            "-Wall",
-            "-Wextra",
-            "-Wpedantic",
-            "-Werror",
-            "-Iinclude",
-            "-Isrc",
-            "-g",
-            "build/test.o",
-            "-o",
-            "bin/tests/Switch",
-            "tests/Switch.cxx"
-        ],
-        "directory": "/home/kc/Dev/WireStructure",
-        "file": "tests/Switch.cxx"
-    },
-    {
-        "arguments": [
-            "g++",
-            "-c",
-            "-std=c++17",
-            "-Wall",
-            "-Wextra",
-            "-Wpedantic",
-            "-Werror",
-            "-Iinclude",
-            "-Isrc",
-            "-g",
-            "build/test.o",
-            "-o",
-            "bin/tests/Node",
-            "tests/Node.cxx"
-        ],
-        "directory": "/home/kc/Dev/WireStructure",
-        "file": "tests/Node.cxx"
-    },
-    {
-        "arguments": [
-            "g++",
-            "-c",
-            "-std=c++17",
-            "-Wall",
-            "-Wextra",
-            "-Wpedantic",
-            "-Werror",
             "-Iinclude",
             "-Isrc",
             "-g",
@@ -83,16 +27,12 @@
             "-Wextra",
             "-Wpedantic",
             "-Werror",
-            "-Iinclude",
-            "-Isrc",
-            "-g",
-            "build/test.o",
             "-o",
-            "bin/tests/Not",
-            "tests/Not.cxx"
+            "bin/WireStructure",
+            "src/WireStructure.cxx"
         ],
         "directory": "/home/kc/Dev/WireStructure",
-        "file": "tests/Not.cxx"
+        "file": "src/WireStructure.cxx"
     },
     {
         "arguments": [
