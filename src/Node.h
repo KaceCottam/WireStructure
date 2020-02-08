@@ -6,6 +6,7 @@
 #include <optional>
 #include <unordered_set>
 #include <utility>
+#include <mutex>
 
 using std::optional;
 using std::pair;
@@ -38,6 +39,13 @@ class Node {
   virtual bool wantConnectionFromS() const noexcept = 0;
   virtual bool wantConnectionFromSE() const noexcept = 0;
 
+  static void safeAddToSet(unordered_set<const Node*>& set, const Node* added) noexcept {
+    static std::mutex mux;
+    mux.lock();
+    set.emplace(added);
+    mux.unlock();
+  }
+  
  public:
   auto numberConnected() const noexcept -> unsigned {
     auto sum = 0u;
@@ -60,7 +68,7 @@ class Node {
       auto sum = 0u;
       if(visited_nodes.count(this) >= 1) return false;
 
-      visited_nodes.emplace(this);
+      safeAddToSet(visited_nodes, this);
 
       if(pointers.nw && pointers.nw->powered(visited_nodes)) { sum++; }
       if(pointers.n  && pointers.n->powered(visited_nodes)) { sum++; }

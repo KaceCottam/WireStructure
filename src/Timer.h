@@ -17,7 +17,7 @@ class Timer : public Node {
 
   virtual bool powered(unordered_set<const Node*> visited_nodes) const noexcept override {
     if(visited_nodes.count(this) >= 1) return false;
-    visited_nodes.emplace(this);
+    safeAddToSet(visited_nodes, this);
     return activated;
   }
 
