@@ -1,7 +1,7 @@
 # I use the .cxx extension for source files that define main.
 
 CXX := g++## What compiler we are using
-CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -Werror## Compiler flags for all operations
+CXXFLAGS := -std=c++17 -pthread -Wall -Wextra -Wpedantic -Werror## Compiler flags for all operations
 # Directories
 SRCDIR := src## Where the source files are located
 OBJDIR := build## Where the object files will be placed

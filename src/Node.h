@@ -7,6 +7,7 @@
 #include <unordered_set>
 #include <utility>
 #include <mutex>
+#include <future>
 
 using std::optional;
 using std::pair;
@@ -65,19 +66,35 @@ class Node {
 
   auto numberPowered(unordered_set<const Node*> visited_nodes) const noexcept
     -> unsigned {
-      auto sum = 0u;
-      if(visited_nodes.count(this) >= 1) return false;
+      if(visited_nodes.count(this) >= 1) return 0;
 
+      unsigned sum = 0;
       safeAddToSet(visited_nodes, this);
 
-      if(pointers.nw && pointers.nw->powered(visited_nodes)) { sum++; }
-      if(pointers.n  && pointers.n->powered(visited_nodes)) { sum++; }
-      if(pointers.ne && pointers.ne->powered(visited_nodes)) { sum++; }
-      if(pointers.w  && pointers.w->powered(visited_nodes)) { sum++; }
-      if(pointers.e  && pointers.e->powered(visited_nodes)) { sum++; }
-      if(pointers.sw && pointers.sw->powered(visited_nodes)) { sum++; }
-      if(pointers.s  && pointers.s->powered(visited_nodes)) { sum++; }
-      if(pointers.se && pointers.se->powered(visited_nodes)) { sum++; }
+      auto makeIsPoweredFunction = [&visited_nodes](const Node* ptr){
+        return [ptr,&visited_nodes]{return ptr->powered(visited_nodes);};
+      };
+
+      std::future<bool> nwPowered, nPowered, nePowered, wPowered, ePowered, swPowered, sPowered, sePowered;
+
+      if(pointers.nw) { nwPowered = std::async(makeIsPoweredFunction(pointers.nw)); }
+      if(pointers.n)  { nPowered = std::async(makeIsPoweredFunction(pointers.n));   }
+      if(pointers.ne) { nePowered = std::async(makeIsPoweredFunction(pointers.ne)); }
+      if(pointers.w)  { wPowered = std::async(makeIsPoweredFunction(pointers.w)); }
+      if(pointers.e)  { ePowered = std::async(makeIsPoweredFunction(pointers.e)); }
+      if(pointers.sw) { swPowered = std::async(makeIsPoweredFunction(pointers.sw)); }
+      if(pointers.s)  { sPowered = std::async(makeIsPoweredFunction(pointers.s)); }
+      if(pointers.se) { sePowered = std::async(makeIsPoweredFunction(pointers.se)); }
+
+      if(nwPowered.valid() && nwPowered.get()) sum++;
+      if(nPowered.valid() && nPowered.get()) sum++;
+      if(nePowered.valid() && nePowered.get()) sum++;
+      if(wPowered.valid() && wPowered.get()) sum++;
+      if(ePowered.valid() && ePowered.get()) sum++;
+      if(swPowered.valid() && swPowered.get()) sum++;
+      if(sPowered.valid() && sPowered.get()) sum++;
+      if(sePowered.valid() && sePowered.get()) sum++;
+
       return sum;
     }
 
