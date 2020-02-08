@@ -11,12 +11,172 @@
             "-Iinclude",
             "-Isrc",
             "-g",
+            "build/test.o",
+            "-o",
+            "bin/tests/Or",
+            "tests/Or.cxx"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "tests/Or.cxx"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-Iinclude",
+            "-Isrc",
+            "-g",
+            "build/test.o",
+            "-o",
+            "bin/tests/Xor",
+            "tests/Xor.cxx"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "tests/Xor.cxx"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-Iinclude",
+            "-Isrc",
+            "-g",
+            "build/test.o",
+            "-o",
+            "bin/tests/Xnor",
+            "tests/Xnor.cxx"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "tests/Xnor.cxx"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-Iinclude",
+            "-Isrc",
+            "-g",
+            "build/test.o",
+            "-o",
+            "bin/tests/Not",
+            "tests/Not.cxx"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "tests/Not.cxx"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-Iinclude",
+            "-Isrc",
+            "-g",
+            "build/test.o",
+            "-o",
+            "bin/tests/Nor",
+            "tests/Nor.cxx"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "tests/Nor.cxx"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-Iinclude",
+            "-Isrc",
+            "-g",
+            "build/test.o",
+            "-o",
+            "bin/tests/And",
+            "tests/And.cxx"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "tests/And.cxx"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-Iinclude",
+            "-Isrc",
+            "-g",
+            "build/test.o",
+            "-o",
+            "bin/tests/Vec2D",
+            "tests/Vec2D.cxx"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "tests/Vec2D.cxx"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-Iinclude",
+            "-Isrc",
+            "-g",
             "-o",
             "build/test.o",
             "tests/test.cpp"
         ],
         "directory": "/home/kc/Dev/WireStructure",
         "file": "tests/test.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-Iinclude",
+            "-Isrc",
+            "-g",
+            "build/test.o",
+            "-o",
+            "bin/tests/Wire",
+            "tests/Wire.cxx"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "tests/Wire.cxx"
     },
     {
         "arguments": [
@@ -48,10 +208,10 @@
             "-g",
             "build/test.o",
             "-o",
-            "bin/tests/Vec2D",
-            "tests/Vec2D.cxx"
+            "bin/tests/Nand",
+            "tests/Nand.cxx"
         ],
         "directory": "/home/kc/Dev/WireStructure",
-        "file": "tests/Vec2D.cxx"
+        "file": "tests/Nand.cxx"
     }
 ]
