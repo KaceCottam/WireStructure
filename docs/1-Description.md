@@ -17,3 +17,7 @@ Wanted Features
 - [ ] Cross-Platform, including Web
 - [ ] Export to picture, video, and code
 - [ ] Wires that can go 'underneath' other wires
+
+More wanted features are shown
+[here](https://github.com/KaceCottam/WireStructure/projects/1?add_cards_query=is%3Aopen),
+in the project tab of github.
