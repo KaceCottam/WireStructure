@@ -3,7 +3,6 @@
 #include "Node.h"
 class Nor : public Node {
  protected:
-  using Node::pointers;
   virtual bool wantOutputToNW() const noexcept override { return false; }
   virtual bool wantOutputToN() const noexcept  override { return false; }
   virtual bool wantOutputToNE() const noexcept override { return false; }
