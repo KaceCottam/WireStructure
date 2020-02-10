@@ -13,19 +13,6 @@ using std::optional;
 using std::pair;
 using std::unordered_set;
 
-enum class DirectionTo : int {
-  NW = 0, N, NE,
-   W,         E,
-  SW,     S, SE,
-  None = -1
-};
-enum class DirectionFrom : int {
-  SE = 0, S, SW,
-   E,         W,
-  NE,     N, NW,
-  None = -1
-};
-
 class Node {
  protected:
   using node_ptr = Node*;
