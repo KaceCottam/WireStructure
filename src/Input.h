@@ -4,14 +4,7 @@
 #include <string>
 class Input : public Node {
  protected:
-  virtual bool wantOutputToNW() const noexcept override { return true; }
-  virtual bool wantOutputToN() const noexcept  override { return true; }
-  virtual bool wantOutputToNE() const noexcept override { return true; }
-  virtual bool wantOutputToW() const noexcept  override { return true; }
-  virtual bool wantOutputToE() const noexcept  override { return true; }
-  virtual bool wantOutputToSW() const noexcept override { return true; }
-  virtual bool wantOutputToS() const noexcept  override { return true; }
-  virtual bool wantOutputToSE() const noexcept override { return true; }
+  virtual DirectionFlagSet OutputDirections() const noexcept override { return NW|N|NE|W|E|SW|S|SE; }
 
   bool activated = false;
 

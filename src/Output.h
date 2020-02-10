@@ -4,14 +4,7 @@
 #include <string>
 class Output: public Node {
  protected:
-  virtual bool wantOutputToNW() const noexcept override { return false; }
-  virtual bool wantOutputToN() const noexcept  override { return false; }
-  virtual bool wantOutputToNE() const noexcept override { return false; }
-  virtual bool wantOutputToW() const noexcept  override { return false; }
-  virtual bool wantOutputToE() const noexcept  override { return false; }
-  virtual bool wantOutputToSW() const noexcept override { return false; }
-  virtual bool wantOutputToS() const noexcept  override { return false; }
-  virtual bool wantOutputToSE() const noexcept override { return false; }
+  virtual DirectionFlagSet OutputDirections() const noexcept override { return 0; }
 
  public:
   template<class... Args>
