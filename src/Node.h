@@ -22,8 +22,24 @@ enum DirectionFlags : DirectionFlagSet {
   W  = 1 << 4,
   SW = 1 << 5,
   S  = 1 << 6,
-  SE = 1 << 7,
+  SE = 1 << 7
 };
+inline unsigned toIndex(const DirectionFlags& i) {
+  switch(i) {
+    case E: return 0;
+    case NE: return 1;
+    case N: return 2;
+    case NW: return 3;
+    case W: return 4;
+    case SW: return 5;
+    case S: return 6;
+    case SE: return 7;
+  }
+  throw i;
+}
+inline DirectionFlags toDirectionFlags(const unsigned i) {
+  return DirectionFlags(1 << i);
+}
 
 class Node {
  protected:
@@ -31,6 +47,13 @@ class Node {
   using Position = Vec2D<int>;
 
   virtual DirectionFlagSet OutputDirections() const noexcept = 0;
+  unsigned rotation = 0;
+  bool isOutputtingInDirection(DirectionFlags dir) const noexcept {
+    auto newDirection = toIndex(dir) - rotation;
+    auto newFlag = toDirectionFlags(newDirection);
+    return (OutputDirections() & newFlag) == newFlag;
+
+  }
 
   static void safeAddToSet(unordered_set<const Node*>& set, const Node* added) noexcept {
     static std::mutex mux;
@@ -40,6 +63,19 @@ class Node {
   }
   
  public:
+  void rotate45ccw() {
+    rotation = (rotation + 1) % 8;
+    // need to reconnect
+    pointers.w  = nullptr;
+    pointers.nw = nullptr;
+    pointers.e  = nullptr;
+    pointers.sw = nullptr;
+    pointers.ne = nullptr;
+    pointers.e  = nullptr;
+    pointers.se = nullptr;
+    pointers.s  = nullptr;
+  }
+
   auto numberConnected() const noexcept -> unsigned {
     auto sum = 0u;
     if(pointers.nw) sum++;
@@ -116,20 +152,20 @@ class Node {
       if(relative_pos.x == -1 || relative_pos == Position{0,-1}) { return connect(b, a); }
 
       if(relative_pos == Position{0, 1}) {
-        if((a.OutputDirections() & S) == S) { b.pointers.n = &a; result = true; }
-        if((b.OutputDirections() & N) == N) { a.pointers.s = &b; result = true; }
+        if(b.pointers.n != &a && a.isOutputtingInDirection(S)) { b.pointers.n = &a; result = true; }
+        if(a.pointers.s != &b && b.isOutputtingInDirection(N)) { a.pointers.s = &b; result = true; }
       }
       else if(relative_pos == Position{1, 1}) {
-        if((a.OutputDirections() & SW) == SW) { b.pointers.ne = &a; result = true; }
-        if((b.OutputDirections() & NE) == NE) { a.pointers.sw = &b; result = true; }
+        if(b.pointers.ne != &a && a.isOutputtingInDirection(SW)) { b.pointers.ne = &a; result = true; }
+        if(a.pointers.sw != &b && b.isOutputtingInDirection(NE)) { a.pointers.sw = &b; result = true; }
       }
       else if(relative_pos == Position{1, 0}) {
-        if((a.OutputDirections() & W) == W) { b.pointers.e = &a; result = true; }
-        if((b.OutputDirections() & E) == E) { a.pointers.w = &b; result = true; }
+        if(b.pointers.e != &a && a.isOutputtingInDirection(W)) { b.pointers.e = &a; result = true; }
+        if(a.pointers.w != &b && b.isOutputtingInDirection(E)) { a.pointers.w = &b; result = true; }
       }
       else if(relative_pos == Position{1,-1}) {
-        if((a.OutputDirections() & NW) == NW) { b.pointers.se = &a; result = true; }
-        if((b.OutputDirections() & SE) == SE) { a.pointers.nw = &b; result = true; }
+        if(b.pointers.se != &a && a.isOutputtingInDirection(NW)) { b.pointers.se = &a; result = true; }
+        if(a.pointers.nw != &b && b.isOutputtingInDirection(SE)) { a.pointers.nw = &b; result = true; }
       }
     }
     return result;
@@ -143,20 +179,20 @@ class Node {
       if(relative_pos.x == -1 || relative_pos == Position{0,-1}) { return disconnect(b, a); }
 
       if(relative_pos == Position{0, 1}) {
-        if(b.pointers.n != nullptr && (a.OutputDirections() & S) == S) { b.pointers.n = nullptr; result = true; }
-        if(a.pointers.s != nullptr && (b.OutputDirections() & N) == N) { a.pointers.s = nullptr; result = true; }
+        if(b.pointers.n != nullptr && a.isOutputtingInDirection(S)) { b.pointers.n = nullptr; result = true; }
+        if(a.pointers.s != nullptr && b.isOutputtingInDirection(N)) { a.pointers.s = nullptr; result = true; }
       }
       else if(relative_pos == Position{1, 1}) {
-        if(b.pointers.ne != nullptr && (a.OutputDirections() & SW) == SW) { b.pointers.ne = nullptr; result = true; }
-        if(a.pointers.sw != nullptr && (b.OutputDirections() & NE) == NE) { a.pointers.sw = nullptr; result = true; }
+        if(b.pointers.ne != nullptr && a.isOutputtingInDirection(SW)) { b.pointers.ne = nullptr; result = true; }
+        if(a.pointers.sw != nullptr && b.isOutputtingInDirection(NE)) { a.pointers.sw = nullptr; result = true; }
       }
       else if(relative_pos == Position{1, 0}) {
-        if(b.pointers.e != nullptr && (a.OutputDirections() & W) == W) { b.pointers.e = nullptr; result = true; }
-        if(a.pointers.w != nullptr && (b.OutputDirections() & E) == E) { a.pointers.w = nullptr; result = true; }
+        if(b.pointers.e != nullptr && a.isOutputtingInDirection(W)) { b.pointers.e = nullptr; result = true; }
+        if(a.pointers.w != nullptr && b.isOutputtingInDirection(E)) { a.pointers.w = nullptr; result = true; }
       }
       else if(relative_pos == Position{1,-1}) {
-        if(b.pointers.se != nullptr && (a.OutputDirections() & NW) == NW) { b.pointers.se = nullptr; result = true; }
-        if(a.pointers.nw != nullptr && (b.OutputDirections() & SE) == SE) { a.pointers.nw = nullptr; result = true; }
+        if(b.pointers.se != nullptr && a.isOutputtingInDirection(NW)) { b.pointers.se = nullptr; result = true; }
+        if(a.pointers.nw != nullptr && b.isOutputtingInDirection(SE)) { a.pointers.nw = nullptr; result = true; }
       }
     }
   return result;

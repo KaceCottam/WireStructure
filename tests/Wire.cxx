@@ -71,7 +71,7 @@ TEST_CASE("Functions can be dispatched through connected wires") {
   REQUIRE(ors[2].query() == true);
   
   SECTION("Testing circular connections") {
-    REQUIRE(connect(wires[1], wires[2]) == true);
+    REQUIRE(connect(wires[0], wires[2]) == true);
 
     REQUIRE(ors[0].query() == true);
     REQUIRE(ors[1].query() == true);
@@ -82,50 +82,7 @@ TEST_CASE("Functions can be dispatched through connected wires") {
     REQUIRE(ors[1].query() == false);
     REQUIRE(ors[2].query() == false);
   }
+  SECTION("Trying to connect to a wire that is already connected is impossible") {
+    REQUIRE(connect(wires[1], wires[2]) == false);
+  }
 }
-//TEST_CASE("Wires that are connected to powered() wires automatically become powered") {
-  //Input lever = Input("Input", Position{0,-1});
-  //Wire wire1 = Wire({0,0});
-  //Wire wire2 = Wire({0,1});
-
-  //REQUIRE(connect(lever, wire1) == true);
-
-  //lever.on();
-  //REQUIRE(wire1.powered() == true);
-  //REQUIRE(wire2.powered() == false);
-
-  //auto valid = connect(wire1, wire2);
-  //REQUIRE(valid == true);
-  //REQUIRE(wire1.powered() == true);
-  //REQUIRE(wire2.powered() == true);
-
-  //SECTION("This connection is dispatched throughout multiple connections") {
-    //Wire wire3 = Wire({1,0});
-    //Wire wire4 = Wire({2, 0});
-
-    //auto valid1 = connect(wire3, wire4);
-    //REQUIRE(valid1 == true);
-
-    //auto valid2 = connect(wire1, wire3);
-    //REQUIRE(valid2 == true);
-    //REQUIRE(wire3.powered() == true);
-    //REQUIRE(wire4.powered() == true);
-  //}
-//}
-//TEST_CASE("Wires that are disconnected from powered() wires automatically become unpowered (if there is not another source of power)") {
-  //Input lever = Input(Vec2D{0,-1});
-  //Wire wire1 = Wire({0,0});
-  //Wire wire2 = Wire({0,1});
-  //REQUIRE(connect(lever, wire1) == true);
-  //auto valid1 = connect(wire1, wire2);
-  //REQUIRE(valid1 == true);
-
-  //lever.on();
-  //REQUIRE(wire1.powered() == true);
-  //REQUIRE(wire2.powered() == true);
-
-  //auto valid2 = disconnect(wire1, wire2);
-  //REQUIRE(valid2 == true);
-  //REQUIRE(wire1.powered() == true);
-  //REQUIRE(wire2.powered() == false);
-//}
