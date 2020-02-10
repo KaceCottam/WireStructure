@@ -13,15 +13,16 @@ using std::optional;
 using std::pair;
 using std::unordered_set;
 using DirectionFlagSet = unsigned char;
+// Going around a circle counterclockwise from 0 degrees
 enum DirectionFlags : DirectionFlagSet {
-  NW = 1 << 0,
-  N  = 1 << 1,
-  NE = 1 << 2,
-  W  = 1 << 3,
-  E  = 1 << 4,
+  E  = 1 << 0,
+  NE = 1 << 1,
+  N  = 1 << 2,
+  NW = 1 << 3,
+  W  = 1 << 4,
   SW = 1 << 5,
   S  = 1 << 6,
-  SE = 1 << 7
+  SE = 1 << 7,
 };
 
 class Node {
