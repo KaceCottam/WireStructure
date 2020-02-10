@@ -1,14 +1,14 @@
 #include <catch.hpp>
 
 #include <And.h>
-#include <Lever.h>
-#include <OutputReader.h>
+#include <Input.h>
+#include <Output.h>
 
 TEST_CASE("And statements work") {
   And a = And({0, 0});
-  Lever l1 = Lever("Top", Position{0, 1});
-  Lever l2 = Lever("Bottom", Position{0,-1});
-  OutputReader r = OutputReader("Output", Position{1, 0});
+  Input l1 = Input("Top", Position{0, 1});
+  Input l2 = Input("Bottom", Position{0,-1});
+  Output r = Output("Output", Position{1, 0});
   REQUIRE(connect(a, l1) == true);
   REQUIRE(connect(a, l2) == true);
   REQUIRE(connect(a, r) == true);

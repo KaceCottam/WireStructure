@@ -2,7 +2,7 @@
 #define LEVER_H
 #include "Node.h"
 #include <string>
-class Lever : public Node {
+class Input : public Node {
  protected:
   virtual bool wantOutputToNW() const noexcept override { return true; }
   virtual bool wantOutputToN() const noexcept  override { return true; }
@@ -23,7 +23,7 @@ class Lever : public Node {
 
  public:
   template<class... Args>
-  explicit Lever(const std::string& id, Args&&... args) noexcept
+  explicit Input(const std::string& id, Args&&... args) noexcept
     : Node(std::forward<Args>(args)...), id{id} {}
 
   const std::string id;

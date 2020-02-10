@@ -2,7 +2,7 @@
 #define OUTPUTREADER_H
 #include "Node.h"
 #include <string>
-class OutputReader : public Node {
+class Output: public Node {
  protected:
   virtual bool wantOutputToNW() const noexcept override { return false; }
   virtual bool wantOutputToN() const noexcept  override { return false; }
@@ -15,7 +15,7 @@ class OutputReader : public Node {
 
  public:
   template<class... Args>
-  explicit OutputReader(const std::string& id, Args&&... args) noexcept
+  explicit Output(const std::string& id, Args&&... args) noexcept
     : Node(std::forward<Args>(args)...), id{id} {}
 
   const std::string id;

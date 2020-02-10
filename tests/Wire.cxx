@@ -1,7 +1,7 @@
 #include <catch.hpp>
 
-#include <Lever.h>
-#include <OutputReader.h>
+#include <Input.h>
+#include <Output.h>
 #include <Wire.h>
 
 TEST_CASE("Wires can be connected if they are adjacent") {
@@ -33,15 +33,15 @@ TEST_CASE("Wires cannot be connected if they are not adjacent") {
   REQUIRE(connect(wire1, wire2) == false);
 }
 TEST_CASE("Functions can be dispatched through connected wires") {
-  Lever lever = Lever("Input", Position{-1, 0});
+  Input lever = Input("Input", Position{-1, 0});
   Wire wires[] =
     { Wire({0, 0}),
       Wire({1, 0}),
       Wire({0,-1}) };
-  OutputReader ors[] =
-    { OutputReader("0", Position{0, 1}),
-      OutputReader("1", Position{1, 1}),
-      OutputReader("2", Position{1,-1}) };
+  Output ors[] =
+    { Output("0", Position{0, 1}),
+      Output("1", Position{1, 1}),
+      Output("2", Position{1,-1}) };
 
   REQUIRE(connect(lever, wires[0]) == true);
   for(auto i = 0; i < 3; i++) {
@@ -84,7 +84,7 @@ TEST_CASE("Functions can be dispatched through connected wires") {
   }
 }
 //TEST_CASE("Wires that are connected to powered() wires automatically become powered") {
-  //Lever lever = Lever("Input", Position{0,-1});
+  //Input lever = Input("Input", Position{0,-1});
   //Wire wire1 = Wire({0,0});
   //Wire wire2 = Wire({0,1});
 
@@ -113,7 +113,7 @@ TEST_CASE("Functions can be dispatched through connected wires") {
   //}
 //}
 //TEST_CASE("Wires that are disconnected from powered() wires automatically become unpowered (if there is not another source of power)") {
-  //Lever lever = Lever(Vec2D{0,-1});
+  //Input lever = Input(Vec2D{0,-1});
   //Wire wire1 = Wire({0,0});
   //Wire wire2 = Wire({0,1});
   //REQUIRE(connect(lever, wire1) == true);
