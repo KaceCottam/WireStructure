@@ -171,6 +171,13 @@ class Node {
     return result;
   }
 
+  template<class... Nodes>
+  friend auto connect(Node& a, Node& b, Nodes&&... other) noexcept
+    -> bool {
+      auto result = connect(a, b);
+      return connect(b, other...) | result;
+  }
+
   friend auto disconnect(Node& a, Node& b) noexcept
     -> bool {
     auto result = false;
@@ -196,6 +203,13 @@ class Node {
       }
     }
   return result;
+  }
+
+  template<class... Nodes>
+  friend auto disconnect(Node& a, Node& b, Nodes&&... other) noexcept
+    -> bool {
+    auto result = disconnect(a, b);
+    return disconnect(b, other...) | result;
   }
 };
 #endif  // ! NODE_H

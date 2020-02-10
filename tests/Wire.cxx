@@ -86,3 +86,14 @@ TEST_CASE("Functions can be dispatched through connected wires") {
     REQUIRE(connect(wires[1], wires[2]) == false);
   }
 }
+TEST_CASE("Templated connect/disconnect") {
+  Wire w1(Position{0,0}), w2(Position{0,1}), w3(Position{0,2}),
+       w4(Position{0,3}), w5(Position{0,4}), w6(Position{0,5}),
+       w7(Position{0,6}), w8(Position{0,7}), w9(Position{0,8}),
+       w10(Position{0,9}), w11(Position{0,10});
+
+  w2.rotate45ccw();
+
+  REQUIRE(connect(w1,w2,w3,w4,w5,w6,w7,w8,w9,w10,w11) == true);
+  REQUIRE(disconnect(w1,w2,w3,w4,w5,w6,w7,w8,w9,w10,w11) == true);
+}
