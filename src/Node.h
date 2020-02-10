@@ -31,14 +31,14 @@ class Node {
   using node_ptr = Node*;
   using Position = Vec2D<int>;
 
-  virtual bool wantConnectionFromNW() const noexcept = 0;
-  virtual bool wantConnectionFromN() const noexcept = 0;
-  virtual bool wantConnectionFromNE() const noexcept = 0;
-  virtual bool wantConnectionFromW() const noexcept = 0;
-  virtual bool wantConnectionFromE() const noexcept = 0;
-  virtual bool wantConnectionFromSW() const noexcept = 0;
-  virtual bool wantConnectionFromS() const noexcept = 0;
-  virtual bool wantConnectionFromSE() const noexcept = 0;
+  virtual bool wantOutputToNW() const noexcept = 0;
+  virtual bool wantOutputToN() const noexcept = 0;
+  virtual bool wantOutputToNE() const noexcept = 0;
+  virtual bool wantOutputToW() const noexcept = 0;
+  virtual bool wantOutputToE() const noexcept = 0;
+  virtual bool wantOutputToSW() const noexcept = 0;
+  virtual bool wantOutputToS() const noexcept = 0;
+  virtual bool wantOutputToSE() const noexcept = 0;
 
   static void safeAddToSet(unordered_set<const Node*>& set, const Node* added) noexcept {
     static std::mutex mux;
@@ -124,20 +124,20 @@ class Node {
       if(relative_pos.x == -1 || relative_pos == Position{0,-1}) { return connect(b, a); }
 
       if(relative_pos == Position{0, 1}) {
-        if(a.wantConnectionFromS()) { b.pointers.n = &a; result = true; }
-        if(b.wantConnectionFromN()) { a.pointers.s = &b; result = true; }
+        if(a.wantOutputToS()) { b.pointers.n = &a; result = true; }
+        if(b.wantOutputToN()) { a.pointers.s = &b; result = true; }
       }
       else if(relative_pos == Position{1, 1}) {
-        if(a.wantConnectionFromSW()) { b.pointers.ne = &a; result = true; }
-        if(b.wantConnectionFromNE()) { a.pointers.sw = &b; result = true; }
+        if(a.wantOutputToSW()) { b.pointers.ne = &a; result = true; }
+        if(b.wantOutputToNE()) { a.pointers.sw = &b; result = true; }
       }
       else if(relative_pos == Position{1, 0}) {
-        if(a.wantConnectionFromW()) { b.pointers.e = &a; result = true; }
-        if(b.wantConnectionFromE()) { a.pointers.w = &b; result = true; }
+        if(a.wantOutputToW()) { b.pointers.e = &a; result = true; }
+        if(b.wantOutputToE()) { a.pointers.w = &b; result = true; }
       }
       else if(relative_pos == Position{1,-1}) {
-        if(a.wantConnectionFromNW()) { b.pointers.se = &a; result = true; }
-        if(b.wantConnectionFromSE()) { a.pointers.nw = &b; result = true; }
+        if(a.wantOutputToNW()) { b.pointers.se = &a; result = true; }
+        if(b.wantOutputToSE()) { a.pointers.nw = &b; result = true; }
       }
     }
     return result;
@@ -151,20 +151,20 @@ class Node {
       if(relative_pos.x == -1 || relative_pos == Position{0,-1}) { return disconnect(b, a); }
 
       if(relative_pos == Position{0, 1}) {
-        if(b.pointers.n != nullptr && a.wantConnectionFromS()) { b.pointers.n = nullptr; result = true; }
-        if(a.pointers.s != nullptr && b.wantConnectionFromN()) { a.pointers.s = nullptr; result = true; }
+        if(b.pointers.n != nullptr && a.wantOutputToS()) { b.pointers.n = nullptr; result = true; }
+        if(a.pointers.s != nullptr && b.wantOutputToN()) { a.pointers.s = nullptr; result = true; }
       }
       else if(relative_pos == Position{1, 1}) {
-        if(b.pointers.ne != nullptr && a.wantConnectionFromSW()) { b.pointers.ne = nullptr; result = true; }
-        if(a.pointers.sw != nullptr && b.wantConnectionFromNE()) { a.pointers.sw = nullptr; result = true; }
+        if(b.pointers.ne != nullptr && a.wantOutputToSW()) { b.pointers.ne = nullptr; result = true; }
+        if(a.pointers.sw != nullptr && b.wantOutputToNE()) { a.pointers.sw = nullptr; result = true; }
       }
       else if(relative_pos == Position{1, 0}) {
-        if(b.pointers.e != nullptr && a.wantConnectionFromW()) { b.pointers.e = nullptr; result = true; }
-        if(a.pointers.w != nullptr && b.wantConnectionFromE()) { a.pointers.w = nullptr; result = true; }
+        if(b.pointers.e != nullptr && a.wantOutputToW()) { b.pointers.e = nullptr; result = true; }
+        if(a.pointers.w != nullptr && b.wantOutputToE()) { a.pointers.w = nullptr; result = true; }
       }
       else if(relative_pos == Position{1,-1}) {
-        if(b.pointers.se != nullptr && a.wantConnectionFromNW()) { b.pointers.se = nullptr; result = true; }
-        if(a.pointers.nw != nullptr && b.wantConnectionFromSE()) { a.pointers.nw = nullptr; result = true; }
+        if(b.pointers.se != nullptr && a.wantOutputToNW()) { b.pointers.se = nullptr; result = true; }
+        if(a.pointers.nw != nullptr && b.wantOutputToSE()) { a.pointers.nw = nullptr; result = true; }
       }
     }
   return result;

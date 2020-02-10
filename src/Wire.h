@@ -3,14 +3,14 @@
 #include "Node.h"
 class Wire : public Node {
  protected:
-  virtual bool wantConnectionFromNW() const noexcept override { return true; }
-  virtual bool wantConnectionFromN() const noexcept  override { return true; }
-  virtual bool wantConnectionFromNE() const noexcept override { return true; }
-  virtual bool wantConnectionFromW() const noexcept  override { return true; }
-  virtual bool wantConnectionFromE() const noexcept  override { return true; }
-  virtual bool wantConnectionFromSW() const noexcept override { return true; }
-  virtual bool wantConnectionFromS() const noexcept  override { return true; }
-  virtual bool wantConnectionFromSE() const noexcept override { return true; }
+  virtual bool wantOutputToNW() const noexcept override { return true; }
+  virtual bool wantOutputToN() const noexcept  override { return true; }
+  virtual bool wantOutputToNE() const noexcept override { return true; }
+  virtual bool wantOutputToW() const noexcept  override { return true; }
+  virtual bool wantOutputToE() const noexcept  override { return true; }
+  virtual bool wantOutputToSW() const noexcept override { return true; }
+  virtual bool wantOutputToS() const noexcept  override { return true; }
+  virtual bool wantOutputToSE() const noexcept override { return true; }
 
  public:
   using Node::Node;
