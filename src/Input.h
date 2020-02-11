@@ -8,7 +8,7 @@ class Input : public Node {
 
   bool activated = false;
 
-  virtual bool powered(unordered_set<const Node*> visited_nodes) const noexcept override {
+  virtual bool powered(NodeSet& visited_nodes) const noexcept override {
     if(visited_nodes.count(this) >= 1) return false;
     safeAddToSet(visited_nodes, this);
     return activated;
