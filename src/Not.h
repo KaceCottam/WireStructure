@@ -3,11 +3,9 @@
 #include "Node.h"
 class Not : public Node {
  protected:
-  virtual DirectionFlagSet OutputDirections() const noexcept override { return E; }
+  virtual DirectionFlagSet OutputDirections() const noexcept override;
+  virtual bool powered(NodeSet& visited_nodes) const noexcept override;
 
-  virtual bool powered(NodeSet& visited_nodes) const noexcept override {
-    return !Node::powered(visited_nodes);
-  }
  public:
   using Node::Node;
 };

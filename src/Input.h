@@ -4,26 +4,21 @@
 #include <string>
 class Input : public Node {
  protected:
-  virtual DirectionFlagSet OutputDirections() const noexcept override { return NW|N|NE|W|E|SW|S|SE; }
+  virtual DirectionFlagSet OutputDirections() const noexcept override;
 
   bool activated = false;
 
-  virtual bool powered(NodeSet& visited_nodes) const noexcept override {
-    if(visited_nodes.count(this) >= 1) return false;
-    safeAddToSet(visited_nodes, this);
-    return activated;
-  }
+  virtual bool powered(NodeSet& visited_nodes) const noexcept override;
 
  public:
   template<class... Args>
-  explicit Input(const std::string& id, Args&&... args) noexcept
-    : Node(std::forward<Args>(args)...), id{id} {}
+  explicit Input(const std::string& id, Args&&... args) noexcept;
 
   const std::string id;
 
-  void on() noexcept { activated = true; }
-  void off() noexcept { activated = false; }
-  void toggle() noexcept { activated = !activated; }
+  void on() noexcept;
+  void off() noexcept;
+  void toggle() noexcept;
 };
 
 #endif // ! LEVER_H

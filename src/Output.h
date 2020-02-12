@@ -4,16 +4,15 @@
 #include <string>
 class Output: public Node {
  protected:
-  virtual DirectionFlagSet OutputDirections() const noexcept override { return 0; }
+  virtual DirectionFlagSet OutputDirections() const noexcept override;
 
  public:
   template<class... Args>
-  explicit Output(const std::string& id, Args&&... args) noexcept
-    : Node(std::forward<Args>(args)...), id{id} {}
+  explicit Output(const std::string& id, Args&&... args) noexcept;
 
   const std::string id;
 
-  bool query() const noexcept { return powered(); }
+  bool query() const noexcept;
 };
 #endif // ! OUTPUTREADER_H
 
