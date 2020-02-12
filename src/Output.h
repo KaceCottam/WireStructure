@@ -8,10 +8,10 @@ class Output: public Node {
 
  public:
   template<class... Args>
-  explicit Output(const DirectionFlags inputDir, Args&&... args) noexcept
-    : Node(std::forward<Args>(args)...), inputDir{inputDir} {}
+  explicit Output(const DirectionFlags outputDir, Args&&... args) noexcept
+    : Node(std::forward<Args>(args)...), outputDir{outputDir} {}
 
-  const DirectionFlags inputDir;
+  const DirectionFlags outputDir;
 
   bool query() const noexcept;
 };
