@@ -21,22 +21,8 @@ enum DirectionFlags : DirectionFlagSet {
   S  = 1 << 6,
   SE = 1 << 7
 };
-inline unsigned toIndex(const DirectionFlags& i) {
-  switch(i) {
-    case E: return 0;
-    case NE: return 1;
-    case N: return 2;
-    case NW: return 3;
-    case W: return 4;
-    case SW: return 5;
-    case S: return 6;
-    case SE: return 7;
-  }
-  throw i;
-}
-inline DirectionFlags toDirectionFlags(const unsigned i) {
-  return DirectionFlags(1 << i);
-}
+unsigned toIndex(const DirectionFlags& i);
+inline DirectionFlags toDirectionFlags(const unsigned i);
 
 template<class NodeSet>
 auto safeAddToSet(NodeSet& set, typename NodeSet::key_type added) noexcept -> void;
