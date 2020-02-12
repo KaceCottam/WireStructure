@@ -33,15 +33,15 @@ TEST_CASE("Wires cannot be connected if they are not adjacent") {
   REQUIRE(connect(wire1, wire2) == false);
 }
 TEST_CASE("Functions can be dispatched through connected wires") {
-  Input lever = Input("Input", Position{-1, 0});
+  Input lever = Input(W, Position{-1, 0});
   Wire wires[] =
     { Wire({0, 0}),
       Wire({1, 0}),
       Wire({0,-1}) };
   Output ors[] =
-    { Output("0", Position{0, 1}),
-      Output("1", Position{1, 1}),
-      Output("2", Position{1,-1}) };
+    { Output(E, Position{0, 1}),
+      Output(N, Position{1, 1}),
+      Output(S, Position{1,-1}) };
 
   REQUIRE(connect(lever, wires[0]) == true);
   for(auto i = 0; i < 3; i++) {

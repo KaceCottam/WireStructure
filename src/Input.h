@@ -1,7 +1,6 @@
 #ifndef LEVER_H
 #define LEVER_H
 #include "Node.h"
-#include <string_view>
 class Input : public Node {
  protected:
   virtual DirectionFlagSet OutputDirections() const noexcept override;
@@ -12,10 +11,10 @@ class Input : public Node {
 
  public:
   template<class... Args>
-  explicit Input(const std::string_view id, Args&&... args) noexcept
-    : Node(std::forward<Args>(args)...), id{id} {}
+  explicit Input(const DirectionFlags inputDir, Args&&... args) noexcept
+    : Node(std::forward<Args>(args)...), inputDir{inputDir} {}
 
-  const std::string_view id;
+  const DirectionFlags inputDir;
 
   void on() noexcept;
   void off() noexcept;
