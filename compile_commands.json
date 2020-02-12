@@ -10,11 +10,39 @@
             "-Wpedantic",
             "-Werror",
             "-o",
-            "build/Output.o",
-            "src/Output.cpp"
+            "build/Nand.o",
+            "src/Nand.cpp"
         ],
         "directory": "/home/kc/Dev/WireStructure",
-        "file": "src/Output.cpp"
+        "file": "src/Nand.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-pthread",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "build/Input.o",
+            "build/Or.o",
+            "build/Nor.o",
+            "build/Xor.o",
+            "build/Xnor.o",
+            "build/Nand.o",
+            "build/Output.o",
+            "build/Not.o",
+            "build/Wire.o",
+            "build/And.o",
+            "build/Node.o",
+            "-o",
+            "bin/WireStructure",
+            "src/WireStructure.cxx"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "src/WireStructure.cxx"
     },
     {
         "arguments": [
@@ -30,11 +58,48 @@
             "-Iinclude",
             "-g",
             "-o",
-            "build/tests/Nand.o",
-            "tests/Nand.cpp"
+            "build/tests/And.o",
+            "tests/And.cpp"
         ],
         "directory": "/home/kc/Dev/WireStructure",
-        "file": "tests/Nand.cpp"
+        "file": "tests/And.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-pthread",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-o",
+            "build/Node.o",
+            "src/Node.cpp"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "src/Node.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-pthread",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-Isrc",
+            "-Iinclude",
+            "-g",
+            "-o",
+            "build/tests/Xnor.o",
+            "tests/Xnor.cpp"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "tests/Xnor.cpp"
     },
     {
         "arguments": [
@@ -80,208 +145,12 @@
             "-Wextra",
             "-Wpedantic",
             "-Werror",
-            "-Isrc",
-            "-Iinclude",
-            "-g",
             "-o",
-            "build/tests/Not.o",
-            "tests/Not.cpp"
-        ],
-        "directory": "/home/kc/Dev/WireStructure",
-        "file": "tests/Not.cpp"
-    },
-    {
-        "arguments": [
-            "g++",
-            "-c",
-            "-std=c++17",
-            "-pthread",
-            "-Wall",
-            "-Wextra",
-            "-Wpedantic",
-            "-Werror",
-            "-Isrc",
-            "-Iinclude",
-            "-g",
-            "-o",
-            "build/tests/test.o",
-            "tests/test.cpp"
-        ],
-        "directory": "/home/kc/Dev/WireStructure",
-        "file": "tests/test.cpp"
-    },
-    {
-        "arguments": [
-            "g++",
-            "-c",
-            "-std=c++17",
-            "-pthread",
-            "-Wall",
-            "-Wextra",
-            "-Wpedantic",
-            "-Werror",
-            "-o",
-            "build/Not.o",
-            "src/Not.cpp"
-        ],
-        "directory": "/home/kc/Dev/WireStructure",
-        "file": "src/Not.cpp"
-    },
-    {
-        "arguments": [
-            "g++",
-            "-c",
-            "-std=c++17",
-            "-pthread",
-            "-Wall",
-            "-Wextra",
-            "-Wpedantic",
-            "-Werror",
-            "-Isrc",
-            "-Iinclude",
-            "-g",
-            "-o",
-            "build/tests/Nor.o",
-            "tests/Nor.cpp"
-        ],
-        "directory": "/home/kc/Dev/WireStructure",
-        "file": "tests/Nor.cpp"
-    },
-    {
-        "arguments": [
-            "g++",
-            "-c",
-            "-std=c++17",
-            "-pthread",
-            "-Wall",
-            "-Wextra",
-            "-Wpedantic",
-            "-Werror",
-            "-o",
-            "build/And.o",
-            "src/And.cpp"
-        ],
-        "directory": "/home/kc/Dev/WireStructure",
-        "file": "src/And.cpp"
-    },
-    {
-        "arguments": [
-            "g++",
-            "-c",
-            "-std=c++17",
-            "-pthread",
-            "-Wall",
-            "-Wextra",
-            "-Wpedantic",
-            "-Werror",
-            "build/Input.o",
-            "build/Or.o",
-            "build/Nor.o",
-            "build/Xor.o",
-            "build/Xnor.o",
-            "build/Nand.o",
             "build/Output.o",
-            "build/Not.o",
-            "build/Wire.o",
-            "build/And.o",
-            "build/Node.o",
-            "-o",
-            "bin/WireStructure",
-            "src/WireStructure.cxx"
+            "src/Output.cpp"
         ],
         "directory": "/home/kc/Dev/WireStructure",
-        "file": "src/WireStructure.cxx"
-    },
-    {
-        "arguments": [
-            "g++",
-            "-c",
-            "-std=c++17",
-            "-pthread",
-            "-Wall",
-            "-Wextra",
-            "-Wpedantic",
-            "-Werror",
-            "-o",
-            "build/Node.o",
-            "src/Node.cpp"
-        ],
-        "directory": "/home/kc/Dev/WireStructure",
-        "file": "src/Node.cpp"
-    },
-    {
-        "arguments": [
-            "g++",
-            "-c",
-            "-std=c++17",
-            "-pthread",
-            "-Wall",
-            "-Wextra",
-            "-Wpedantic",
-            "-Werror",
-            "-o",
-            "build/Wire.o",
-            "src/Wire.cpp"
-        ],
-        "directory": "/home/kc/Dev/WireStructure",
-        "file": "src/Wire.cpp"
-    },
-    {
-        "arguments": [
-            "g++",
-            "-c",
-            "-std=c++17",
-            "-pthread",
-            "-Wall",
-            "-Wextra",
-            "-Wpedantic",
-            "-Werror",
-            "-o",
-            "build/Nand.o",
-            "src/Nand.cpp"
-        ],
-        "directory": "/home/kc/Dev/WireStructure",
-        "file": "src/Nand.cpp"
-    },
-    {
-        "arguments": [
-            "g++",
-            "-c",
-            "-std=c++17",
-            "-pthread",
-            "-Wall",
-            "-Wextra",
-            "-Wpedantic",
-            "-Werror",
-            "-Isrc",
-            "-Iinclude",
-            "-g",
-            "-o",
-            "build/tests/Xnor.o",
-            "tests/Xnor.cpp"
-        ],
-        "directory": "/home/kc/Dev/WireStructure",
-        "file": "tests/Xnor.cpp"
-    },
-    {
-        "arguments": [
-            "g++",
-            "-c",
-            "-std=c++17",
-            "-pthread",
-            "-Wall",
-            "-Wextra",
-            "-Wpedantic",
-            "-Werror",
-            "-Isrc",
-            "-Iinclude",
-            "-g",
-            "-o",
-            "build/tests/Vec2D.o",
-            "tests/Vec2D.cpp"
-        ],
-        "directory": "/home/kc/Dev/WireStructure",
-        "file": "tests/Vec2D.cpp"
+        "file": "src/Output.cpp"
     },
     {
         "arguments": [
@@ -317,6 +186,26 @@
             "-Iinclude",
             "-g",
             "-o",
+            "build/tests/Nand.o",
+            "tests/Nand.cpp"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "tests/Nand.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-pthread",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-Isrc",
+            "-Iinclude",
+            "-g",
+            "-o",
             "build/tests/Xor.o",
             "tests/Xor.cpp"
         ],
@@ -333,15 +222,69 @@
             "-Wextra",
             "-Wpedantic",
             "-Werror",
+            "-o",
+            "build/Not.o",
+            "src/Not.cpp"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "src/Not.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-pthread",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-o",
+            "build/And.o",
+            "src/And.cpp"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "src/And.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-pthread",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
             "-Isrc",
             "-Iinclude",
             "-g",
             "-o",
-            "build/tests/And.o",
-            "tests/And.cpp"
+            "build/tests/Not.o",
+            "tests/Not.cpp"
         ],
         "directory": "/home/kc/Dev/WireStructure",
-        "file": "tests/And.cpp"
+        "file": "tests/Not.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-pthread",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-Isrc",
+            "-Iinclude",
+            "-g",
+            "-o",
+            "build/tests/Vec2D.o",
+            "tests/Vec2D.cpp"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "tests/Vec2D.cpp"
     },
     {
         "arguments": [
@@ -387,12 +330,52 @@
             "-Wextra",
             "-Wpedantic",
             "-Werror",
+            "-Isrc",
+            "-Iinclude",
+            "-g",
             "-o",
-            "build/Nor.o",
-            "src/Nor.cpp"
+            "build/tests/test.o",
+            "tests/test.cpp"
         ],
         "directory": "/home/kc/Dev/WireStructure",
-        "file": "src/Nor.cpp"
+        "file": "tests/test.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-pthread",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-o",
+            "build/Wire.o",
+            "src/Wire.cpp"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "src/Wire.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-pthread",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-Isrc",
+            "-Iinclude",
+            "-g",
+            "-o",
+            "build/tests/Nor.o",
+            "tests/Nor.cpp"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "tests/Nor.cpp"
     },
     {
         "arguments": [
@@ -413,5 +396,22 @@
         ],
         "directory": "/home/kc/Dev/WireStructure",
         "file": "tests/Or.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-pthread",
+            "-Wall",
+            "-Wextra",
+            "-Wpedantic",
+            "-Werror",
+            "-o",
+            "build/Nor.o",
+            "src/Nor.cpp"
+        ],
+        "directory": "/home/kc/Dev/WireStructure",
+        "file": "src/Nor.cpp"
     }
 ]
