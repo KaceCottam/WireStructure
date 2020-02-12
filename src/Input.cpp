@@ -10,10 +10,6 @@ bool Input::powered(NodeSet& visited_nodes) const noexcept {
   return activated;
 }
 
-template<class... Args>
-Input::Input(const std::string& id, Args&&... args) noexcept
-  : Node(std::forward<Args>(args)...), id{id} {}
-
 void Input::on() noexcept { activated = true; }
 void Input::off() noexcept { activated = false; }
 void Input::toggle() noexcept { activated = !activated; }

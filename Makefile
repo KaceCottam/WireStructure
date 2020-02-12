@@ -102,13 +102,15 @@ ${TEST_OBJDIR}/%.o: ${TEST_SRCDIR}/%.cpp ${INCDIR}/catch.hpp
 	@mkdir -pv ${TEST_OBJDIR}
 	${CXX} ${CXXFLAGS} ${COMPILE_ARGS} ${TEST_INCLUDES} -g -c -o $@ $<
 
-${TEST_BINDIR}/unit-tests: ${TEST_OBJS} ${INCDIR}/catch.hpp ${HEADS} ${OBJS}
+${TEST_BINDIR}/unit-tests: ${OBJS} ${TEST_OBJS} ${INCDIR}/catch.hpp ${HEADS}
 	@mkdir -pv ${TEST_BINDIR}
 	${CXX} ${CXXFLAGS} ${LINKING_ARGS} ${TEST_INCLUDES} -g -o $@ $(call filter-hpp, $^)
 
 .PHONY: run-tests
 run-tests: ${TEST_BINDIR}/unit-tests
 	./$<
+
+all: run-tests
 
 ${INCDIR}/catch.hpp: ## Download Catch2 Library
 	@echo "Installing catch2 library to $@..."
