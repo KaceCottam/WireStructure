@@ -91,39 +91,24 @@ clean: ## Cleans directory to return to working state
 	@echo "...Done"
 
 # -------------- Testing Targets -------------- #
+TEST_BINDIR := ${BINDIR}
+TEST_OBJDIR := ${OBJDIR}/tests
+TEST_SRCDIR := tests
+TEST_INCLUDES := -I${SRCDIR} -I${INCDIR}
+TEST_SRCS   := $(wildcard ${TEST_SRCDIR}/*.cpp)
+TEST_OBJS   := ${TEST_SRCS:${TEST_SRCDIR}/%.cpp=${TEST_OBJDIR}/%.o}
 
-TESTDIR       := tests
-TEST_SRCS     := $(wildcard ${TESTDIR}/*.cpp)
-TEST_SRCS     += $(wildcard ${TESTDIR}/*.cxx)
-TEST_BINDIR   := ${BINDIR}/${TESTDIR}## Where test binaries are placed
-TEST_INCLUDES := -I${INCDIR} -I${SRCDIR}## Extra includes for tests
-TEST_BINS     := ${TEST_SRCS:${TESTDIR}/%.cxx=${TEST_BINDIR}/%}
+${TEST_OBJDIR}/%.o: ${TEST_SRCDIR}/%.cpp ${INCDIR}/catch.hpp
+	@mkdir -pv ${TEST_OBJDIR}
+	${CXX} ${CXXFLAGS} ${COMPILE_ARGS} ${TEST_INCLUDES} -g -c -o $@ $<
 
-.PHONY: tests
-tests: ${TEST_BINS} ## Compile all tests
+${TEST_BINDIR}/unit-tests: ${TEST_OBJS} ${INCDIR}/catch.hpp ${HEADS} ${OBJS}
+	@mkdir -pv ${TEST_BINDIR}
+	${CXX} ${CXXFLAGS} ${LINKING_ARGS} ${TEST_INCLUDES} -g -o $@ $(call filter-hpp, $^)
 
 .PHONY: run-tests
-run-tests: tests
-	for i in ${TEST_BINDIR}/*; do \
-		echo "$$i" && $$i; \
-	 	if [ $$? != 0 ]; then \
-			exit $$?; \
-		fi; \
-	done
-
-setup-project: setup-test-project
-
-.PHONY: setup-test-project
-setup-test-project:
-	@echo "Making test directory..."
-	@mkdir -pv ${TESTDIR}
-	@echo "...Done"
-	@echo "Making test files..."
-	@echo "//PRECOMPILED HEADER FOR CATCH\n#define CATCH_CONFIG_MAIN\n#include <catch.hpp>" \
-		> ${TESTDIR}/test.h
-	@echo "...Done"
-
-all: run-tests
+run-tests: ${TEST_BINDIR}/unit-tests
+	./$<
 
 ${INCDIR}/catch.hpp: ## Download Catch2 Library
 	@echo "Installing catch2 library to $@..."
@@ -131,14 +116,6 @@ ${INCDIR}/catch.hpp: ## Download Catch2 Library
 	@curl -o $@ "https://raw.githubusercontent.com/catchorg/Catch2/v2.10.2/single_include/catch2/catch.hpp" \
         1>/dev/null 3>/dev/null
 	@echo "...Done"
-
-${OBJDIR}/test.o: ${TESTDIR}/test.cpp ${INCDIR}/catch.hpp
-	@mkdir -pv ${OBJDIR}
-	${CXX} ${CXXFLAGS} ${COMPILE_ARGS} ${TEST_INCLUDES} -g -c -o $@ $<
-
-${TEST_BINDIR}/%: ${TESTDIR}/%.cxx ${SRCDIR}/%.h ${OBJDIR}/test.o
-	@mkdir -pv ${TEST_BINDIR}
-	${CXX} ${CXXFLAGS} ${COMPILE_ARGS} ${TEST_INCLUDES} -g -o $@ $(call filter-hpp, $^)
 
 # ---------- Documentation ----------------- #
 DOCS := $(sort $(wildcard docs/*-*.md))

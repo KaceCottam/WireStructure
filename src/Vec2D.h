@@ -4,20 +4,17 @@
 #include <utility>
 
 template<class T>
-class Vec2D {
-
- public:
+struct Vec2D {
   Vec2D(const T x, const T y) : x{x}, y{y} {}
 
-  T x;
-  T y;
+  T x, y;
 
   template<class Callable>
   friend inline auto mapIt(Callable&& fn, const Vec2D<T>& a) noexcept
-    -> Vec2D<decltype(fn(a.x))> { return {fn(a.x), fn(a.y)}; }
+    -> Vec2D<decltype(fn(T{}))> { return {fn(a.x), fn(a.y)}; }
   template<class Callable>
   friend inline auto foldIt(Callable&& fn, const Vec2D<T>& a) noexcept
-    -> decltype(fn(a.x, a.y)) { return fn(a.x, a.y); }
+    -> decltype(fn(T{}, T{})) { return fn(a.x, a.y); }
 
   friend inline auto operator+(const Vec2D<T>& a, const Vec2D<T>& b) noexcept
     -> Vec2D<T> { return {a.x + b.x, a.y + b.y}; }

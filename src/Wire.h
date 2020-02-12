@@ -3,7 +3,7 @@
 #include "Node.h"
 class Wire : public Node {
  protected:
-  virtual DirectionFlagSet OutputDirections() const noexcept override { return NW|N|NE|W|E|SW|S|SE; }
+  virtual DirectionFlagSet OutputDirections() const noexcept override;
 
  public:
   using Node::Node;
