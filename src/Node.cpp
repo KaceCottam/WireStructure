@@ -91,32 +91,49 @@ auto connect(Node& a, Node& b) noexcept -> bool {
     auto relative_pos = a.pos - b.pos;
     if(relative_pos != Position{0,0} &&
         magnitude(relative_pos) <= magnitude(Position{1,1})) {
-      if(relative_pos.x == -1 || relative_pos == Position{0,-1})
-      { return connect(b, a); }
+      if(relative_pos.x == -1 || relative_pos == Position{0,-1}) {
+        return connect(b, a);
+      }
 
       if(relative_pos == Position{0, 1}) {
-        if(b.pointers.n != &a && a.isOutputtingInDirection(S))
-        { b.pointers.n = &a; result = true; }
-        if(a.pointers.s != &b && b.isOutputtingInDirection(N))
-        { a.pointers.s = &b; result = true; }
+        if(b.pointers.n != &a && a.isOutputtingInDirection(S)) {
+          b.pointers.n = &a;
+          result = true;
+        }
+        if(a.pointers.s != &b && b.isOutputtingInDirection(N)) {
+          a.pointers.s = &b;
+          result = true;
+        }
       }
       else if(relative_pos == Position{1, 1}) {
-        if(b.pointers.ne != &a && a.isOutputtingInDirection(SW))
-        { b.pointers.ne = &a; result = true; }
-        if(a.pointers.sw != &b && b.isOutputtingInDirection(NE))
-        { a.pointers.sw = &b; result = true; }
+        if(b.pointers.ne != &a && a.isOutputtingInDirection(SW)) {
+          b.pointers.ne = &a;
+          result = true;
+        }
+        if(a.pointers.sw != &b && b.isOutputtingInDirection(NE)) {
+          a.pointers.sw = &b;
+          result = true;
+        }
       }
       else if(relative_pos == Position{1, 0}) {
-        if(b.pointers.e != &a && a.isOutputtingInDirection(W))
-        { b.pointers.e = &a; result = true; }
-        if(a.pointers.w != &b && b.isOutputtingInDirection(E))
-        { a.pointers.w = &b; result = true; }
+        if(b.pointers.e != &a && a.isOutputtingInDirection(W)) {
+          b.pointers.e = &a;
+          result = true;
+        }
+        if(a.pointers.w != &b && b.isOutputtingInDirection(E)) {
+          a.pointers.w = &b;
+          result = true;
+        }
       }
       else if(relative_pos == Position{1,-1}) {
-        if(b.pointers.se != &a && a.isOutputtingInDirection(NW))
-        { b.pointers.se = &a; result = true; }
-        if(a.pointers.nw != &b && b.isOutputtingInDirection(SE))
-        { a.pointers.nw = &b; result = true; }
+        if(b.pointers.se != &a && a.isOutputtingInDirection(NW)) {
+          b.pointers.se = &a;
+          result = true;
+        }
+        if(a.pointers.nw != &b && b.isOutputtingInDirection(SE)) {
+          a.pointers.nw = &b;
+          result = true;
+        }
       }
     }
     return result;
@@ -127,32 +144,49 @@ auto disconnect(Node& a, Node& b) noexcept -> bool {
     auto relative_pos = a.pos - b.pos;
     if(relative_pos != Position{0,0} &&
         magnitude(relative_pos) <= magnitude(Position{1,1})) {
-      if(relative_pos.x == -1 || relative_pos == Position{0,-1})
-      { return disconnect(b, a); }
+      if(relative_pos.x == -1 || relative_pos == Position{0,-1}) {
+        return disconnect(b, a);
+      }
 
       if(relative_pos == Position{0, 1}) {
-        if(b.pointers.n != nullptr && a.isOutputtingInDirection(S))
-        { b.pointers.n = nullptr; result = true; }
-        if(a.pointers.s != nullptr && b.isOutputtingInDirection(N))
-        { a.pointers.s = nullptr; result = true; }
+        if(b.pointers.n != nullptr && a.isOutputtingInDirection(S)) {
+          b.pointers.n = nullptr;
+          result = true;
+        }
+        if(a.pointers.s != nullptr && b.isOutputtingInDirection(N)) {
+          a.pointers.s = nullptr;
+          result = true;
+        }
       }
       else if(relative_pos == Position{1, 1}) {
-        if(b.pointers.ne != nullptr && a.isOutputtingInDirection(SW))
-        { b.pointers.ne = nullptr; result = true; }
-        if(a.pointers.sw != nullptr && b.isOutputtingInDirection(NE))
-        { a.pointers.sw = nullptr; result = true; }
+        if(b.pointers.ne != nullptr && a.isOutputtingInDirection(SW)) {
+          b.pointers.ne = nullptr;
+          result = true;
+        }
+        if(a.pointers.sw != nullptr && b.isOutputtingInDirection(NE)) {
+          a.pointers.sw = nullptr;
+          result = true;
+        }
       }
       else if(relative_pos == Position{1, 0}) {
-        if(b.pointers.e != nullptr && a.isOutputtingInDirection(W))
-        { b.pointers.e = nullptr; result = true; }
-        if(a.pointers.w != nullptr && b.isOutputtingInDirection(E))
-        { a.pointers.w = nullptr; result = true; }
+        if(b.pointers.e != nullptr && a.isOutputtingInDirection(W)) {
+          b.pointers.e = nullptr;
+          result = true;
+        }
+        if(a.pointers.w != nullptr && b.isOutputtingInDirection(E)) {
+          a.pointers.w = nullptr;
+          result = true;
+        }
       }
       else if(relative_pos == Position{1,-1}) {
-        if(b.pointers.se != nullptr && a.isOutputtingInDirection(NW))
-        { b.pointers.se = nullptr; result = true; }
-        if(a.pointers.nw != nullptr && b.isOutputtingInDirection(SE))
-        { a.pointers.nw = nullptr; result = true; }
+        if(b.pointers.se != nullptr && a.isOutputtingInDirection(NW)) {
+          b.pointers.se = nullptr;
+          result = true;
+        }
+        if(a.pointers.nw != nullptr && b.isOutputtingInDirection(SE)) {
+          a.pointers.nw = nullptr;
+          result = true;
+        }
       }
     }
   return result;
