@@ -1,7 +1,7 @@
 # I use the .cxx extension for source files that define main.
 
 CXX := g++## What compiler we are using
-CXXFLAGS := -std=c++17 -pthread -Wall -Wextra -Wpedantic -Werror## Compiler flags for all operations
+CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -Werror## Compiler flags for all operations
 # Directories
 SRCDIR := src## Where the source files are located
 OBJDIR := build## Where the object files will be placed
@@ -15,8 +15,8 @@ HEADS     += $(wildcard ${SRCDIR}/*.hxx)
 HEADS     += $(wildcard ${SRCDIR}/*.h)
 OBJS      := ${SRCS:${SRCDIR}/%.cpp=${OBJDIR}/%.o}
 # Extra Arguments
-COMPILE_ARGS := ## Extra arguments for compilation
-LINKING_ARGS := ## Extra arguments for linking
+COMPILE_ARGS :=## Extra arguments for compilation
+LINKING_ARGS :=-pthread -lsfml-graphics -lsfml-window -lsfml-system## Extra arguments for linking
 # Misc
 EXEC          := WireStructure## The output executable for the linking process. Can also automatically use files with the .cxx extension if undefined.
 EXEC_MAINS    := ${SRC_MAINS:${SRCDIR}/%.cxx=${BINDIR}/%}
@@ -73,11 +73,11 @@ help: ## Prints usage instructions
 
 ${OBJDIR}/%.o: ${SRCDIR}/%.cpp
 	@mkdir -pv ${OBJDIR}
-	${CXX} ${CXXFLAGS} ${COMPILE_ARGS} -c -o $@ $<
+	${CXX} ${CXXFLAGS} -c -o $@ $< ${COMPILE_ARGS}
 
 ${BINDIR}/%: ${SRCDIR}/%.cxx ${OBJS} ${HEADS}
 	@mkdir -pv ${BINDIR}
-	${CXX} ${CXXFLAGS} ${LINKING_ARGS} -o $@ $(call filter-hpp, $^)
+	${CXX} ${CXXFLAGS} -o $@ $(call filter-hpp, $^) ${LINKING_ARGS}
 
 .PHONY: DEBUG_MAKE
 DEBUG_MAKE: ## Allows for debugging of makefile
@@ -100,11 +100,11 @@ TEST_OBJS   := ${TEST_SRCS:${TEST_SRCDIR}/%.cpp=${TEST_OBJDIR}/%.o}
 
 ${TEST_OBJDIR}/%.o: ${TEST_SRCDIR}/%.cpp ${INCDIR}/catch.hpp
 	@mkdir -pv ${TEST_OBJDIR}
-	${CXX} ${CXXFLAGS} ${COMPILE_ARGS} ${TEST_INCLUDES} -g -c -o $@ $<
+	${CXX} ${CXXFLAGS} ${TEST_INCLUDES} -g -c -o $@ $< ${COMPILE_ARGS}
 
 ${TEST_BINDIR}/unit-tests: ${OBJS} ${TEST_OBJS} ${INCDIR}/catch.hpp ${HEADS}
 	@mkdir -pv ${TEST_BINDIR}
-	${CXX} ${CXXFLAGS} ${LINKING_ARGS} ${TEST_INCLUDES} -g -o $@ $(call filter-hpp, $^)
+	${CXX} ${CXXFLAGS} ${TEST_INCLUDES} -g -o $@ $(call filter-hpp, $^) ${LINKING_ARGS}
 
 .PHONY: run-tests
 run-tests: ${TEST_BINDIR}/unit-tests
