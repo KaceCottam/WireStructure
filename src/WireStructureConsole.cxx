@@ -63,7 +63,7 @@ auto parse(const IO<string>& in) noexcept {
       if(args[0] == "quit") return QUIT_COMMAND;
       return INVALID_COMMAND;
     case 2:
-      if(args[0] == "create") { 
+      if(args[0] == "showme") { 
       }
       return INVALID_COMMAND;
     case 3:
