@@ -1,4 +1,43 @@
-#include "Node.h"
+#include "Gates.h"
+
+#include <future>
+
+DirectionFlagSet And::OutputDirections() const noexcept {
+  return E;
+}
+
+bool And::powered(NodeSet& visited_nodes) const noexcept {
+  return numberPowered(visited_nodes) == numberConnected();
+}
+
+DirectionFlagSet Input::OutputDirections() const noexcept {
+  return NW|N|NE|W|E|SW|S|SE;
+}
+
+bool Input::powered(NodeSet& visited_nodes) const noexcept {
+  if(visited_nodes.count(this) >= 1) return false;
+  safeAddToSet(visited_nodes, this);
+  return activated;
+}
+
+void Input::on() noexcept { activated = true; }
+void Input::off() noexcept { activated = false; }
+void Input::toggle() noexcept { activated = !activated; }
+
+DirectionFlagSet Output::OutputDirections() const noexcept {
+  return 0;
+}
+bool Output::query() const noexcept {
+  return Node::powered();
+}
+
+DirectionFlagSet Nand::OutputDirections() const noexcept {
+  return E;
+}
+
+bool Nand::powered(NodeSet& visited_nodes) const noexcept {
+  return numberPowered(visited_nodes) != numberConnected();
+}
 
 auto Node::isOutputtingInDirection(DirectionFlags dir) const noexcept -> bool {
   auto newDirection = toIndex(dir) - rotation;
@@ -214,4 +253,42 @@ unsigned toIndex(const DirectionFlags& i) {
     case SE: return 7;
   }
   throw i;
+}
+
+DirectionFlagSet Nor::OutputDirections() const noexcept {
+  return E;
+}
+
+bool Nor::powered(NodeSet& visited_nodes) const noexcept {
+  return numberPowered(visited_nodes) < 1;
+}
+
+DirectionFlagSet Not::OutputDirections() const noexcept {
+ return E;
+}
+
+bool Not::powered(NodeSet& visited_nodes) const noexcept {
+  return !Node::powered(visited_nodes);
+}
+DirectionFlagSet Or::OutputDirections() const noexcept {
+  return E;
+}
+bool Or::powered(NodeSet& visited_nodes) const noexcept {
+  return numberPowered(visited_nodes) >= 1;
+}
+
+DirectionFlagSet Wire::OutputDirections() const noexcept {
+  return NW|N|NE|W|E|SW|S|SE;
+}
+
+DirectionFlagSet Xnor::OutputDirections() const noexcept { return E; }
+
+bool Xnor::powered(NodeSet& visited_nodes) const noexcept {
+  return numberPowered(visited_nodes) != 1;
+}
+
+DirectionFlagSet Xor::OutputDirections() const noexcept { return E; }
+
+bool Xor::powered(NodeSet& visited_nodes) const noexcept {
+  return numberPowered(visited_nodes) == 1;
 }

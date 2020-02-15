@@ -1,4 +1,4 @@
-#include "Node.h"
+#include "Gates.h"
 #include "InputManager.h"
 #include "GhostNode.h"
 
