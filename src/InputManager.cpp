@@ -1,13 +1,13 @@
 #include "InputManager.h"
-bool allKeysPressed(const sf::Mouse::Button& key) {
+[[nodiscard]] bool allKeysPressed(const sf::Mouse::Button& key) noexcept {
   return sf::Mouse::isButtonPressed(key);
 }
-bool allKeysPressed(const sf::Keyboard::Key& key) {
+[[nodiscard]] bool allKeysPressed(const sf::Keyboard::Key& key) noexcept {
   return sf::Keyboard::isKeyPressed(key);
 }
-bool anyKeysPressed(const sf::Mouse::Button& key) {
+[[nodiscard]] bool anyKeysPressed(const sf::Mouse::Button& key) noexcept {
   return sf::Mouse::isButtonPressed(key);
 }
-bool anyKeysPressed(const sf::Keyboard::Key& key) {
+[[nodiscard]] bool anyKeysPressed(const sf::Keyboard::Key& key) noexcept {
   return sf::Keyboard::isKeyPressed(key);
 }

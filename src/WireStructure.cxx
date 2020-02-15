@@ -27,7 +27,7 @@ auto setupGhostGrid(const sf::View& view, const float distance) {
 int main() {
   sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Wire Structure");
   sf::View view = window.getDefaultView();
-  // i will want a qtree for this eventually
+
   auto ghostNodes = setupGhostGrid(view, 50.f);
   float zoomLevel = 1.f;
   std::unordered_set<std::unique_ptr<Node>> board;
@@ -75,7 +75,7 @@ int main() {
         std::sqrt(std::pow(iPos.x - transformedMouse.x, 2) +
                   std::pow(iPos.y - transformedMouse.y, 2));
       const auto isInRange = distanceToMouse < 25.f;
-      i->Highlight(isInRange);
+      i->setHighlight(isInRange);
 
     }
 
