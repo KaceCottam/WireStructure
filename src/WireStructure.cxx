@@ -1,4 +1,5 @@
 #include "Node.h"
+#include "InputManager.h"
 #include "GhostNode.h"
 
 #include <SFML/Graphics.hpp>
@@ -22,30 +23,6 @@ auto setupGhostGrid(const sf::View& view, const float distance) {
   return ghostNodes;
 }
 
-bool allKeysPressed(const sf::Mouse::Button& key) {
-  return sf::Mouse::isButtonPressed(key);
-}
-bool allKeysPressed(const sf::Keyboard::Key& key) {
-  return sf::Keyboard::isKeyPressed(key);
-}
-template<class T, class... Keys>
-bool allKeysPressed(const T& key, const Keys&... keys) {
-  bool result = allKeysPressed(key) &&
-                allKeysPressed(keys...);
-  return result;
-}
-bool anyKeysPressed(const sf::Mouse::Button& key) {
-  return sf::Mouse::isButtonPressed(key);
-}
-bool anyKeysPressed(const sf::Keyboard::Key& key) {
-  return sf::Keyboard::isKeyPressed(key);
-}
-template<class T, class... Keys>
-bool anyKeysPressed(const T& key, const Keys&... keys) {
-  bool result = anyKeysPressed(key) ||
-                anyKeysPressed(keys...);
-  return result;
-}
 
 int main() {
   sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Wire Structure");
