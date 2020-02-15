@@ -77,14 +77,6 @@ int main() {
       const auto isInRange = distanceToMouse < 25.f;
       i->Highlight(isInRange);
 
-      if(allKeysPressed(sf::Mouse::Left)) {
-        //std::unique_ptr<Node> newNode = promptNode(i->getPosition());
-      }
-      if(allKeysPressed(sf::Mouse::Right)) {
-        //if (auto& node = board.findPos(i->getPosition())) {
-            //node.rotate45ccw();
-        //}
-      }
     }
 
     window.clear();
