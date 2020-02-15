@@ -1,9 +1,13 @@
+#include "Node.h"
 #include "GhostNode.h"
+
 #include <SFML/Graphics.hpp>
 
 #include <vector>
 #include <memory>
 #include <cmath>
+#include <utility>
+#include <unordered_set>
 
 auto setupGhostGrid(const sf::View& view, const float distance) {
   std::vector<std::unique_ptr<GhostNode>> ghostNodes{};
@@ -18,20 +22,28 @@ auto setupGhostGrid(const sf::View& view, const float distance) {
   return ghostNodes;
 }
 
+bool allKeysPressed(const sf::Mouse::Button& key) {
+  return sf::Mouse::isButtonPressed(key);
+}
 bool allKeysPressed(const sf::Keyboard::Key& key) {
   return sf::Keyboard::isKeyPressed(key);
 }
-template<class... Keys>
-bool allKeysPressed(const sf::Keyboard::Key& key, Keys&&... keys) {
-  bool result = allKeysPressed(key) && allKeysPressed(keys...);
+template<class T, class... Keys>
+bool allKeysPressed(const T& key, const Keys&... keys) {
+  bool result = allKeysPressed(key) &&
+                allKeysPressed(keys...);
   return result;
+}
+bool anyKeysPressed(const sf::Mouse::Button& key) {
+  return sf::Mouse::isButtonPressed(key);
 }
 bool anyKeysPressed(const sf::Keyboard::Key& key) {
   return sf::Keyboard::isKeyPressed(key);
 }
-template<class... Keys>
-bool anyKeysPressed(const sf::Keyboard::Key& key, Keys&&... keys) {
-  bool result = anyKeysPressed(key) || anyKeysPressed(keys...);
+template<class T, class... Keys>
+bool anyKeysPressed(const T& key, const Keys&... keys) {
+  bool result = anyKeysPressed(key) ||
+                anyKeysPressed(keys...);
   return result;
 }
 
@@ -40,49 +52,62 @@ int main() {
   sf::View view = window.getDefaultView();
   // i will want a qtree for this eventually
   auto ghostNodes = setupGhostGrid(view, 50.f);
-  const auto moveSpeed = 0.2f;
-  const auto moveSpeedFast = 1.0f;
+  float zoomLevel = 1.f;
+  std::unordered_set<std::unique_ptr<Node>> board;
   while(window.isOpen()) {
     sf::Event event;
     while(window.pollEvent(event)) {
       if(event.type == sf::Event::Closed) {
         window.close();
       }
+
+      if(event.type == sf::Event::MouseButtonPressed) {
+      }
     }
+
+    const auto moveSpeed = 1.5f;
+    const auto moveSpeedFast = 10.0f;
     const auto speed = allKeysPressed(sf::Keyboard::LShift) ? moveSpeedFast
                                                             : moveSpeed;
     if(anyKeysPressed(sf::Keyboard::W, sf::Keyboard::A, sf::Keyboard::D,
                       sf::Keyboard::S, sf::Keyboard::Z)) {
         ghostNodes = setupGhostGrid(view, 50.f);
     }
-    if(allKeysPressed(sf::Keyboard::W)) {
-      view.move(0.f,-1 * speed);
-    }
-    if(allKeysPressed(sf::Keyboard::A)) {
-      view.move(-1 * speed, 0.f);
-    }
-    if(allKeysPressed(sf::Keyboard::D)) {
-      view.move(speed, 0.f);
-    }
-    if(allKeysPressed(sf::Keyboard::S)) {
-      view.move(0.f, speed);
-    }
-    const auto zoomFactor = 0.001f *
+    if(allKeysPressed(sf::Keyboard::W)) { view.move(0.f,-1 * speed); }
+    if(allKeysPressed(sf::Keyboard::A)) { view.move(-1 * speed, 0.f); }
+    if(allKeysPressed(sf::Keyboard::S)) { view.move(0.f, speed); }
+    if(allKeysPressed(sf::Keyboard::D)) { view.move(speed, 0.f); }
+
+    const auto zoomFactor = 0.01f *
       (allKeysPressed(sf::Keyboard::LShift) ? 1 : -1);
+
     if(allKeysPressed(sf::Keyboard::Z)) {
-      view.zoom(1.f + zoomFactor);
+      const auto zoomHigh = 1.25f;
+      const auto zoomLow = 0.45f;
+      if(zoomLevel > zoomLow && zoomLevel < zoomHigh) {
+        view.zoom(1.f + zoomFactor);
+      }
+      zoomLevel = std::clamp(zoomLevel * (1.f + zoomFactor), zoomLow, zoomHigh);
     }
+
     const auto mousePos = sf::Mouse::getPosition(window);
     for(const auto& i : ghostNodes) {
-      auto iPos = i->getPosition();
-      auto transformedMouse = window.mapPixelToCoords(mousePos, view);
-      auto distanceToMouse =
+      const auto iPos = i->getPosition();
+      const auto transformedMouse = window.mapPixelToCoords(mousePos, view);
+      const auto distanceToMouse =
         std::sqrt(std::pow(iPos.x - transformedMouse.x, 2) +
                   std::pow(iPos.y - transformedMouse.y, 2));
-      if(distanceToMouse < 25.f &&
-         distanceToMouse < 25.f)
-        i->Highlight(true);
-      else i->Highlight(false);
+      const auto isInRange = distanceToMouse < 25.f;
+      i->Highlight(isInRange);
+
+      if(allKeysPressed(sf::Mouse::Left)) {
+        //std::unique_ptr<Node> newNode = promptNode(i->getPosition());
+      }
+      if(allKeysPressed(sf::Mouse::Right)) {
+        //if (auto& node = board.findPos(i->getPosition())) {
+            //node.rotate45ccw();
+        //}
+      }
     }
 
     window.clear();

@@ -9,7 +9,8 @@ class GhostNode : public sf::CircleShape {
       CircleShape::setFillColor(sf::Color(55,55,55,255));
     }
 
-    void Highlight(bool value = false) {
+    void Highlight(bool value) {
+      highlight = value;
       if(value) {
         CircleShape::setOutlineColor(sf::Color::White);
         CircleShape::setOutlineThickness(2.f);
@@ -17,6 +18,11 @@ class GhostNode : public sf::CircleShape {
         CircleShape::setOutlineColor(sf::Color::Transparent);
       }
     }
+    bool Highlight() const {
+      return highlight;
+    }
+  private:
+    bool highlight;
 };
 #endif // ! GHOSTNODE_H
 
