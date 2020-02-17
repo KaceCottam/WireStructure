@@ -37,9 +37,10 @@ class Node {
   } pointers;
 
   unsigned rotation = 0;
-  const Position pos;
 
  public:
+  const Position pos;
+
   explicit Node(const Position& position = {0,0}) noexcept;
 
   void rotate45ccw() noexcept;
