@@ -10,6 +10,7 @@ template<class Gate>
 class VisualBaseGate
   : public Gate, public sf::Drawable, public sf::Transformable { };
 
+// TODO implement draw functions inside of these
 class VisualNotGate     : public VisualBaseGate<NotGate> { };
 class VisualAndGate     : public VisualBaseGate<AndGate> { };
 class VisualOrGate      : public VisualBaseGate<OrGate> { };
