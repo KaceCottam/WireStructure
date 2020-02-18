@@ -1,15 +1,20 @@
 #include "BaseGate.h"
 
 #include <algorithm>
+#include <future>
 
 unsigned BaseGate::countPowered() const
 {
-  unsigned result = 0;
-  for(auto i : inputs)
-  {
-    if(i->powered()) result++;
-  }
-  return result;
+  std::vector<std::future<bool>> results; 
+  const auto seeIfPowered = [](auto* i){ return i->powered(); };
+
+  std::transform(inputs.begin(), inputs.end(), std::back_inserter(results),
+      [&seeIfPowered](auto& i)
+      { return std::async(std::launch::async, seeIfPowered, i); });
+
+  return std::count_if(results.begin(), results.end(),
+    [](auto& i){ return i.get(); }
+    );
 }
 
 bool NotGate::powered() const { return inputs.size() == 1 && countPowered() == 0; }
