@@ -1,7 +1,7 @@
 Technologies
 ===
 - C++
-- C++ STL - unordered_set, mutex, future, async, functional
+- C++ STL
 - WxWidgets
 
 I am using `C++` and `WxWidgets`.  WxWidgets for graphics is simple, and I am
