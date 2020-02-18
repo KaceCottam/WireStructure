@@ -1,6 +1,6 @@
 #include <catch.hpp>
 
-#include <BaseGate.h>
+#include <Gates.h>
 
 TEST_CASE("or gates work")
 {

@@ -1,5 +1,5 @@
-#ifndef BASEGATE_H
-#define BASEGATE_H
+#ifndef GATES_H
+#define GATES_H
 #include <vector>
 struct BaseGate
 {
@@ -18,5 +18,5 @@ struct NandGate    : public BaseGate { bool powered() const override; };
 struct InputGate   : public BaseGate { bool active;  bool powered() const override; };
 struct OutputGate  : public OrGate {};
 struct Multiplexer : public BaseGate { bool powered() const override; };
-#endif // ! BASEGATE_H
+#endif // ! GATES_H
 
