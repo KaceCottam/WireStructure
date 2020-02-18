@@ -2,19 +2,22 @@
 
 #include <algorithm>
 
-unsigned countPowered(const BaseGate* bg)
+unsigned BaseGate::countPowered() const
 {
-  return std::count_if(bg->inputs.begin(),bg->inputs.end(),
-      [](auto i){return powered(i);}
-      );
+  unsigned result = 0;
+  for(auto i : inputs)
+  {
+    if(i->powered()) result++;
+  }
+  return result;
 }
 
-bool powered(const NotGate& ng) { return countPowered(&ng) == 0; }
-bool powered(const AndGate& ag) { return countPowered(&ag) == ag.inputs.size(); }
-bool powered(const OrGate& g) { return countPowered(&g) >= 1; }
-bool powered(const NorGate& g) { return countPowered(&g) == 0; }
-bool powered(const XorGate& g) { return countPowered(&g) == 1; }
-bool powered(const XnorGate& g) { return countPowered(&g) > 1; }
-bool powered(const NandGate& g) { return countPowered(&g) != g.inputs.size(); }
-bool powered(const InputGate& g) { return g.active; }
-bool powered(const OutputGate&) { return false; }
+bool NotGate::powered() const { return inputs.size() == 1 && countPowered() == 0; }
+bool AndGate::powered() const { return countPowered() == inputs.size(); }
+bool OrGate::powered() const { return countPowered() >= 1; }
+bool NorGate::powered() const { return countPowered() == 0; }
+bool XorGate::powered() const { return countPowered() == 1; }
+bool XnorGate::powered() const { return countPowered() > 1; }
+bool NandGate::powered() const { return countPowered() != inputs.size(); }
+bool InputGate::powered() const { return active; }
+
