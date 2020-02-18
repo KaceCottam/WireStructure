@@ -1,5 +1,7 @@
 #include "Gates.h"
 #include "InputManager.h"
+#include "MainWindow.h"
+#include "GridView.h"
 #include "GhostNode.h"
 
 #include <SFML/Graphics.hpp>
@@ -24,184 +26,160 @@ auto setupGhostGrid(const sf::View& view, const float distance) {
   return ghostNodes;
 }
 
-
 int main() {
-  sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Wire Structure");
-  sf::View view = window.getDefaultView();
-
-  auto ghostNodes = setupGhostGrid(view, 50.f);
   float zoomLevel = 1.f;
+  auto ghostNodes = setupGhostGrid(GridView::getInstance(), 50.f);
   std::unordered_set<std::shared_ptr<Node>> board;
   std::shared_ptr<Node> connect1;
-  while(window.isOpen()) {
+  while(MainWindow::getInstance().isOpen()) {
     sf::Event event;
-    while(window.pollEvent(event)) {
+    while(MainWindow::getInstance().pollEvent(event)) {
       if(event.type == sf::Event::Closed) {
-        window.close();
+        MainWindow::getInstance().close();
+      }
+
+      if(event.type == sf::Event::KeyReleased) {
+        for(const auto& i : ghostNodes) {
+          const auto mousePos = sf::Mouse::getPosition(MainWindow::getInstance());
+          const auto iPos = i->getPosition();
+          const auto transformedMouse = MainWindow::getInstance().mapPixelToCoords(mousePos, GridView::getInstance());
+          const auto distanceToMouse =
+            std::sqrt(std::pow(iPos.x - transformedMouse.x, 2) +
+                      std::pow(iPos.y - transformedMouse.y, 2));
+          const auto isInRange = distanceToMouse < 25.f;
+
+          // (Key, NodeType)
+          // ~, GhostNode
+          // 1, Wire
+          // 2, Input
+          // 3, Output
+          // 4, Not
+          // 5, And
+          // 6, Or
+          // 7, Nand
+          // 8, Nor
+          // 9, Xor
+          // 0, Xnor
+          if(isInRange) {
+            if(event.key.code == sf::Keyboard::Tilde) {
+              auto node = std::find_if(board.begin(), board.end(),
+                  [&iPos](auto& x)
+                  {return x->pos.x == (int)iPos.x && x->pos.y == (int)iPos.y;});
+              if(node != board.end()) {
+                board.erase(node);
+                std::cout << "Node erased at " << iPos.x << ' ' << iPos.y << '\n';
+              } else {
+                std::cout << "No nodes found at " << iPos.x << ' ' << iPos.y << '\n';
+              }
+            }
+            if(event.key.code == sf::Keyboard::Num1) {
+              board.emplace(new Wire(Position{(int)iPos.x, (int)iPos.y}));
+              std::cout << "Created a new wire at " << iPos.x << ' ' << iPos.y << '\n';
+            }
+            if(event.key.code == sf::Keyboard::Num2) {
+              board.emplace(new Input(W,Position{(int)iPos.x, (int)iPos.y}));
+              std::cout << "Created a new input at " << iPos.x << ' ' << iPos.y << '\n';
+            }
+            if(event.key.code == sf::Keyboard::Num3) {
+              board.emplace(new Output(E,Position{(int)iPos.x, (int)iPos.y}));
+              std::cout << "Created a new output at " << iPos.x << ' ' << iPos.y << '\n';
+            }
+            if(event.key.code == sf::Keyboard::Num4) {
+              board.emplace(new Not(Position{(int)iPos.x, (int)iPos.y}));
+              std::cout << "Created a new not at " << iPos.x << ' ' << iPos.y << '\n';
+            }
+            if(event.key.code == sf::Keyboard::Num5) {
+              board.emplace(new And(Position{(int)iPos.x, (int)iPos.y}));
+              std::cout << "Created a new and at " << iPos.x << ' ' << iPos.y << '\n';
+            }
+            if(event.key.code == sf::Keyboard::Num6) {
+              board.emplace(new Or(Position{(int)iPos.x, (int)iPos.y}));
+              std::cout << "Created a new or at " << iPos.x << ' ' << iPos.y << '\n';
+            }
+            if(event.key.code == sf::Keyboard::Num7) {
+              board.emplace(new Nand(Position{(int)iPos.x, (int)iPos.y}));
+              std::cout << "Created a new nand at " << iPos.x << ' ' << iPos.y << '\n';
+            }
+            if(event.key.code == sf::Keyboard::Num8) {
+              board.emplace(new Nor(Position{(int)iPos.x, (int)iPos.y}));
+              std::cout << "Created a new nor at " << iPos.x << ' ' << iPos.y << '\n';
+            }
+            if(event.key.code == sf::Keyboard::Num9) {
+              board.emplace(new Xor(Position{(int)iPos.x, (int)iPos.y}));
+              std::cout << "Created a new xor at " << iPos.x << ' ' << iPos.y << '\n';
+            }
+            if(event.key.code == sf::Keyboard::Num0) {
+              board.emplace(new Xnor(Position{(int)iPos.x, (int)iPos.y}));
+              std::cout << "Created a new xnor at " << iPos.x << ' ' << iPos.y << '\n';
+            }
+            if(event.key.code == sf::Keyboard::C) {
+              if(!connect1) {
+                connect1 =
+                  *std::find_if(board.begin(), board.end(),
+                    [&iPos](auto& x)
+                    {return x->pos.x == (int)iPos.x && x->pos.y == (int)iPos.y;});
+                std::cout << "Starting first connection at " << iPos.x << ' ' << iPos.y << '\n';
+              } else {
+                auto connect2 = 
+                *std::find_if(board.begin(), board.end(),
+                  [&iPos](auto& x)
+                  {return x->pos.x == (int)iPos.x && x->pos.y == (int)iPos.y;});
+                auto valid = connect(*connect1, *connect2);
+                if(valid) {
+                  std::cout << "Connected to " << iPos.x << ' ' << iPos.y << '\n';
+                } else {
+                  std::cout << "Tried connecting to " << iPos.x << ' ' << iPos.y <<
+                    ", but failed!\n";
+                }
+                connect1 = nullptr;
+              }
+            }
+          }
+        }
       }
     }
 
     const auto moveSpeed = 1.5f;
     const auto moveSpeedFast = 5.0f;
-    const auto speed = allKeysPressed(sf::Keyboard::LShift) ? moveSpeedFast
+    const auto speed = InputManager::allKeysPressed(sf::Keyboard::LShift) ? moveSpeedFast
                                                             : moveSpeed;
-    if(anyKeysPressed(sf::Keyboard::W, sf::Keyboard::A, sf::Keyboard::D,
+    if(InputManager::anyKeysPressed(sf::Keyboard::W, sf::Keyboard::A, sf::Keyboard::D,
                       sf::Keyboard::S, sf::Keyboard::Z)) {
-        ghostNodes = setupGhostGrid(view, 50.f);
+        ghostNodes = setupGhostGrid(GridView::getInstance(), 50.f);
     }
-    if(allKeysPressed(sf::Keyboard::W)) { view.move(0.f,-1 * speed); }
-    if(allKeysPressed(sf::Keyboard::A)) { view.move(-1 * speed, 0.f); }
-    if(allKeysPressed(sf::Keyboard::S)) { view.move(0.f, speed); }
-    if(allKeysPressed(sf::Keyboard::D)) { view.move(speed, 0.f); }
+    if(InputManager::allKeysPressed(sf::Keyboard::W)) { GridView::getInstance().move(0.f,-1 * speed); }
+    if(InputManager::allKeysPressed(sf::Keyboard::A)) { GridView::getInstance().move(-1 * speed, 0.f); }
+    if(InputManager::allKeysPressed(sf::Keyboard::S)) { GridView::getInstance().move(0.f, speed); }
+    if(InputManager::allKeysPressed(sf::Keyboard::D)) { GridView::getInstance().move(speed, 0.f); }
 
     const auto zoomFactor = 0.01f *
-      (allKeysPressed(sf::Keyboard::LShift) ? 1 : -1);
+      (InputManager::allKeysPressed(sf::Keyboard::LShift) ? 1 : -1);
 
-    if(allKeysPressed(sf::Keyboard::Z)) {
+    if(InputManager::allKeysPressed(sf::Keyboard::Z)) {
       const auto zoomHigh = 1.25f;
       const auto zoomLow = 0.45f;
       if(zoomLevel > zoomLow && zoomLevel < zoomHigh) {
-        view.zoom(1.f + zoomFactor);
+        GridView::getInstance().zoom(1.f + zoomFactor);
       }
       zoomLevel = std::clamp(zoomLevel * (1.f + zoomFactor), zoomLow, zoomHigh);
     }
 
-    const auto mousePos = sf::Mouse::getPosition(window);
+    const auto mousePos = sf::Mouse::getPosition(MainWindow::getInstance());
     for(const auto& i : ghostNodes) {
       const auto iPos = i->getPosition();
-      const auto transformedMouse = window.mapPixelToCoords(mousePos, view);
+      const auto transformedMouse = MainWindow::getInstance().mapPixelToCoords(mousePos, GridView::getInstance());
       const auto distanceToMouse =
         std::sqrt(std::pow(iPos.x - transformedMouse.x, 2) +
                   std::pow(iPos.y - transformedMouse.y, 2));
       const auto isInRange = distanceToMouse < 25.f;
       i->setHighlight(isInRange);
-
-      if(isInRange) {
-        auto buttonHeld = false;
-        // (Key, NodeType)
-        // ~, GhostNode
-        // 1, Wire
-        // 2, Input
-        // 3, Output
-        // 4, Not
-        // 5, And
-        // 6, Or
-        // 7, Nand
-        // 8, Nor
-        // 9, Xor
-        // 0, Xnor
-        if(anyKeysPressed(sf::Keyboard::Tilde)) {
-          if(buttonHeld) {
-          buttonHeld = true;
-          board.erase(std::find_if(board.begin(), board.end(),
-            [&iPos](auto& x)
-            {return x->pos.x == (int)iPos.x && x->pos.y == (int)iPos.y;}));
-          }
-        } else if(buttonHeld) buttonHeld = false; 
-
-        if(anyKeysPressed(sf::Keyboard::Num1)) {
-          if(buttonHeld) {
-          buttonHeld = true;
-          board.emplace(new Wire(Position{(int)iPos.x, (int)iPos.y}));
-          std::cout << "Created a new wire at " << iPos.x << ' ' << iPos.y << '\n';
-          }
-        } else if(buttonHeld) buttonHeld = false; 
-        if(anyKeysPressed(sf::Keyboard::Num2)) {
-          if(buttonHeld) {
-          buttonHeld = true;
-          board.emplace(new Input(W,Position{(int)iPos.x, (int)iPos.y}));
-          std::cout << "Created a new input at " << iPos.x << ' ' << iPos.y << '\n';
-          }
-        } else if(buttonHeld) buttonHeld = false; 
-        if(anyKeysPressed(sf::Keyboard::Num3)) {
-          if(buttonHeld) {
-          buttonHeld = true;
-          board.emplace(new Output(E,Position{(int)iPos.x, (int)iPos.y}));
-          std::cout << "Created a new output at " << iPos.x << ' ' << iPos.y << '\n';
-          }
-        } else if(buttonHeld) buttonHeld = false; 
-        if(anyKeysPressed(sf::Keyboard::Num4)) {
-          if(buttonHeld) {
-          buttonHeld = true;
-          board.emplace(new Not(Position{(int)iPos.x, (int)iPos.y}));
-          std::cout << "Created a new not at " << iPos.x << ' ' << iPos.y << '\n';
-          }
-        } else if(buttonHeld) buttonHeld = false; 
-        if(anyKeysPressed(sf::Keyboard::Num5)) {
-          if(buttonHeld) {
-          buttonHeld = true;
-          board.emplace(new And(Position{(int)iPos.x, (int)iPos.y}));
-          std::cout << "Created a new and at " << iPos.x << ' ' << iPos.y << '\n';
-          }
-        } else if(buttonHeld) buttonHeld = false; 
-        if(anyKeysPressed(sf::Keyboard::Num6)) {
-          if(buttonHeld) {
-          buttonHeld = true;
-          board.emplace(new Or(Position{(int)iPos.x, (int)iPos.y}));
-          std::cout << "Created a new or at " << iPos.x << ' ' << iPos.y << '\n';
-          }
-        } else if(buttonHeld) buttonHeld = false; 
-        if(anyKeysPressed(sf::Keyboard::Num7)) {
-          if(buttonHeld) {
-          buttonHeld = true;
-          board.emplace(new Nand(Position{(int)iPos.x, (int)iPos.y}));
-          std::cout << "Created a new nand at " << iPos.x << ' ' << iPos.y << '\n';
-          }
-        } else if(buttonHeld) buttonHeld = false; 
-        if(anyKeysPressed(sf::Keyboard::Num8)) {
-          if(buttonHeld) {
-          buttonHeld = true;
-          board.emplace(new Nor(Position{(int)iPos.x, (int)iPos.y}));
-          std::cout << "Created a new nor at " << iPos.x << ' ' << iPos.y << '\n';
-          }
-        } else if(buttonHeld) buttonHeld = false; 
-        if(anyKeysPressed(sf::Keyboard::Num9)) {
-          if(buttonHeld) {
-          buttonHeld = true;
-          board.emplace(new Xor(Position{(int)iPos.x, (int)iPos.y}));
-          std::cout << "Created a new xor at " << iPos.x << ' ' << iPos.y << '\n';
-          }
-        } else if(buttonHeld) buttonHeld = false; 
-        if(anyKeysPressed(sf::Keyboard::Num0)) {
-          if(buttonHeld) {
-          buttonHeld = true;
-          board.emplace(new Xnor(Position{(int)iPos.x, (int)iPos.y}));
-          std::cout << "Created a new xnor at " << iPos.x << ' ' << iPos.y << '\n';
-          }
-        } else if(buttonHeld) buttonHeld = false; 
-        if(anyKeysPressed(sf::Keyboard::C)) {
-          if(buttonHeld) {
-          buttonHeld = true;
-          if(!connect1) {
-            connect1 =
-              *std::find_if(board.begin(), board.end(),
-                [&iPos](auto& x)
-                {return x->pos.x == (int)iPos.x && x->pos.y == (int)iPos.y;});
-            std::cout << "Starting first connection at " << iPos.x << ' ' << iPos.y << '\n';
-          } else {
-            auto connect2 = 
-            *std::find_if(board.begin(), board.end(),
-              [&iPos](auto& x)
-              {return x->pos.x == (int)iPos.x && x->pos.y == (int)iPos.y;});
-            auto valid = connect(*connect1, *connect2);
-            if(valid) {
-              std::cout << "Connected to " << iPos.x << ' ' << iPos.y << '\n';
-            } else {
-              std::cout << "Tried connecting to " << iPos.x << ' ' << iPos.y <<
-                ", but failed!\n";
-            }
-            connect1 = nullptr;
-          }
-          }
-        } else if(buttonHeld) buttonHeld = false; 
-      }
     }
 
-    window.clear();
+    MainWindow::getInstance().clear();
     for(const auto& i : ghostNodes) {
-      window.draw(*i);
+      MainWindow::getInstance().draw(*i);
     }
-    window.setView(view);
-    window.display();
+    MainWindow::getInstance().setView(GridView::getInstance());
+    MainWindow::getInstance().display();
   }
 }
