@@ -1,38 +1,20 @@
-#include <SFML/Graphics.hpp>
+#include "WireStructure.h"
+#include <wx/sizer.h>
 
-#include "MainScene.h"
+IMPLEMENT_APP(MyApp)
 
-#include <memory>
-
-int main()
+bool MyApp::OnInit()
 {
-  sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Wire Structure");
+  wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
+  frame = new wxFrame(NULL, wxID_ANY, wxT("Wire Structure"));
 
-  std::unique_ptr<Scene> mainScene = std::make_unique<MainScene>();
+  Canvas* canvas = new Canvas(frame);
 
-  if(!mainScene->load())
-  {
-    window.close();
-    return 1;
-  }
+  sizer->Add(canvas, 1, wxEXPAND);
 
-  while(window.isOpen()) {
-    sf::Event e;
-    while(window.pollEvent(e))
-    {
-      if(e.type == sf::Event::Closed && !mainScene->update(e))
-      {
-        window.close();
-      }
-    }
+  frame->SetSizer(sizer);
+  frame->SetAutoLayout(true);
 
-    window.clear();
-    window.draw(*mainScene);
-    window.display();
-  }
-
-  if(!mainScene->unload())
-  {
-    return 1;
-  }
+  frame->Show(true);
+  return true;
 }
