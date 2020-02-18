@@ -1,3 +1,6 @@
+#ifndef _HOME_KC_DEV_WIRESTRUCTURE_SRC_GATES_H
+#define _HOME_KC_DEV_WIRESTRUCTURE_SRC_GATES_H
+
 #include <unordered_set>
 
 #include "Vec2D.h"
@@ -16,8 +19,8 @@ enum DirectionFlags : DirectionFlagSet
   S  = 1 << 6,
   SE = 1 << 7
 };
-unsigned              toIndex(const DirectionFlags& i);
-inline DirectionFlags toDirectionFlags(const unsigned i);
+auto              toIndex(const DirectionFlags& i) -> unsigned;
+inline auto toDirectionFlags(unsigned i) -> DirectionFlags;
 
 template<class NodeSet>
 auto safeAddToSet(NodeSet& set, typename NodeSet::key_type added) noexcept
@@ -29,8 +32,8 @@ class Node
   using NodePtr = const Node*;
   using NodeSet = unordered_set<NodePtr>;
 
-  virtual DirectionFlagSet OutputDirections() const noexcept = 0;
-  bool isOutputtingInDirection(DirectionFlags dir) const noexcept;
+  [[nodiscard]] virtual auto OutputDirections() const noexcept -> DirectionFlagSet = 0;
+  [[nodiscard]] auto isOutputtingInDirection(DirectionFlags dir) const noexcept -> bool;
 
   // input node ptrs
   struct
@@ -44,12 +47,12 @@ class Node
  public:
   const Position pos;
 
-  explicit Node(const Position& position = {0, 0}) noexcept;
+  explicit Node(const Position& position) noexcept;
 
   void         rotate45ccw() noexcept;
-  auto         numberConnected() const noexcept -> unsigned;
+  [[nodiscard]] auto         numberConnected() const noexcept -> unsigned;
   auto         numberPowered(NodeSet& visited_nodes) const noexcept -> unsigned;
-  auto         powered() const noexcept -> bool;
+  [[nodiscard]] auto         powered() const noexcept -> bool;
   virtual auto powered(NodeSet& visited_nodes) const noexcept -> bool;
 
   friend auto connect(Node& a, Node& b) noexcept -> bool;
@@ -61,8 +64,8 @@ class Node
 class And : public Node
 {
  protected:
-  DirectionFlagSet OutputDirections() const noexcept override;
-  bool             powered(NodeSet& visited_nodes) const noexcept override;
+  [[nodiscard]] auto OutputDirections() const noexcept -> DirectionFlagSet override;
+  auto             powered(NodeSet& visited_nodes) const noexcept -> bool override;
 
  public:
   using Node::Node;
@@ -71,10 +74,10 @@ class And : public Node
 class Input : public Node
 {
  protected:
-  DirectionFlagSet OutputDirections() const noexcept override;
+  [[nodiscard]] auto OutputDirections() const noexcept -> DirectionFlagSet override;
   bool             activated = false;
 
-  bool powered(NodeSet& visited_nodes) const noexcept override;
+  auto powered(NodeSet& visited_nodes) const noexcept -> bool override;
 
   const DirectionFlags inputDir;
 
@@ -95,7 +98,7 @@ class Output : public Node
 {
  protected:
   DirectionFlags   outputDir;
-  DirectionFlagSet OutputDirections() const noexcept override;
+  [[nodiscard]] auto OutputDirections() const noexcept -> DirectionFlagSet override;
 
  public:
   template<class... Args>
@@ -105,14 +108,14 @@ class Output : public Node
   {
   }
 
-  bool query() const noexcept;
+  [[nodiscard]] auto query() const noexcept -> bool;
 };
 
 class Nand : public Node
 {
  protected:
-  DirectionFlagSet OutputDirections() const noexcept override;
-  bool             powered(NodeSet& visited_nodes) const noexcept override;
+  [[nodiscard]] auto OutputDirections() const noexcept -> DirectionFlagSet override;
+  auto             powered(NodeSet& visited_nodes) const noexcept -> bool override;
 
  public:
   using Node::Node;
@@ -121,8 +124,8 @@ class Nand : public Node
 class Nor : public Node
 {
  protected:
-  DirectionFlagSet OutputDirections() const noexcept override;
-  bool             powered(NodeSet& visited_nodes) const noexcept override;
+  [[nodiscard]] auto OutputDirections() const noexcept -> DirectionFlagSet override;
+  auto             powered(NodeSet& visited_nodes) const noexcept -> bool override;
 
  public:
   using Node::Node;
@@ -131,8 +134,8 @@ class Nor : public Node
 class Not : public Node
 {
  protected:
-  DirectionFlagSet OutputDirections() const noexcept override;
-  bool             powered(NodeSet& visited_nodes) const noexcept override;
+  [[nodiscard]] auto OutputDirections() const noexcept -> DirectionFlagSet override;
+  auto             powered(NodeSet& visited_nodes) const noexcept -> bool override;
 
  public:
   using Node::Node;
@@ -141,8 +144,8 @@ class Not : public Node
 class Or : public Node
 {
  protected:
-  DirectionFlagSet OutputDirections() const noexcept override;
-  bool             powered(NodeSet& visited_nodes) const noexcept override;
+  [[nodiscard]] auto OutputDirections() const noexcept -> DirectionFlagSet override;
+  auto             powered(NodeSet& visited_nodes) const noexcept -> bool override;
 
  public:
   using Node::Node;
@@ -151,7 +154,7 @@ class Or : public Node
 class Wire : public Node
 {
  protected:
-  DirectionFlagSet OutputDirections() const noexcept override;
+  [[nodiscard]] auto OutputDirections() const noexcept -> DirectionFlagSet override;
 
  public:
   using Node::Node;
@@ -160,8 +163,8 @@ class Wire : public Node
 class Xnor : public Node
 {
  protected:
-  DirectionFlagSet OutputDirections() const noexcept override;
-  bool             powered(NodeSet& visited_nodes) const noexcept override;
+  [[nodiscard]] auto OutputDirections() const noexcept -> DirectionFlagSet override;
+  auto             powered(NodeSet& visited_nodes) const noexcept -> bool override;
 
  public:
   using Node::Node;
@@ -170,9 +173,11 @@ class Xnor : public Node
 class Xor : public Node
 {
  protected:
-  DirectionFlagSet OutputDirections() const noexcept override;
-  bool             powered(NodeSet& visited_nodes) const noexcept override;
+  [[nodiscard]] auto OutputDirections() const noexcept -> DirectionFlagSet override;
+  auto             powered(NodeSet& visited_nodes) const noexcept -> bool override;
 
  public:
   using Node::Node;
 };
+
+#endif

@@ -2,21 +2,21 @@
 
 #include <future>
 
-DirectionFlagSet And::OutputDirections() const noexcept { return E; }
+auto And::OutputDirections() const noexcept -> DirectionFlagSet { return E; }
 
-bool And::powered(NodeSet& visited_nodes) const noexcept
+auto And::powered(NodeSet& visited_nodes) const noexcept -> bool
 {
   return numberPowered(visited_nodes) == numberConnected();
 }
 
-DirectionFlagSet Input::OutputDirections() const noexcept
+auto Input::OutputDirections() const noexcept -> DirectionFlagSet
 {
   return NW | N | NE | W | E | SW | S | SE;
 }
 
-bool Input::powered(NodeSet& visited_nodes) const noexcept
+auto Input::powered(NodeSet& visited_nodes) const noexcept -> bool
 {
-  if (visited_nodes.count(this) >= 1) return false;
+  if (visited_nodes.count(this) >= 1) { return false; }
   safeAddToSet(visited_nodes, this);
   return activated;
 }
@@ -25,12 +25,12 @@ void Input::on() noexcept { activated = true; }
 void Input::off() noexcept { activated = false; }
 void Input::toggle() noexcept { activated = !activated; }
 
-DirectionFlagSet Output::OutputDirections() const noexcept { return 0; }
-bool             Output::query() const noexcept { return Node::powered(); }
+auto Output::OutputDirections() const noexcept -> DirectionFlagSet { return 0; }
+auto Output::query() const noexcept -> bool { return Node::powered(); }
 
-DirectionFlagSet Nand::OutputDirections() const noexcept { return E; }
+auto Nand::OutputDirections() const noexcept -> DirectionFlagSet { return E; }
 
-bool Nand::powered(NodeSet& visited_nodes) const noexcept
+auto Nand::powered(NodeSet& visited_nodes) const noexcept -> bool
 {
   return numberPowered(visited_nodes) != numberConnected();
 }
@@ -58,15 +58,15 @@ auto Node::rotate45ccw() noexcept -> void
 
 auto Node::numberConnected() const noexcept -> unsigned
 {
-  auto sum = 0u;
-  if (pointers.nw) sum++;
-  if (pointers.n) sum++;
-  if (pointers.ne) sum++;
-  if (pointers.w) sum++;
-  if (pointers.e) sum++;
-  if (pointers.sw) sum++;
-  if (pointers.s) sum++;
-  if (pointers.se) sum++;
+  auto sum = 0U;
+  if (pointers.nw != nullptr) { sum++; }
+  if (pointers.n != nullptr) { sum++; }
+  if (pointers.ne != nullptr) { sum++; }
+  if (pointers.w != nullptr) { sum++; }
+  if (pointers.e != nullptr) { sum++; }
+  if (pointers.sw != nullptr) { sum++; }
+  if (pointers.s != nullptr) { sum++; }
+  if (pointers.se != nullptr) { sum++; }
   return sum;
 }
 
@@ -78,7 +78,7 @@ auto Node::powered() const noexcept -> bool
 
 auto Node::numberPowered(NodeSet& visited_nodes) const noexcept -> unsigned
 {
-  if (visited_nodes.count(this) >= 1) return 0;
+  if (visited_nodes.count(this) >= 1) { return 0; }
 
   unsigned sum = 0;
   safeAddToSet(visited_nodes, this);
@@ -87,30 +87,40 @@ auto Node::numberPowered(NodeSet& visited_nodes) const noexcept -> unsigned
     return [ptr, &visited_nodes] { return ptr->powered(visited_nodes); };
   };
 
-  std::future<bool> nwPowered, nPowered, nePowered, wPowered, ePowered,
-      swPowered, sPowered, sePowered;
+  std::future<bool> nwPowered;
+  std::future<bool> nPowered;
+  std::future<bool> nePowered;
+  std::future<bool> wPowered;
+  std::future<bool> ePowered;
+  std::future<bool> swPowered;
+  std::future<bool> sPowered;
+  std::future<bool> sePowered;
 
-  if (pointers.nw)
+  if (pointers.nw != nullptr)
     { nwPowered = std::async(makeIsPoweredFunction(pointers.nw)); }
-  if (pointers.n) { nPowered = std::async(makeIsPoweredFunction(pointers.n)); }
-  if (pointers.ne)
+  if (pointers.n != nullptr)
+    { nPowered = std::async(makeIsPoweredFunction(pointers.n)); }
+  if (pointers.ne != nullptr)
     { nePowered = std::async(makeIsPoweredFunction(pointers.ne)); }
-  if (pointers.w) { wPowered = std::async(makeIsPoweredFunction(pointers.w)); }
-  if (pointers.e) { ePowered = std::async(makeIsPoweredFunction(pointers.e)); }
-  if (pointers.sw)
+  if (pointers.w != nullptr)
+    { wPowered = std::async(makeIsPoweredFunction(pointers.w)); }
+  if (pointers.e != nullptr)
+    { ePowered = std::async(makeIsPoweredFunction(pointers.e)); }
+  if (pointers.sw != nullptr)
     { swPowered = std::async(makeIsPoweredFunction(pointers.sw)); }
-  if (pointers.s) { sPowered = std::async(makeIsPoweredFunction(pointers.s)); }
-  if (pointers.se)
+  if (pointers.s != nullptr)
+    { sPowered = std::async(makeIsPoweredFunction(pointers.s)); }
+  if (pointers.se != nullptr)
     { sePowered = std::async(makeIsPoweredFunction(pointers.se)); }
 
-  if (nwPowered.valid() && nwPowered.get()) sum++;
-  if (nPowered.valid() && nPowered.get()) sum++;
-  if (nePowered.valid() && nePowered.get()) sum++;
-  if (wPowered.valid() && wPowered.get()) sum++;
-  if (ePowered.valid() && ePowered.get()) sum++;
-  if (swPowered.valid() && swPowered.get()) sum++;
-  if (sPowered.valid() && sPowered.get()) sum++;
-  if (sePowered.valid() && sePowered.get()) sum++;
+  if (nwPowered.valid() && nwPowered.get()) { sum++; }
+  if (nPowered.valid() && nPowered.get()) { sum++; }
+  if (nePowered.valid() && nePowered.get()) { sum++; }
+  if (wPowered.valid() && wPowered.get()) { sum++; }
+  if (ePowered.valid() && ePowered.get()) { sum++; }
+  if (swPowered.valid() && swPowered.get()) { sum++; }
+  if (sPowered.valid() && sPowered.get()) { sum++; }
+  if (sePowered.valid() && sePowered.get()) { sum++; }
 
   return sum;
 }
@@ -265,11 +275,11 @@ auto safeAddToSet(NodeSet& set, typename NodeSet::key_type added) noexcept
   std::lock_guard   guard(mux);
   set.emplace(added);
 }
-inline DirectionFlags toDirectionFlags(const unsigned i)
+inline auto toDirectionFlags(const unsigned i) -> DirectionFlags
 {
   return DirectionFlags(1 << i);
 }
-unsigned toIndex(const DirectionFlags& i)
+auto toIndex(const DirectionFlags& i) -> unsigned
 {
   switch (i)
     {
@@ -285,40 +295,40 @@ unsigned toIndex(const DirectionFlags& i)
   throw i;
 }
 
-DirectionFlagSet Nor::OutputDirections() const noexcept { return E; }
+auto Nor::OutputDirections() const noexcept -> DirectionFlagSet { return E; }
 
-bool Nor::powered(NodeSet& visited_nodes) const noexcept
+auto Nor::powered(NodeSet& visited_nodes) const noexcept -> bool
 {
   return numberPowered(visited_nodes) < 1;
 }
 
-DirectionFlagSet Not::OutputDirections() const noexcept { return E; }
+auto Not::OutputDirections() const noexcept -> DirectionFlagSet { return E; }
 
-bool Not::powered(NodeSet& visited_nodes) const noexcept
+auto Not::powered(NodeSet& visited_nodes) const noexcept -> bool
 {
   return !Node::powered(visited_nodes);
 }
-DirectionFlagSet Or::OutputDirections() const noexcept { return E; }
-bool             Or::powered(NodeSet& visited_nodes) const noexcept
+auto Or::OutputDirections() const noexcept -> DirectionFlagSet { return E; }
+auto Or::powered(NodeSet& visited_nodes) const noexcept -> bool
 {
   return numberPowered(visited_nodes) >= 1;
 }
 
-DirectionFlagSet Wire::OutputDirections() const noexcept
+auto Wire::OutputDirections() const noexcept -> DirectionFlagSet
 {
   return NW | N | NE | W | E | SW | S | SE;
 }
 
-DirectionFlagSet Xnor::OutputDirections() const noexcept { return E; }
+auto Xnor::OutputDirections() const noexcept -> DirectionFlagSet { return E; }
 
-bool Xnor::powered(NodeSet& visited_nodes) const noexcept
+auto Xnor::powered(NodeSet& visited_nodes) const noexcept -> bool
 {
   return numberPowered(visited_nodes) != 1;
 }
 
-DirectionFlagSet Xor::OutputDirections() const noexcept { return E; }
+auto Xor::OutputDirections() const noexcept -> DirectionFlagSet { return E; }
 
-bool Xor::powered(NodeSet& visited_nodes) const noexcept
+auto Xor::powered(NodeSet& visited_nodes) const noexcept -> bool
 {
   return numberPowered(visited_nodes) == 1;
 }

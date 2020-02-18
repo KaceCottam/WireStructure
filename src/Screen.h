@@ -1,5 +1,5 @@
-#ifndef SCREEN_H
-#define SCREEN_H
+#ifndef _HOME_KC_DEV_WIRESTRUCTURE_SRC_SCREEN_H
+#define _HOME_KC_DEV_WIRESTRUCTURE_SRC_SCREEN_H
 #include <SFML/Graphics.hpp>
 class Screen : public sf::Drawable
 {
@@ -8,6 +8,6 @@ class Screen : public sf::Drawable
   virtual void loadResources()                = 0;
   virtual void update(const sf::Event& event) = 0;
   virtual void unloadResources()              = 0;
-  virtual ~Screen();
+  ~Screen() override;
 };
-#endif  // ! SCREEN_H
+#endif // _HOME_KC_DEV_WIRESTRUCTURE_SRC_SCREEN_H

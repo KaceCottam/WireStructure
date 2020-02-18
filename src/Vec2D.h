@@ -1,5 +1,5 @@
-#ifndef VEC2D_H
-#define VEC2D_H
+#ifndef _HOME_KC_DEV_WIRESTRUCTURE_SRC_VEC2D_H
+#define _HOME_KC_DEV_WIRESTRUCTURE_SRC_VEC2D_H
 #include <cmath>
 #include <utility>
 
@@ -37,12 +37,12 @@ struct Vec2D
   {
     return {a.x - b.x, a.y - b.y};
   }
-  friend inline auto operator*(const int scal, const Vec2D<T>& a) noexcept
+  friend inline auto operator*(int scal, const Vec2D<T>& a) noexcept
       -> Vec2D<T>
   {
     return {a.x * scal, a.y * scal};
   }
-  friend inline auto operator*(const Vec2D<T>& a, const int scal) noexcept
+  friend inline auto operator*(const Vec2D<T>& a, int scal) noexcept
       -> Vec2D<T>
   {
     return scal * a;
@@ -55,7 +55,7 @@ struct Vec2D
   friend inline auto operator==(const Vec2D<T>& a, const Vec2D<T>& b) noexcept
       -> bool
   {
-    return a.x == b.x && a.y == b.y;
+    return (a.x == b.x && a.y == b.y);
   }
   friend inline auto operator!=(const Vec2D<T>& a, const Vec2D<T>& b) noexcept
       -> bool
@@ -90,4 +90,4 @@ inline auto closestPoint(const Vec2D<double>& a) noexcept -> Vec2D<int>
 using Position  = Vec2D<int>;
 using Magnitude = Vec2D<double>;
 
-#endif  // ! VEC2D_H
+#endif // _HOME_KC_DEV_WIRESTRUCTURE_SRC_VEC2D_H

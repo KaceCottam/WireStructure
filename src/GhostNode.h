@@ -1,5 +1,5 @@
-#ifndef GHOSTNODE_H
-#define GHOSTNODE_H
+#ifndef _HOME_KC_DEV_WIRESTRUCTURE_SRC_GHOSTNODE_H
+#define _HOME_KC_DEV_WIRESTRUCTURE_SRC_GHOSTNODE_H
 #include <SFML/Graphics.hpp>
 class GhostNode : public sf::CircleShape
 {
@@ -7,9 +7,9 @@ class GhostNode : public sf::CircleShape
   bool highlighted = false;
 
  public:
-  GhostNode(const sf::Vector2f& location, const float size) noexcept;
+  GhostNode(const sf::Vector2f& location, float size) noexcept;
 
-  void               setHighlight(const bool value) noexcept;
-  [[nodiscard]] bool getHighlight() const noexcept;
+  void               setHighlight(bool value) noexcept;
+  [[nodiscard]] auto getHighlight() const noexcept -> bool;
 };
-#endif  // ! GHOSTNODE_H
+#endif // _HOME_KC_DEV_WIRESTRUCTURE_SRC_GHOSTNODE_H

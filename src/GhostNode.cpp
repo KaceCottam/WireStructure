@@ -13,7 +13,7 @@ void GhostNode::setHighlight(const bool value) noexcept
   if (highlighted)
     {
       sf::CircleShape::setOutlineColor(sf::Color::White);
-      sf::CircleShape::setOutlineThickness(2.f);
+      sf::CircleShape::setOutlineThickness(2.F);
     }
   else
     {
@@ -21,7 +21,7 @@ void GhostNode::setHighlight(const bool value) noexcept
     }
 }
 
-[[nodiscard]] bool GhostNode::getHighlight() const noexcept
+[[nodiscard]] auto GhostNode::getHighlight() const noexcept -> bool
 {
   return highlighted;
 }

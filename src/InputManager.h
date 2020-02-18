@@ -1,41 +1,41 @@
-#ifndef INPUTMANAGER_H
-#define INPUTMANAGER_H
+#ifndef _HOME_KC_DEV_WIRESTRUCTURE_SRC_INPUTMANAGER_H
+#define _HOME_KC_DEV_WIRESTRUCTURE_SRC_INPUTMANAGER_H
 #include <SFML/Window.hpp>
 struct InputManager
 {
-  [[nodiscard]] static bool allKeysPressed(
-      const sf::Mouse::Button& key) noexcept
+  [[nodiscard]] static auto allKeysPressed(
+      const sf::Mouse::Button& key) noexcept -> bool
   {
     return sf::Mouse::isButtonPressed(key);
   }
-  [[nodiscard]] static bool allKeysPressed(
-      const sf::Keyboard::Key& key) noexcept
+  [[nodiscard]] static auto allKeysPressed(
+      const sf::Keyboard::Key& key) noexcept -> bool
   {
     return sf::Keyboard::isKeyPressed(key);
   }
-  [[nodiscard]] static bool anyKeysPressed(
-      const sf::Mouse::Button& key) noexcept
+  [[nodiscard]] static auto anyKeysPressed(
+      const sf::Mouse::Button& key) noexcept -> bool
   {
     return sf::Mouse::isButtonPressed(key);
   }
-  [[nodiscard]] static bool anyKeysPressed(
-      const sf::Keyboard::Key& key) noexcept
+  [[nodiscard]] static auto anyKeysPressed(
+      const sf::Keyboard::Key& key) noexcept -> bool
   {
     return sf::Keyboard::isKeyPressed(key);
   }
   template<class T, class... Keys>
-  [[nodiscard]] static bool allKeysPressed(
+  [[nodiscard]] static auto allKeysPressed(
       const T& key,
-      const Keys&... keys) noexcept
+      const Keys&... keys) noexcept -> bool
   {
     return allKeysPressed(key) && allKeysPressed(keys...);
   }
   template<class T, class... Keys>
-  [[nodiscard]] static bool anyKeysPressed(
+  [[nodiscard]] static auto anyKeysPressed(
       const T& key,
-      const Keys&... keys) noexcept
+      const Keys&... keys) noexcept -> bool
   {
     return anyKeysPressed(key) || anyKeysPressed(keys...);
   }
 };
-#endif  // ! INPUTMANAGER_H
+#endif // _HOME_KC_DEV_WIRESTRUCTURE_SRC_INPUTMANAGER_H

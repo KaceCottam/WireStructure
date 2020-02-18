@@ -1,13 +1,13 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef _HOME_KC_DEV_WIRESTRUCTURE_SRC_MAINWINDOW_H
+#define _HOME_KC_DEV_WIRESTRUCTURE_SRC_MAINWINDOW_H
 #include <SFML/Graphics.hpp>
 struct MainWindow
 {
-  static sf::RenderWindow& getInstance()
+  static auto getInstance() -> sf::RenderWindow&
   {
     static sf::RenderWindow window
         = sf::RenderWindow{sf::VideoMode::getDesktopMode(), "Wire Structure"};
     return window;
   }
 };
-#endif  // ! MAINWINDOW_H
+#endif // _HOME_KC_DEV_WIRESTRUCTURE_SRC_MAINWINDOW_H
