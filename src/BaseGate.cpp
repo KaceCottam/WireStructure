@@ -17,7 +17,7 @@ unsigned BaseGate::countPowered() const
     );
 }
 
-bool NotGate::powered() const { return inputs[0]->powered(); }
+bool NotGate::powered() const { return !inputs[0]->powered(); }
 bool AndGate::powered() const { return countPowered() == inputs.size(); }
 bool OrGate::powered() const { return countPowered() >= 1; }
 bool NorGate::powered() const { return countPowered() == 0; }
@@ -25,4 +25,7 @@ bool XorGate::powered() const { return countPowered() == 1; }
 bool XnorGate::powered() const { return countPowered() > 1; }
 bool NandGate::powered() const { return countPowered() != inputs.size(); }
 bool InputGate::powered() const { return active; }
-bool Multiplexer::powered() const { return inputs[0]->powered() ? inputs[2]->powered() : inputs[1]->powered(); };
+bool Multiplexer::powered() const
+{
+  return inputs[0]->powered() ? inputs[2]->powered() : inputs[1]->powered();
+}
