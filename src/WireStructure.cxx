@@ -113,25 +113,26 @@ int main() {
               std::cout << "Created a new xnor at " << iPos.x << ' ' << iPos.y << '\n';
             }
             if(event.key.code == sf::Keyboard::C) {
-              if(!connect1) {
-                connect1 =
-                  *std::find_if(board.begin(), board.end(),
-                    [&iPos](auto& x)
-                    {return x->pos.x == (int)iPos.x && x->pos.y == (int)iPos.y;});
-                std::cout << "Starting first connection at " << iPos.x << ' ' << iPos.y << '\n';
-              } else {
-                auto connect2 = 
-                *std::find_if(board.begin(), board.end(),
-                  [&iPos](auto& x)
-                  {return x->pos.x == (int)iPos.x && x->pos.y == (int)iPos.y;});
-                auto valid = connect(*connect1, *connect2);
-                if(valid) {
-                  std::cout << "Connected to " << iPos.x << ' ' << iPos.y << '\n';
+              const auto matchXY =
+                [&iPos](auto& x)
+                {return x->pos.x == (int)iPos.x && x->pos.y == (int)iPos.y;};
+              const auto cNodeInBoard =
+                  std::find_if(board.begin(), board.end(), matchXY);
+              if(cNodeInBoard != board.end()) {
+                if(!connect1) {
+                  connect1 = *cNodeInBoard;
+                  std::cout << "Starting first connection at " << iPos.x << ' ' << iPos.y << '\n';
                 } else {
-                  std::cout << "Tried connecting to " << iPos.x << ' ' << iPos.y <<
-                    ", but failed!\n";
+                  auto connect2 = *cNodeInBoard;
+                  auto valid = connect(*connect1, *connect2);
+                  if(valid) {
+                    std::cout << "Connected to " << iPos.x << ' ' << iPos.y << '\n';
+                  } else {
+                    std::cout << "Tried connecting to " << iPos.x << ' ' << iPos.y <<
+                      ", but failed!\n";
+                  }
+                  connect1 = nullptr;
                 }
-                connect1 = nullptr;
               }
             }
           }
