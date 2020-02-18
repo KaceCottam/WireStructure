@@ -1,8 +1,0 @@
-#ifndef _HOME_KC_DEV_WIRESTRUCTURE_SRC_INITIALIZESCREEN_H
-#define _HOME_KC_DEV_WIRESTRUCTURE_SRC_INITIALIZESCREEN_H
-#include "Screen.h"
-class InitializeScreen : public Screen
-{
- public:
-};
-#endif // _HOME_KC_DEV_WIRESTRUCTURE_SRC_INITIALIZESCREEN_H
