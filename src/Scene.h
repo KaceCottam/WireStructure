@@ -4,10 +4,10 @@
 class Scene : public sf::Drawable
 {
  public:
-  virtual void load() = 0;
-  virtual void update(const sf::Event& e) = 0;
+  virtual bool load() { return true; };
+  virtual bool update(const sf::Event& e) = 0;
   void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-  virtual void unload() = 0;
+  virtual bool unload() { return true; };
 };
 #endif // ! SCENE_H
 

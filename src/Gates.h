@@ -8,15 +8,15 @@ struct BaseGate
   unsigned countPowered() const;
 };
 
-struct NotGate     : public BaseGate { bool powered() const override; };
-struct AndGate     : public BaseGate { bool powered() const override; };
-struct OrGate      : public BaseGate { bool powered() const override; };
-struct NorGate     : public BaseGate { bool powered() const override; };
-struct XorGate     : public BaseGate { bool powered() const override; };
-struct XnorGate    : public BaseGate { bool powered() const override; };
-struct NandGate    : public BaseGate { bool powered() const override; };
-struct InputGate   : public BaseGate { bool active;  bool powered() const override; };
+struct NotGate     : public BaseGate { bool powered() const final; };
+struct AndGate     : public BaseGate { bool powered() const final; };
+struct OrGate      : public BaseGate { bool powered() const final; };
+struct NorGate     : public BaseGate { bool powered() const final; };
+struct XorGate     : public BaseGate { bool powered() const final; };
+struct XnorGate    : public BaseGate { bool powered() const final; };
+struct NandGate    : public BaseGate { bool powered() const final; };
+struct InputGate   : public BaseGate { bool active;  bool powered() const final; };
 struct OutputGate  : public OrGate {};
-struct Multiplexer : public BaseGate { bool powered() const override; };
+struct Multiplexer : public BaseGate { bool powered() const final; };
 #endif // ! GATES_H
 
