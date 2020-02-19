@@ -31,143 +31,110 @@ void VisualGateBase::onMouseMove(wxMouseEvent& event)
   wxClientDC dc(this);
   render(dc);
 }
+void VisualGateBase::setupColors(wxDC& dc) const
+{
+  static auto pen = wxPen(*wxBLACK, 5, wxPENSTYLE_SOLID);
+  pen.SetCap(wxCAP_ROUND);
+  dc.SetPen(pen);
+  dc.SetBrush(*wxTRANSPARENT_BRUSH);
+}
 
-//VisualNot
 void VisualNotGate::render(wxDC& dc) const
 {
-  dc.SetPen(*wxBLACK_PEN);
-  dc.SetBrush(*wxTRANSPARENT_BRUSH);
+  setupColors(dc);
   wxPoint points[] =
   {
     wxPoint(-50, 50) + GetPosition(),
     wxPoint(-50,-50) + GetPosition(),
-    wxPoint( 50, 0) + GetPosition()
+    wxPoint( 50,  0) + GetPosition()
   };
   dc.DrawPolygon(3, points);
   dc.DrawCircle(wxPoint(60,0) + GetPosition(), 10);
 }
 void VisualAndGate::render(wxDC& dc) const
 {
-  dc.SetPen(*wxBLACK_PEN);
-  dc.SetBrush(*wxTRANSPARENT_BRUSH);
+  setupColors(dc);
   wxPoint points[] =
   {
     wxPoint(-50, 50) + GetPosition(),
     wxPoint(-50,-50) + GetPosition(),
-    wxPoint( 50, 0) + GetPosition()
+    wxPoint(  0, 50) + GetPosition(),
+    wxPoint(  0,-50) + GetPosition(),
+    wxPoint(  0,  0) + GetPosition()
   };
   dc.DrawLine(points[0], points[1]);
-  dc.DrawArc(points[0], points[1], points[2]);
+  dc.DrawLine(points[0], points[2]);
+  dc.DrawLine(points[1], points[3]);
+  dc.DrawArc(points[2], points[3], points[4]);
 }
 void VisualOrGate::render(wxDC& dc) const
 {
-  dc.SetPen(*wxBLACK_PEN);
-  dc.SetBrush(*wxTRANSPARENT_BRUSH);
+  setupColors(dc);
   wxPoint points[] =
   {
     wxPoint(-50, 50) + GetPosition(),
     wxPoint(-50,-50) + GetPosition(),
-    wxPoint( 50, 0) + GetPosition(),
-    wxPoint(0,0) + GetPosition()
+    wxPoint(-75,  0) + GetPosition()
   };
-  dc.DrawLine(points[0], points[2]);
-  dc.DrawLine(points[1], points[2]);
-  dc.DrawArc(points[0], points[1], points[3]);
+  dc.DrawArc(points[0], points[1], points[2]);
+  wxPoint topPoints[] =
+  {
+    wxPoint(-50, 50) + GetPosition(),
+    wxPoint(  0, 40) + GetPosition(),
+    wxPoint( 50,  0) + GetPosition()
+  };
+  dc.DrawSpline(3, topPoints);
+  wxPoint bottomPoints[] =
+  {
+    wxPoint(-50,-50) + GetPosition(),
+    wxPoint(  0,-40) + GetPosition(),
+    wxPoint( 50,  0) + GetPosition()
+  };
+  dc.DrawSpline(3, bottomPoints);
 }
 void VisualNorGate::render(wxDC& dc) const
 {
-  dc.SetPen(*wxBLACK_PEN);
-  dc.SetBrush(*wxTRANSPARENT_BRUSH);
-  wxPoint points[] =
-  {
-    wxPoint(-50, 50) + GetPosition(),
-    wxPoint(-50,-50) + GetPosition(),
-    wxPoint( 50, 0) + GetPosition(),
-    wxPoint( 0, 0) + GetPosition(),
-    wxPoint( 6, 0) + GetPosition()
-  };
-  dc.DrawLine(points[0], points[2]);
-  dc.DrawLine(points[1], points[2]);
-  dc.DrawArc(points[0], points[1], points[3]);
-  dc.DrawCircle(points[4], 10);
+  VisualOrGate::render(dc); 
+  dc.DrawCircle(wxPoint(60,0) + GetPosition(), 10);
 }
 void VisualXorGate::render(wxDC& dc) const
 {
-  dc.SetPen(*wxBLACK_PEN);
-  dc.SetBrush(*wxTRANSPARENT_BRUSH);
+  VisualOrGate::render(dc); 
   wxPoint points[] =
   {
-    wxPoint(-50, 50) + GetPosition(),
-    wxPoint(-50,-50) + GetPosition(),
-    wxPoint( 50, 0) + GetPosition(),
-    wxPoint( 0, 0) + GetPosition(),
-    wxPoint( 60, 0) + GetPosition(),
     wxPoint(-70, 50) + GetPosition(),
     wxPoint(-70,-50) + GetPosition(),
-    wxPoint( 30, 0) + GetPosition()
+    wxPoint(-95,  0) + GetPosition()
   };
-  dc.DrawLine(points[0], points[2]);
-  dc.DrawLine(points[1], points[2]);
-  dc.DrawArc(points[0], points[1], points[3]);
-  dc.DrawArc(points[5], points[6], points[7]);
+  dc.DrawArc(points[0], points[1], points[2]);
 }
 void VisualXnorGate::render(wxDC& dc) const
 {
-  dc.SetPen(*wxBLACK_PEN);
-  dc.SetBrush(*wxTRANSPARENT_BRUSH);
-  wxPoint points[] =
-  {
-    wxPoint(-50, 50) + GetPosition(),
-    wxPoint(-50,-50) + GetPosition(),
-    wxPoint( 50, 0) + GetPosition(),
-    wxPoint( 0, 0) + GetPosition(),
-    wxPoint( 60, 0) + GetPosition(),
-    wxPoint(-70, 50) + GetPosition(),
-    wxPoint(-70,-50) + GetPosition(),
-    wxPoint( 30, 0) + GetPosition(),
-    wxPoint( 60, 0) + GetPosition()
-  };
-  dc.DrawLine(points[0], points[2]);
-  dc.DrawLine(points[1], points[2]);
-  dc.DrawArc(points[0], points[1], points[3]);
-  dc.DrawArc(points[5], points[6], points[7]);
-  dc.DrawCircle(points[8], 10);
+  VisualXorGate::render(dc);
+  dc.DrawCircle(wxPoint(60,0) + GetPosition(), 10);
 }
 void VisualNandGate::render(wxDC& dc) const
 {
-  dc.SetPen(*wxBLACK_PEN);
-  dc.SetBrush(*wxTRANSPARENT_BRUSH);
-  wxPoint points[] =
-  {
-    wxPoint(-50, 50) + GetPosition(),
-    wxPoint(-50,-50) + GetPosition(),
-    wxPoint( 50, 0) + GetPosition(),
-    wxPoint( 60, 0) + GetPosition()
-  };
-  dc.DrawLine(points[0], points[1]);
-  dc.DrawArc(points[0], points[1], points[2]);
-  dc.DrawCircle(points[3], 10);
+  VisualAndGate::render(dc);
+  dc.DrawCircle(wxPoint(60,0) + GetPosition(), 10);
 }
 void VisualInputGate::render(wxDC& dc) const
 {
-  dc.SetPen(*wxBLACK_PEN);
-  dc.SetBrush(*wxTRANSPARENT_BRUSH);
+  setupColors(dc);
   wxPoint point = wxPoint(0,0) + GetPosition();
-  dc.DrawCircle(point, 3);
+  dc.DrawCircle(point, 25);
   dc.DrawText(wxT("I"), point);
 }
 void VisualOutputGate::render(wxDC& dc) const
 {
-  dc.SetPen(*wxBLACK_PEN);
-  dc.SetBrush(*wxTRANSPARENT_BRUSH);
+  setupColors(dc);
   wxPoint point = wxPoint(0,0) + GetPosition();
-  dc.DrawCircle(point, 3);
+  dc.DrawCircle(point, 25);
   dc.DrawText(wxT("O"), point);
 }
 void VisualMultiplexer::render(wxDC& dc) const
 {
-  dc.SetPen(*wxBLACK_PEN);
-  dc.SetBrush(*wxTRANSPARENT_BRUSH);
+  setupColors(dc);
   wxPoint points[] =
   {
     wxPoint(-50, -50) + GetPosition(),

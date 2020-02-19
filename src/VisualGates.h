@@ -18,6 +18,8 @@ struct VisualGateBase : public wxPanel
 
   virtual void render(wxDC& dc) const = 0;
 
+  void setupColors(wxDC& dc) const;
+
   bool dragging = false;
   DECLARE_EVENT_TABLE()
 };
@@ -37,33 +39,39 @@ struct VisualOrGate : public VisualGateBase, public OrGate
   using VisualGateBase::VisualGateBase;
   void render(wxDC& dc) const override;
 };
-struct VisualNorGate : public VisualGateBase, public NorGate
+struct VisualNorGate : public VisualOrGate, public NorGate
 {
-  using VisualGateBase::VisualGateBase;
+  using VisualOrGate::VisualOrGate;
   void render(wxDC& dc) const override;
 };
-struct VisualXorGate : public VisualGateBase, public XorGate
+struct VisualXorGate : public VisualOrGate, public XorGate
 {
+  using VisualOrGate::VisualOrGate;
   void render(wxDC& dc) const override;
 };
-struct VisualXnorGate : public VisualGateBase, public XnorGate
+struct VisualXnorGate : public VisualXorGate, public XnorGate
 {
+  using VisualXorGate::VisualXorGate;
   void render(wxDC& dc) const override;
 };
-struct VisualNandGate : public VisualGateBase, public NandGate
+struct VisualNandGate : public VisualAndGate, public NandGate
 {
+  using VisualAndGate::VisualAndGate;
   void render(wxDC& dc) const override;
 };
 struct VisualInputGate : public VisualGateBase, public InputGate
 {
+  using VisualGateBase::VisualGateBase;
   void render(wxDC& dc) const override;
 };
 struct VisualOutputGate : public VisualGateBase, public OutputGate
 {
+  using VisualGateBase::VisualGateBase;
   void render(wxDC& dc) const override;
 };
 struct VisualMultiplexer : public VisualGateBase, public Multiplexer
 {
+  using VisualGateBase::VisualGateBase;
   void render(wxDC& dc) const override;
 };
 #endif // ! VISUALGATES_H

@@ -25,6 +25,7 @@ class Canvas : public wxPanel
   static constexpr int spaceHigh = 100;
   static constexpr int spaceLow = 12;
   int space = 25;
+  wxPoint contextMenuOpenPos;
 
   void addGate(wxCommandEvent& event);
 
