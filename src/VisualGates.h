@@ -7,20 +7,18 @@
 
 struct VisualGateBase : public wxPanel
 {
+  static wxPen hoverPen, nohoverPen;
+  bool hovering = false;
   explicit VisualGateBase(wxFrame* parent);
 
   void onPaint(wxPaintEvent& event);
-  // Used for dragging
-  void onMouseDown(wxMouseEvent& event);
-  void onMouseUp(wxMouseEvent& event);
-  // Highlight
-  void onMouseMove(wxMouseEvent& event);
 
-  virtual void render(wxDC& dc) const = 0;
+  void onMotion(wxMouseEvent& event);
+
+  virtual void render(wxDC& dc) const;
 
   void setupColors(wxDC& dc) const;
 
-  bool dragging = false;
   DECLARE_EVENT_TABLE()
 };
 

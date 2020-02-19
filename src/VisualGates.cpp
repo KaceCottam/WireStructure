@@ -2,46 +2,32 @@
 
 BEGIN_EVENT_TABLE(VisualGateBase, wxPanel)
   EVT_PAINT(VisualGateBase::onPaint)
-  EVT_LEFT_DOWN(VisualGateBase::onMouseDown)
-  EVT_LEFT_UP(VisualGateBase::onMouseUp)
-  EVT_MOTION(VisualGateBase::onMouseMove)
+  EVT_MOTION(VisualGateBase::onMotion)
 END_EVENT_TABLE()
+
+static wxPen shapePen(*wxBLACK, 5, wxPENSTYLE_SOLID|wxCAP_ROUND);
 
 VisualGateBase::VisualGateBase(wxFrame* parent) : wxPanel(parent) {}
 
-void VisualGateBase::onPaint(wxPaintEvent& event)
+void VisualGateBase::onPaint(wxPaintEvent& WXUNUSED(event))
 {
   wxPaintDC dc(this);
   render(dc);
 }
-void VisualGateBase::onMouseDown(wxMouseEvent& event)
+
+void VisualGateBase::onMotion(wxMouseEvent& WXUNUSED(event))
 {
-  dragging = true;
 }
-void VisualGateBase::onMouseUp(wxMouseEvent& event)
+
+void VisualGateBase::render(wxDC& dc) const
 {
-  dragging = false;
-}
-void VisualGateBase::onMouseMove(wxMouseEvent& event)
-{
-  if(dragging)
-  {
-    this->Move(event.GetPosition() - this->GetPosition());
-  }
-  wxClientDC dc(this);
-  render(dc);
-}
-void VisualGateBase::setupColors(wxDC& dc) const
-{
-  static auto pen = wxPen(*wxBLACK, 5, wxPENSTYLE_SOLID);
-  pen.SetCap(wxCAP_ROUND);
-  dc.SetPen(pen);
+  dc.SetPen(shapePen);
   dc.SetBrush(*wxTRANSPARENT_BRUSH);
 }
 
 void VisualNotGate::render(wxDC& dc) const
 {
-  setupColors(dc);
+  VisualGateBase::render(dc);
   wxPoint points[] =
   {
     wxPoint(-50, 50) + GetPosition(),
@@ -53,7 +39,7 @@ void VisualNotGate::render(wxDC& dc) const
 }
 void VisualAndGate::render(wxDC& dc) const
 {
-  setupColors(dc);
+  VisualGateBase::render(dc);
   wxPoint points[] =
   {
     wxPoint(-50, 50) + GetPosition(),
@@ -69,7 +55,7 @@ void VisualAndGate::render(wxDC& dc) const
 }
 void VisualOrGate::render(wxDC& dc) const
 {
-  setupColors(dc);
+  VisualGateBase::render(dc);
   wxPoint points[] =
   {
     wxPoint(-50, 50) + GetPosition(),
@@ -120,21 +106,25 @@ void VisualNandGate::render(wxDC& dc) const
 }
 void VisualInputGate::render(wxDC& dc) const
 {
-  setupColors(dc);
-  wxPoint point = wxPoint(0,0) + GetPosition();
-  dc.DrawCircle(point, 25);
-  dc.DrawText(wxT("I"), point);
+  VisualGateBase::render(dc);
+  dc.SetFont(wxFont(32,wxFONTFAMILY_ROMAN,wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+  dc.SetTextForeground(*wxBLACK);
+  dc.SetBrush(*wxWHITE_BRUSH);
+  dc.DrawCircle(wxPoint(0,0) + GetPosition(), 25);
+  dc.DrawLabel(wxT("I"),wxRect(wxPoint(-25,-25) + GetPosition(), wxSize(50,50)),wxALIGN_CENTER);
 }
 void VisualOutputGate::render(wxDC& dc) const
 {
-  setupColors(dc);
-  wxPoint point = wxPoint(0,0) + GetPosition();
-  dc.DrawCircle(point, 25);
-  dc.DrawText(wxT("O"), point);
+  VisualGateBase::render(dc);
+  dc.SetFont(wxFont(32,wxFONTFAMILY_ROMAN,wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+  dc.SetTextForeground(*wxBLACK);
+  dc.SetBrush(*wxWHITE_BRUSH);
+  dc.DrawCircle(wxPoint(0,0) + GetPosition(), 25);
+  dc.DrawLabel(wxT("O"),wxRect(wxPoint(-25,-25) + GetPosition(), wxSize(50,50)),wxALIGN_CENTER);
 }
 void VisualMultiplexer::render(wxDC& dc) const
 {
-  setupColors(dc);
+  VisualGateBase::render(dc);
   wxPoint points[] =
   {
     wxPoint(-50, -50) + GetPosition(),
