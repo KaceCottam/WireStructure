@@ -10,7 +10,7 @@ bool MyApp::OnInit()
 
   Canvas* canvas = new Canvas(frame);
 
-  sizer->Add(canvas, 1, wxEXPAND);
+  sizer->Add(canvas, 1, wxEXPAND | wxALL, 5);
 
   frame->SetSizer(sizer);
   frame->SetAutoLayout(true);
