@@ -1,23 +1,20 @@
-#include "Gates.h"
-#include "MainWindow.h"
-#include "Screen.h"
+#include "WireStructure.h"
+#include <wx/sizer.h>
 
-#include <SFML/Graphics.hpp>
+IMPLEMENT_APP(MyApp)
 
-#include <memory>
-#include <unordered_set>
+bool MyApp::OnInit()
+{
+  wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
+  frame = new wxFrame(NULL, wxID_ANY, wxT("Wire Structure"));
 
-int main() {
-  std::unique_ptr<Screen> currentScreen = InitializeScreen();
+  Canvas* canvas = new Canvas(frame);
 
-  while(MainWindow::getInstance().isOpen()) {
-    sf::Event event;
-    while(MainWindow::getInstance().pollEvent(event)) {
-      currentScreen->update(event);
-    }
+  sizer->Add(canvas, 1, wxEXPAND | wxALL, 5);
 
-    MainWindow::getInstance().clear();
-    MainWindow::getInstance().draw(*currentScreen);
-    MainWindow::getInstance().display();
-  }
+  frame->SetSizer(sizer);
+  frame->SetAutoLayout(true);
+
+  frame->Show(true);
+  return true;
 }

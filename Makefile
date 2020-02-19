@@ -1,7 +1,7 @@
 # I use the .cxx extension for source files that define main.
 
 CXX := g++## What compiler we are using
-CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -Werror## Compiler flags for all operations
+CXXFLAGS := -std=c++17## Compiler flags for all operations
 # Directories
 SRCDIR := src## Where the source files are located
 OBJDIR := build## Where the object files will be placed
@@ -15,8 +15,8 @@ HEADS     += $(wildcard ${SRCDIR}/*.hxx)
 HEADS     += $(wildcard ${SRCDIR}/*.h)
 OBJS      := ${SRCS:${SRCDIR}/%.cpp=${OBJDIR}/%.o}
 # Extra Arguments
-COMPILE_ARGS :=## Extra arguments for compilation
-LINKING_ARGS :=-pthread -lsfml-graphics -lsfml-window -lsfml-system## Extra arguments for linking
+COMPILE_ARGS :=`wx-config --cxxflags --libs`## Extra arguments for compilation
+LINKING_ARGS :=-pthread `wx-config --cxxflags --libs`## Extra arguments for linking
 # Misc
 EXEC          := WireStructure## The output executable for the linking process. Can also automatically use files with the .cxx extension if undefined.
 EXEC_MAINS    := ${SRC_MAINS:${SRCDIR}/%.cxx=${BINDIR}/%}
