@@ -125,12 +125,17 @@ void VisualOutputGate::render(wxDC& dc) const
 void VisualMultiplexer::render(wxDC& dc) const
 {
   VisualGateBase::render(dc);
+  dc.SetFont(wxFont(24,wxFONTFAMILY_ROMAN,wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+  dc.SetTextForeground(*wxBLACK);
+  dc.SetBrush(*wxWHITE_BRUSH);
   wxPoint points[] =
   {
-    wxPoint(-50, -50) + GetPosition(),
-    wxPoint( 50, -50) + GetPosition(),
-    wxPoint( 50,  50) + GetPosition(),
-    wxPoint(-50,  50) + GetPosition()
+    wxPoint(-25, -50) + GetPosition(),
+    wxPoint( 25, -50) + GetPosition(),
+    wxPoint( 25,  50) + GetPosition(),
+    wxPoint(-25,  50) + GetPosition()
   };
   dc.DrawPolygon(4, points);
+  dc.DrawLabel(wxT("0"),wxRect(wxPoint(-25,-50) + GetPosition(), wxSize(50,50)),wxALIGN_CENTER);
+  dc.DrawLabel(wxT("1"),wxRect(wxPoint(-25,  0) + GetPosition(), wxSize(50,50)),wxALIGN_CENTER);
 }
