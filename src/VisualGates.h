@@ -5,26 +5,6 @@
 #include <wx/wx.h>
 #include <vector>
 
-struct BoundingBox : public wxPanel
-{
-  struct ColorData { wxColour stroke, fill; };
-
-  explicit BoundingBox(wxFrame* parent);
-
-  void onPaint(wxPaintEvent& event);
-  // Used for connections
-  void onMouseDown(wxMouseEvent& event);
-  void onMouseUp(wxMouseEvent& event);
-  // Highlight based on if connected
-  void onMouseMove(wxMouseEvent& event);
-
-  void render(wxDC& dc) const;
-
-  BoundingBox* connection;
-
-  DECLARE_EVENT_TABLE()
-};
-
 struct VisualGateBase : public wxPanel
 {
   explicit VisualGateBase(wxFrame* parent);
@@ -37,8 +17,6 @@ struct VisualGateBase : public wxPanel
   void onMouseMove(wxMouseEvent& event);
 
   virtual void render(wxDC& dc) const = 0;
-  virtual std::vector<BoundingBox*> getInputAnchors() = 0;
-  virtual std::vector<BoundingBox*> getOutputAnchors() = 0;
 
   bool dragging = false;
   DECLARE_EVENT_TABLE()
@@ -46,48 +24,47 @@ struct VisualGateBase : public wxPanel
 
 struct VisualNotGate : public VisualGateBase, public NotGate
 {
-  explicit VisualNotGate(wxFrame* parent);
-  void render(wxDC& dc) const override = 0;
-  BoundingBox input, output;
+  using VisualGateBase::VisualGateBase;
+  void render(wxDC& dc) const override;
 };
 struct VisualAndGate : public VisualGateBase, public AndGate
 {
   using VisualGateBase::VisualGateBase;
-  void render(wxDC& dc) const override = 0;
+  void render(wxDC& dc) const override;
 };
 struct VisualOrGate : public VisualGateBase, public OrGate
 {
   using VisualGateBase::VisualGateBase;
-  void render(wxDC& dc) const override = 0;
+  void render(wxDC& dc) const override;
 };
 struct VisualNorGate : public VisualGateBase, public NorGate
 {
   using VisualGateBase::VisualGateBase;
-  void render(wxDC& dc) const override = 0;
+  void render(wxDC& dc) const override;
 };
 struct VisualXorGate : public VisualGateBase, public XorGate
 {
-  void render(wxDC& dc) const override = 0;
+  void render(wxDC& dc) const override;
 };
 struct VisualXnorGate : public VisualGateBase, public XnorGate
 {
-  void render(wxDC& dc) const override = 0;
+  void render(wxDC& dc) const override;
 };
 struct VisualNandGate : public VisualGateBase, public NandGate
 {
-  void render(wxDC& dc) const override = 0;
+  void render(wxDC& dc) const override;
 };
 struct VisualInputGate : public VisualGateBase, public InputGate
 {
-  void render(wxDC& dc) const override = 0;
+  void render(wxDC& dc) const override;
 };
 struct VisualOutputGate : public VisualGateBase, public OutputGate
 {
-  void render(wxDC& dc) const override = 0;
+  void render(wxDC& dc) const override;
 };
 struct VisualMultiplexer : public VisualGateBase, public Multiplexer
 {
-  void render(wxDC& dc) const override = 0;
+  void render(wxDC& dc) const override;
 };
 #endif // ! VISUALGATES_H
 
