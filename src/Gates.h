@@ -15,7 +15,7 @@ struct NorGate     : public BaseGate { bool powered() const final; };
 struct XorGate     : public BaseGate { bool powered() const final; };
 struct XnorGate    : public BaseGate { bool powered() const final; };
 struct NandGate    : public BaseGate { bool powered() const final; };
-struct InputGate   : public BaseGate { bool active;  bool powered() const final; };
+struct InputGate   : public BaseGate { bool active{false};  bool powered() const final; };
 struct OutputGate  : public OrGate {};
 struct Multiplexer : public BaseGate { bool powered() const final; };
 #endif // ! GATES_H

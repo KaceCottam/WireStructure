@@ -123,10 +123,10 @@ void VisualInputGate::render(wxDC& dc)
   resetColors(dc);
   dcSetup(dc);
   dc.SetFont({32, wxFONTFAMILY_ROMAN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD});
-  dc.SetTextForeground(*wxBLACK);
-  dc.SetBrush(*wxWHITE_BRUSH);
+  dc.SetTextForeground(active?wxColour(0x00cc00):*wxRED);
+  dc.SetBrush(active?*wxWHITE_BRUSH:*wxLIGHT_GREY_BRUSH);
   dc.DrawCircle(50, 50, 25);
-  dc.DrawLabel("I",wxRect(0,0,100,100),wxALIGN_CENTER);
+  dc.DrawLabel(this->active?"1":"0",wxRect(0,0,100,100),wxALIGN_CENTER);
 }
 void VisualOutputGate::render(wxDC& dc)
 {
