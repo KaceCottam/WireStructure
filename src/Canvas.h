@@ -22,8 +22,6 @@ enum GateAddIDs
 
 class Canvas : public wxPanel
 {
-  static constexpr int spaceHigh = 100;
-  static constexpr int spaceLow = 12;
   int space = 25;
   wxPoint contextMenuOpenPos;
 
@@ -35,7 +33,6 @@ class Canvas : public wxPanel
 
   void onContextMenu(wxContextMenuEvent& event);
   void onPaint(wxPaintEvent& event);
-  void onLeftUp(wxMouseEvent& event);
 
   void render(wxDC& dc);
   DECLARE_EVENT_TABLE()

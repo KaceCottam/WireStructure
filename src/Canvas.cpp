@@ -5,7 +5,6 @@
 BEGIN_EVENT_TABLE(Canvas, wxPanel)
   EVT_CONTEXT_MENU(Canvas::onContextMenu)
   EVT_MENU(wxID_ANY, Canvas::addGate)
-  EVT_LEFT_UP(Canvas::onLeftUp)
   EVT_PAINT(Canvas::onPaint)
 END_EVENT_TABLE()
 
@@ -60,16 +59,16 @@ void Canvas::addGate(wxCommandEvent& event)
 void Canvas::onContextMenu(wxContextMenuEvent& event)
 {
   wxMenu menu;
-  menu.Append(NotID, wxT("Add NOT Gate"));
-  menu.Append(AndID, wxT("Add AND Gate"));
-  menu.Append(OrID, wxT("Add OR Gate"));
-  menu.Append(NorID, wxT("Add NOR Gate"));
-  menu.Append(XorID, wxT("Add XOR Gate"));
-  menu.Append(XnorID, wxT("Add XNOR Gate"));
-  menu.Append(NandID, wxT("Add NAND Gate"));
-  menu.Append(InputID, wxT("Add INPUT"));
-  menu.Append(OutputID, wxT("Add OUTPUT"));
-  menu.Append(MultiplexerID, wxT("Add MULTIPLEXER"));
+  menu.Append(NotID, "Add NOT Gate");
+  menu.Append(AndID, "Add AND Gate");
+  menu.Append(OrID, "Add OR Gate");
+  menu.Append(NorID, "Add NOR Gate");
+  menu.Append(XorID, "Add XOR Gate");
+  menu.Append(XnorID, "Add XNOR Gate");
+  menu.Append(NandID, "Add NAND Gate");
+  menu.Append(InputID, "Add INPUT");
+  menu.Append(OutputID, "Add OUTPUT");
+  menu.Append(MultiplexerID, "Add MULTIPLEXER");
   contextMenuOpenPos = ScreenToClient(event.GetPosition());
   PopupMenu(&menu, ScreenToClient(event.GetPosition()));
 }
@@ -77,18 +76,6 @@ void Canvas::onPaint(wxPaintEvent& WXUNUSED(event))
 {
   wxBufferedPaintDC dc(this);
   render(dc);
-}
-void Canvas::onLeftUp(wxMouseEvent& event)
-{
-  for(const auto& i : gates)
-  {
-    auto rect = i->GetScreenRect();
-    if(rect.Contains(event.GetPosition()))
-    {
-      i->selected = !i->selected;
-      Refresh();
-    }
-  }
 }
 
 void Canvas::render(wxDC& dc)

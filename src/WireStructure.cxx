@@ -6,7 +6,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
   wxBoxSizer* sizer = new wxBoxSizer(wxHORIZONTAL);
-  frame = new wxFrame(NULL, wxID_ANY, wxT("Wire Structure"));
+  frame = new wxFrame(NULL, wxID_ANY, "Wire Structure");
 
   Canvas* canvas = new Canvas(frame);
 

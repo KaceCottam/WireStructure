@@ -126,7 +126,7 @@ void VisualInputGate::render(wxDC& dc)
   dc.SetTextForeground(*wxBLACK);
   dc.SetBrush(*wxWHITE_BRUSH);
   dc.DrawCircle(50, 50, 25);
-  dc.DrawLabel(wxT("I"),wxRect(0,0,100,100),wxALIGN_CENTER);
+  dc.DrawLabel("I",wxRect(0,0,100,100),wxALIGN_CENTER);
 }
 void VisualOutputGate::render(wxDC& dc)
 {
@@ -136,7 +136,7 @@ void VisualOutputGate::render(wxDC& dc)
   dc.SetTextForeground(*wxBLACK);
   dc.SetBrush(*wxWHITE_BRUSH);
   dc.DrawCircle(50, 50, 25);
-  dc.DrawLabel(wxT("O"), wxRect(0,0,100,100), wxALIGN_CENTER);
+  dc.DrawLabel("O", wxRect(0,0,100,100), wxALIGN_CENTER);
 }
 void VisualMultiplexer::render(wxDC& dc)
 {
@@ -152,6 +152,6 @@ void VisualMultiplexer::render(wxDC& dc)
     wxPoint(50, 100),
   };
   dc.DrawPolygon(4, points);
-  dc.DrawLabel(wxT("0"), wxRect(0, 0, 50, 50), wxALIGN_CENTER);
-  dc.DrawLabel(wxT("1"), wxRect(0, 50, 50, 50), wxALIGN_CENTER);
+  dc.DrawLabel("0", wxRect(0, 0, 50, 50), wxALIGN_CENTER);
+  dc.DrawLabel("1", wxRect(0, 50, 50, 50), wxALIGN_CENTER);
 }
