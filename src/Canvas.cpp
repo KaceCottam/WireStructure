@@ -5,6 +5,7 @@
 BEGIN_EVENT_TABLE(Canvas, wxPanel)
   EVT_CONTEXT_MENU(Canvas::onContextMenu)
   EVT_MENU(wxID_ANY, Canvas::addGate)
+  EVT_LEFT_UP(Canvas::onLeftUp)
   EVT_PAINT(Canvas::onPaint)
 END_EVENT_TABLE()
 
@@ -52,7 +53,7 @@ void Canvas::addGate(wxCommandEvent& event)
       newGate = new VisualMultiplexer((wxFrame*)GetParent());
       break;
   }
-  newGate->SetPosition(contextMenuOpenPos);
+  newGate->SetPosition(contextMenuOpenPos - newGate->GetSize().Scale(0.5, 0.5));
   gates.push_back(newGate);
 }
 
@@ -77,8 +78,20 @@ void Canvas::onPaint(wxPaintEvent& WXUNUSED(event))
   wxBufferedPaintDC dc(this);
   render(dc);
 }
+void Canvas::onLeftUp(wxMouseEvent& event)
+{
+  for(const auto& i : gates)
+  {
+    auto rect = i->GetScreenRect();
+    if(rect.Contains(event.GetPosition()))
+    {
+      i->selected = !i->selected;
+      Refresh();
+    }
+  }
+}
 
-void Canvas::render(wxDC& dc) const
+void Canvas::render(wxDC& dc)
 {
   dc.Clear();
   dc.SetPen(wxPen(wxColour(0xdddddd), 2, wxPENSTYLE_SOLID));
@@ -89,5 +102,5 @@ void Canvas::render(wxDC& dc) const
   for(auto i = 0; i <= width + space; i += space)
       dc.DrawLine(i, 0, i, height + space);
 
-  for(auto i : gates) i->render(dc);
+  for(auto i : gates) i->renderNow();
 }

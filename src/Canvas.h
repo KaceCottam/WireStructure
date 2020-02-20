@@ -35,8 +35,9 @@ class Canvas : public wxPanel
 
   void onContextMenu(wxContextMenuEvent& event);
   void onPaint(wxPaintEvent& event);
+  void onLeftUp(wxMouseEvent& event);
 
-  void render(wxDC& dc) const;
+  void render(wxDC& dc);
   DECLARE_EVENT_TABLE()
 };
 #endif // ! CANVAS_H
