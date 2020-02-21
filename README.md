@@ -39,7 +39,7 @@ Roadmap
 ===
 
 Using the [standard semantic versioning scheme](https://semver.org/),
-V<MAJOR>.<MINOR>[.<PATCH>]  
+V\<MAJOR\>.\<MINOR\>[.\<PATCH\>]  
 - _italicized_ items are not prioritized-- they may happen and they may not.
 
 V1.0 "DRAWABLE CIRCUITS"
