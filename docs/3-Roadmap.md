@@ -11,7 +11,7 @@ Drawing of circuit diagrams, with some basic gates, multiplexers.
 The goal at this point is to be able to draw a MIPS architecture diagram,
 like as presented in the picture below.
 
-![MIPS DIAGRAM]("http://www.cise.ufl.edu/~mssz/CompOrg/Fig4.16-MIPS-MCDP-Diagr.gif")
+![MIPS DIAGRAM](http://www.cise.ufl.edu/~mssz/CompOrg/Fig4.16-MIPS-MCDP-Diagr.gif)
 
 _V1.1_
 ---
