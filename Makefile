@@ -10,25 +10,22 @@ INCDIR := include## Additional include directories
 # File GLOBs
 SRCS      := $(wildcard ${SRCDIR}/*.cpp)
 SRC_MAINS := $(wildcard ${SRCDIR}/*.cxx)
-HEADS     := $(wildcard ${SRCDIR}/*.hpp)
-HEADS     += $(wildcard ${SRCDIR}/*.hxx)
-HEADS     += $(wildcard ${SRCDIR}/*.h)
+HEADS     := $(wildcard ${SRCDIR}/*.h)
 OBJS      := ${SRCS:${SRCDIR}/%.cpp=${OBJDIR}/%.o}
 # Extra Arguments
-COMPILE_ARGS :=`wx-config --cxxflags --libs`## Extra arguments for compilation
-LINKING_ARGS :=-pthread `wx-config --cxxflags --libs`## Extra arguments for linking
+COMPILE_ARGS :=## Extra arguments for compilation
+LINKING_ARGS :=-pthread## Extra arguments for linking
+WX_WIDGETS   :=`wx-config --cxxflags --libs`
 # Misc
 EXEC_MAINS    := ${SRC_MAINS:${SRCDIR}/%.cxx=${BINDIR}/%}
 DEBUG         :=1## Compile with debug mode
 VERBOSE       :=0## Use verbose compilation
 
 ifeq "${DEBUG}" "1"
-	COMPILE_ARGS        += -g
-	LINKING_ARGS        += -g
+	CXXFLAGS += -g
 endif
 ifeq "${VERBOSE}" "1"
-	COMPILE_ARGS        += -v
-	LINKING_ARGS        += -v
+	CXXFLAGS += -v
 endif
 
 .PHONY: default
@@ -48,11 +45,11 @@ help: ## Prints usage instructions
 
 ${OBJDIR}/%.o: ${SRCDIR}/%.cpp
 	@mkdir -pv ${OBJDIR}
-	${CXX} ${CXXFLAGS} -c -o $@ $< ${COMPILE_ARGS}
+	${CXX} ${CXXFLAGS} ${COMPILE_ARGS} -c -o $@ $^ ${WX_WIDGETS}
 
 ${BINDIR}/%: ${SRCDIR}/%.cxx ${OBJS} ${HEADS} ## Build an executable with a given object in src/%.cxx
 	@mkdir -pv ${BINDIR}
-	${CXX} ${CXXFLAGS} -o $@ $(call filter-hpp, $^) ${LINKING_ARGS}
+	${CXX} ${CXXFLAGS} ${LINKING_ARGS} -o $@ $(filter-out %.h, $^) ${WX_WIDGETS}
 
 .PHONY: clean
 clean: ## Cleans directory to return to working state

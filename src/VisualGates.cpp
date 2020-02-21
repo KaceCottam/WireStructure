@@ -123,10 +123,10 @@ void VisualInputGate::render(wxDC& dc)
   resetColors(dc);
   dcSetup(dc);
   dc.SetFont({32, wxFONTFAMILY_ROMAN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD});
-  dc.SetTextForeground(active?wxColour(0x00cc00):*wxRED);
-  dc.SetBrush(active?*wxWHITE_BRUSH:*wxLIGHT_GREY_BRUSH);
+  dc.SetTextForeground(*wxBLACK);
+  dc.SetBrush(*wxWHITE_BRUSH);
   dc.DrawCircle(50, 50, 25);
-  dc.DrawLabel(this->active?"1":"0",wxRect(0,0,100,100),wxALIGN_CENTER);
+  dc.DrawLabel("I",wxRect(0,0,100,100),wxALIGN_CENTER);
 }
 void VisualOutputGate::render(wxDC& dc)
 {
@@ -146,12 +146,12 @@ void VisualMultiplexer::render(wxDC& dc)
   dc.SetBrush(*wxWHITE_BRUSH);
   wxPoint points[] =
   {
-    wxPoint(0, 100),
-    wxPoint(0, 0),
-    wxPoint(50, 0),
-    wxPoint(50, 100),
+    wxPoint(25, 100),
+    wxPoint(25, 0),
+    wxPoint(75, 0),
+    wxPoint(75, 100),
   };
   dc.DrawPolygon(4, points);
-  dc.DrawLabel("0", wxRect(0, 0, 50, 50), wxALIGN_CENTER);
-  dc.DrawLabel("1", wxRect(0, 50, 50, 50), wxALIGN_CENTER);
+  dc.DrawLabel("0", wxRect(25, 0, 75, 50), wxALIGN_CENTER);
+  dc.DrawLabel("1", wxRect(25, 50, 75, 50), wxALIGN_CENTER);
 }

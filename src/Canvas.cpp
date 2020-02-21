@@ -44,7 +44,6 @@ void Canvas::addGate(wxCommandEvent& event)
       break;
     case InputID:
       newGate = new VisualInputGate((wxFrame*)GetParent());
-      ((InputGate*)newGate)->active = false;
       break;
     case OutputID:
       newGate = new VisualOutputGate((wxFrame*)GetParent());
