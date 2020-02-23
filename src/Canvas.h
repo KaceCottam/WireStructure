@@ -1,42 +1,25 @@
 #ifndef CANVAS_H
 #define CANVAS_H
-#include "Gates.h"
-
 #include <wx/wx.h>
+#include <optional>
 
-#include <vector>
-
-enum GateAddIDs
+class Canvas : public wxWindow
 {
-  NotID = 101,
-  AndID,
-  OrID,
-  NorID,
-  XorID,
-  XnorID,
-  NandID,
-  InputID,
-  OutputID,
-  MultiplexerID,
-  LabelID
-};
-
-class Canvas : public wxPanel
-{
-  int space = 25;
-  wxPoint contextMenuOpenPos;
-
-  void addGate(wxCommandEvent& event);
-
-  std::vector<GateBase*> gates;
-
  public:
-  Canvas(wxFrame* parent);
+  using wxWindow::wxWindow;
 
-  void onPaint(wxPaintEvent&);
-  void onContextMenu(wxContextMenuEvent&);
+ private:
+  const int m_space = 20;
+  wxPoint m_panningOffset = {0, 0};
+  std::optional<wxPoint> m_mouseClickedPlace;
 
-  void render(wxDC& dc);
+  void OnEraseBackground(wxEraseEvent& event);
+  void OnRightDown(wxMouseEvent& event);
+  void OnRightUp(wxMouseEvent& event);
+  void OnMouseMove(wxMouseEvent& event);
+
+  void RenderBackground(wxDC& dc);
+  void Render(wxDC& dc);
 
   DECLARE_EVENT_TABLE()
 };

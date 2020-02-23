@@ -1,15 +1,12 @@
 #ifndef WIRESTRUCTURE_H
 #define WIRESTRUCTURE_H
 #include <wx/wx.h>
-#include "Canvas.h"
+#include "MainFrame.h"
 
-class MyApp: public wxApp
+class WireStructure : public wxApp
 {
-  public:
-    virtual bool OnInit();
-
-    wxFrame* frame;
-    Canvas* canvas;
+ public:
+  bool OnInit() override;
 };
 #endif // ! WIRESTRUCTURE_H
 
