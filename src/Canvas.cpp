@@ -1,11 +1,11 @@
 #include "Canvas.h"
-#include <algorithm>
 #include <wx/dcbuffer.h>
+#include <algorithm>
 
 BEGIN_EVENT_TABLE(Canvas, wxPanel)
+  EVT_PAINT(Canvas::onPaint)
   EVT_CONTEXT_MENU(Canvas::onContextMenu)
   EVT_MENU(wxID_ANY, Canvas::addGate)
-  EVT_PAINT(Canvas::onPaint)
 END_EVENT_TABLE()
 
 Canvas::Canvas(wxFrame* parent) : wxPanel(parent)
@@ -18,42 +18,53 @@ Canvas::Canvas(wxFrame* parent) : wxPanel(parent)
 
 void Canvas::addGate(wxCommandEvent& event)
 {
-  VisualGateBase* newGate;
+  GateBase* newGate;
   switch(event.GetId())
   {
     case NotID:
-      newGate = new VisualNotGate((wxFrame*)GetParent());
+      newGate = new NotGate((wxFrame*)this);
       break;
     case AndID:
-      newGate = new VisualAndGate((wxFrame*)GetParent());
+      newGate = new AndGate((wxFrame*)this);
       break;
     case OrID:
-      newGate = new VisualOrGate((wxFrame*)GetParent());
+      newGate = new OrGate((wxFrame*)this);
       break;
     case NorID:
-      newGate = new VisualNorGate((wxFrame*)GetParent());
+      newGate = new NorGate((wxFrame*)this);
       break;
     case XorID:
-      newGate = new VisualXorGate((wxFrame*)GetParent());
+      newGate = new XorGate((wxFrame*)this);
       break;
     case XnorID:
-      newGate = new VisualXnorGate((wxFrame*)GetParent());
+      newGate = new XnorGate((wxFrame*)this);
       break;
     case NandID:
-      newGate = new VisualNandGate((wxFrame*)GetParent());
+      newGate = new NandGate((wxFrame*)this);
       break;
     case InputID:
-      newGate = new VisualInputGate((wxFrame*)GetParent());
+      newGate = new InputGate((wxFrame*)this);
       break;
     case OutputID:
-      newGate = new VisualOutputGate((wxFrame*)GetParent());
+      newGate = new OutputGate((wxFrame*)this);
       break;
     case MultiplexerID:
-      newGate = new VisualMultiplexer((wxFrame*)GetParent());
+      newGate = new Multiplexer((wxFrame*)this);
+      break;
+    case LabelID:
+      newGate = new Label((wxFrame*)this);
       break;
   }
   newGate->SetPosition(contextMenuOpenPos - newGate->GetSize().Scale(0.5, 0.5));
   gates.push_back(newGate);
+
+  Refresh();
+}
+
+void Canvas::onPaint(wxPaintEvent&)
+{
+  wxBufferedPaintDC dc(this);
+  render(dc);
 }
 
 void Canvas::onContextMenu(wxContextMenuEvent& event)
@@ -69,13 +80,11 @@ void Canvas::onContextMenu(wxContextMenuEvent& event)
   menu.Append(InputID, "Add INPUT");
   menu.Append(OutputID, "Add OUTPUT");
   menu.Append(MultiplexerID, "Add MULTIPLEXER");
-  contextMenuOpenPos = ScreenToClient(event.GetPosition());
-  PopupMenu(&menu, ScreenToClient(event.GetPosition()));
-}
-void Canvas::onPaint(wxPaintEvent& WXUNUSED(event))
-{
-  wxBufferedPaintDC dc(this);
-  render(dc);
+  menu.Append(LabelID, "Add LABEL");
+
+  const auto pos = ScreenToClient(event.GetPosition());
+  contextMenuOpenPos = pos;
+  PopupMenu(&menu, pos);
 }
 
 void Canvas::render(wxDC& dc)
@@ -89,5 +98,5 @@ void Canvas::render(wxDC& dc)
   for(auto i = 0; i <= width + space; i += space)
       dc.DrawLine(i, 0, i, height + space);
 
-  for(auto i : gates) i->renderNow();
+  for(auto& i : gates) i->renderNow();
 }

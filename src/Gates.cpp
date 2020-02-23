@@ -1,46 +1,9 @@
-#include "VisualGates.h"
-#include <algorithm>
+#include "Gates.h"
 
-BEGIN_EVENT_TABLE(VisualGateBase, wxPanel)
-  EVT_PAINT(VisualGateBase::onPaint)
-END_EVENT_TABLE()
-
-static wxPen deselectedPen(*wxBLACK, 5, wxPENSTYLE_SOLID|wxCAP_ROUND);
-static wxPen selectedPen(wxColour(0x00cc00), 5, wxPENSTYLE_SOLID|wxCAP_ROUND);
-
-VisualGateBase::VisualGateBase(wxFrame* parent) : wxPanel(parent)
+void NotGate::render(wxDC& dc)
 {
-  SetBackgroundStyle(wxBG_STYLE_PAINT);
-  SetSize(150,150);
-}
-
-void VisualGateBase::dcSetup(wxDC& dc) const
-{
-  dc.SetLogicalOrigin(-25, -25);
-}
-
-void VisualGateBase::renderNow()
-{
-  wxClientDC dc(this);
-  render(dc);
-}
-
-void VisualGateBase::resetColors(wxDC& dc) const
-{
-  dc.SetPen(selected ? selectedPen : deselectedPen);
-  dc.SetBrush(*wxTRANSPARENT_BRUSH);
-}
-
-void VisualGateBase::onPaint(wxPaintEvent& WXUNUSED(event))
-{
-  wxPaintDC dc(this);
-  render(dc);
-}
-
-void VisualNotGate::render(wxDC& dc)
-{
+  setupDC(dc, {-25, -25});
   resetColors(dc);
-  dcSetup(dc);
 
   wxPoint points[] =
   {
@@ -51,10 +14,12 @@ void VisualNotGate::render(wxDC& dc)
   dc.DrawPolygon(3, points);
   dc.DrawCircle(110, 50, 10);
 }
-void VisualAndGate::render(wxDC& dc)
+
+void AndGate::render(wxDC& dc)
 {
+  setupDC(dc, {-25, -25});
   resetColors(dc);
-  dcSetup(dc);
+
   wxPoint points[] =
   {
     wxPoint(50, 100),
@@ -64,12 +29,14 @@ void VisualAndGate::render(wxDC& dc)
     wxPoint(50, 50),
   };
   dc.DrawLines(4,points);
-  dc.DrawArc(points[0],points[3],points[4]);
+  dc.DrawArc(points[0], points[3], points[4]);
 }
-void VisualOrGate::render(wxDC& dc)
+
+void OrGate::render(wxDC& dc)
 {
+  setupDC(dc, {-25, -25});
   resetColors(dc);
-  dcSetup(dc);
+
   wxPoint spline1[] =
   {
     wxPoint(0, 100),
@@ -92,14 +59,16 @@ void VisualOrGate::render(wxDC& dc)
   };
   dc.DrawSpline(3, bottomPoints);
 }
-void VisualNorGate::render(wxDC& dc)
+
+void NorGate::render(wxDC& dc)
 {
-  VisualOrGate::render(dc);
+  OrGate::render(dc);
   dc.DrawCircle(110, 50, 10);
 }
-void VisualXorGate::render(wxDC& dc)
+
+void XorGate::render(wxDC& dc)
 {
-  VisualOrGate::render(dc);
+  OrGate::render(dc);
   wxPoint spline[] =
   {
     wxPoint(-10, 100),
@@ -108,38 +77,44 @@ void VisualXorGate::render(wxDC& dc)
   };
   dc.DrawSpline(3, spline);
 }
-void VisualXnorGate::render(wxDC& dc)
+
+void XnorGate::render(wxDC& dc)
 {
-  VisualXorGate::render(dc);
+  XorGate::render(dc);
   dc.DrawCircle(110, 50, 10);
 }
-void VisualNandGate::render(wxDC& dc)
+
+void NandGate::render(wxDC& dc)
 {
-  VisualAndGate::render(dc);
+  AndGate::render(dc);
   dc.DrawCircle(110, 50, 10);
 }
-void VisualInputGate::render(wxDC& dc)
+
+void InputGate::render(wxDC& dc)
 {
+  setupDC(dc, {-25, -25});
   resetColors(dc);
-  dcSetup(dc);
   dc.SetFont({32, wxFONTFAMILY_ROMAN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD});
   dc.SetTextForeground(*wxBLACK);
   dc.SetBrush(*wxWHITE_BRUSH);
   dc.DrawCircle(50, 50, 25);
-  dc.DrawLabel("I",wxRect(0,0,100,100),wxALIGN_CENTER);
+  dc.DrawLabel("I", wxRect(0, 0, 100, 100),wxALIGN_CENTER);
 }
-void VisualOutputGate::render(wxDC& dc)
+
+void OutputGate::render(wxDC& dc)
 {
+  setupDC(dc, {-25, -25});
   resetColors(dc);
-  dcSetup(dc);
   dc.SetFont({32, wxFONTFAMILY_ROMAN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD});
   dc.SetTextForeground(*wxBLACK);
   dc.SetBrush(*wxWHITE_BRUSH);
   dc.DrawCircle(50, 50, 25);
   dc.DrawLabel("O", wxRect(0,0,100,100), wxALIGN_CENTER);
 }
-void VisualMultiplexer::render(wxDC& dc)
+
+void Multiplexer::render(wxDC& dc)
 {
+  setupDC(dc, {-25, -25});
   resetColors(dc);
   dc.SetFont({24, wxFONTFAMILY_ROMAN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD});
   dc.SetTextForeground(*wxBLACK);
@@ -155,3 +130,47 @@ void VisualMultiplexer::render(wxDC& dc)
   dc.DrawLabel("0", wxRect(25, 0, 75, 50), wxALIGN_CENTER);
   dc.DrawLabel("1", wxRect(25, 50, 75, 50), wxALIGN_CENTER);
 }
+
+BEGIN_EVENT_TABLE(Label, GateBase)
+  EVT_LEFT_DCLICK(Label::onLeftDClick)
+  EVT_CONTEXT_MENU(Label::onContextMenu)
+  EVT_MENU(wxID_ANY, Label::addLabel)
+END_EVENT_TABLE()
+
+Label::Label(wxFrame* parent)
+  : GateBase(parent)
+{
+  SetSize(5000, 32);
+}
+
+void Label::render(wxDC& dc)
+{
+  setupDC(dc, {-25, -25});
+  resetColors(dc);
+  dc.SetFont({24, wxFONTFAMILY_ROMAN, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD});
+  dc.SetTextForeground(*wxBLACK);
+  dc.DrawLabel(labelText, wxRect(-25, -25, 125, 125), wxALIGN_CENTER);
+}
+
+void Label::onLeftDClick(wxMouseEvent& event)
+{
+  wxCommandEvent cmdEvent;
+  addLabel(cmdEvent);
+  event.Skip();
+}
+
+void Label::onContextMenu(wxContextMenuEvent& event)
+{
+  wxMenu menu;
+  menu.Append(wxID_ANY, "Rename Label");
+  PopupMenu(&menu, ScreenToClient(event.GetPosition()));
+  event.Skip();
+}
+
+void Label::addLabel(wxCommandEvent& event)
+{
+  auto newLabel = wxGetTextFromUser("Please enter a new label.");
+  if(newLabel != "") labelText = newLabel;
+  //event.Skip();
+}
+

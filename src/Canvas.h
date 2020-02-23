@@ -1,6 +1,6 @@
 #ifndef CANVAS_H
 #define CANVAS_H
-#include "VisualGates.h"
+#include "Gates.h"
 
 #include <wx/wx.h>
 
@@ -17,7 +17,8 @@ enum GateAddIDs
   NandID,
   InputID,
   OutputID,
-  MultiplexerID
+  MultiplexerID,
+  LabelID
 };
 
 class Canvas : public wxPanel
@@ -27,14 +28,16 @@ class Canvas : public wxPanel
 
   void addGate(wxCommandEvent& event);
 
-  std::vector<VisualGateBase*> gates;
+  std::vector<GateBase*> gates;
+
  public:
   Canvas(wxFrame* parent);
 
-  void onContextMenu(wxContextMenuEvent& event);
-  void onPaint(wxPaintEvent& event);
+  void onPaint(wxPaintEvent&);
+  void onContextMenu(wxContextMenuEvent&);
 
   void render(wxDC& dc);
+
   DECLARE_EVENT_TABLE()
 };
 #endif // ! CANVAS_H
