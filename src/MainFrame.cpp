@@ -35,18 +35,29 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos,
   wxWindow* canvasPanel = new Canvas(mainSplitter, wxID_ANY);
 
   wxSplitterWindow* leftSplitter = new wxSplitterWindow(mainSplitter, wxID_ANY,
-      wxDefaultPosition, wxDefaultSize, wxSP_3D|wxSP_LIVE_UPDATE);
+      wxDefaultPosition, wxDefaultSize, wxSP_THIN_SASH|wxSP_LIVE_UPDATE);
   leftSplitter->SetSashGravity(1.0);
   leftSplitter->SetMinimumPaneSize(1);
+
   wxWindow* propertiesPanel = new wxWindow(leftSplitter, wxID_ANY);
+  wxStaticBoxSizer* propertiesSizer = new wxStaticBoxSizer(wxVERTICAL,
+      propertiesPanel, "Properties");
+  propertiesPanel->SetSizer(propertiesSizer);
 
   wxSplitterWindow* outputInputSplitter = new wxSplitterWindow(leftSplitter, wxID_ANY,
-      wxDefaultPosition, wxDefaultSize, wxSP_3D|wxSP_LIVE_UPDATE);
+      wxDefaultPosition, wxDefaultSize, wxSP_THIN_SASH|wxSP_LIVE_UPDATE);
   outputInputSplitter->SetSashGravity(1.0);
   outputInputSplitter->SetMinimumPaneSize(1);
 
   wxWindow* inputPanel = new wxWindow(outputInputSplitter, wxID_ANY);
+  wxStaticBoxSizer* inputSizer = new wxStaticBoxSizer(wxVERTICAL,
+      inputPanel, "Advanced Input Options");
+  inputPanel->SetSizer(inputSizer);
+
   wxWindow* outputPanel = new wxWindow(outputInputSplitter, wxID_ANY);
+  wxStaticBoxSizer* outputSizer = new wxStaticBoxSizer(wxVERTICAL,
+      outputPanel, "Outputs");
+  outputPanel->SetSizer(outputSizer);
 
   outputInputSplitter->SplitHorizontally(outputPanel, inputPanel);
   leftSplitter->SplitHorizontally(propertiesPanel, outputInputSplitter);
