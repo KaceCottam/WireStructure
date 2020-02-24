@@ -19,7 +19,6 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos,
   wxMenu* menuHelp = new wxMenu;
   menuHelp->Append(wxID_ABOUT);
 
-
   wxMenuBar* menuBar = new wxMenuBar;
   menuBar->Append(menuFile, "&File");
   menuBar->Append(menuView, "&View");
