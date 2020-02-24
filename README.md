@@ -81,3 +81,12 @@ V2.0 "MORE THAN LOGIC"
 We should be able to add other circuit components based in physics, as well
 as measure voltage, current, etc.
 
+[docs/4-Interface.md](docs/4-Interface.md)
+Interface
+===
+
+The interface is going to be very simplistic and understandable.
+There is an emphasis on fluid interaction within the program.
+
+![Current interface](interface.png)
+
