@@ -14,11 +14,13 @@ void Canvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 
 void Canvas::OnRightDown(wxMouseEvent& event)
 {
+  this->CaptureMouse();
   m_mouseClickedPlace = m_panningOffset + event.GetPosition();
   this->SetCursor(*wxCROSS_CURSOR);
 }
 void Canvas::OnRightUp(wxMouseEvent& event)
 {
+  this->ReleaseMouse();
   m_mouseClickedPlace = {};
   this->SetCursor(wxNullCursor);
 }
