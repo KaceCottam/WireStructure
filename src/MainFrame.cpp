@@ -19,10 +19,10 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos,
   menuBar->Append(menuFile, "&File");
   menuBar->Append(menuHelp, "&Help");
 
-  this->SetMenuBar(menuBar);
+  SetMenuBar(menuBar);
 
-  this->CreateStatusBar();
-  this->SetStatusText("Ready!");
+  CreateStatusBar();
+  SetStatusText("Ready!");
 
   wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 
@@ -64,7 +64,7 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos,
   mainSplitter->SplitVertically(leftSplitter, canvasPanel);
 
   mainSizer->SetSizeHints(this);
-  this->SetSizer(mainSizer);
+  SetSizer(mainSizer);
 
   // !PLAN
   // Create a splitter window

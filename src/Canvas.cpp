@@ -9,21 +9,21 @@ END_EVENT_TABLE()
 void Canvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 {
   wxClientDC dc(this);
-  this->RenderBackground(dc);
+  RenderBackground(dc);
 }
 
 void Canvas::OnRightDown(wxMouseEvent& event)
 {
-  this->CaptureMouse();
+  CaptureMouse();
   m_mouseClickedPlace = m_panningOffset + event.GetPosition();
-  this->SetCursor(*wxCROSS_CURSOR);
+  SetCursor(*wxCROSS_CURSOR);
 }
 void Canvas::OnRightUp(wxMouseEvent& event)
 {
-  if (!this->HasCapture()) return;
-  this->ReleaseMouse();
+  if (!HasCapture()) return;
+  ReleaseMouse();
   m_mouseClickedPlace = {};
-  this->SetCursor(wxNullCursor);
+  SetCursor(wxNullCursor);
 }
 void Canvas::OnMouseMove(wxMouseEvent& event)
 {
@@ -31,12 +31,12 @@ void Canvas::OnMouseMove(wxMouseEvent& event)
   {
     m_panningOffset = event.GetPosition() - *m_mouseClickedPlace;
   }
-  this->Refresh();
+  Refresh();
 }
 
 void Canvas::RenderBackground(wxDC& dc)
 {
-  const auto [width, height] = this->GetSize();
+  const auto [width, height] = GetSize();
   //
   // TODO get this in config
   dc.SetBackground(*wxWHITE_BRUSH);
@@ -45,15 +45,15 @@ void Canvas::RenderBackground(wxDC& dc)
 
   dc.SetLogicalOrigin(-m_panningOffset.x % m_space,
       -m_panningOffset.y % m_space);
-  this->Freeze();
+  Freeze();
   for(auto j = -m_space; j <= height + m_space; j += m_space)
       dc.DrawLine(-m_space, j, width + m_space, j);
   for(auto i = -m_space; i <= width + m_space; i += m_space)
       dc.DrawLine(i, -m_space, i, height + m_space);
-  this->Thaw();
+  Thaw();
 }
 
 void Canvas::Render(wxDC& dc)
 {
-  this->RenderBackground(dc);
+  RenderBackground(dc);
 }
