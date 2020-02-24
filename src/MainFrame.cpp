@@ -12,11 +12,17 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos,
   wxMenu* menuFile = new wxMenu;
   menuFile->Append(wxID_EXIT);
 
+  wxMenu* menuView = new wxMenu;
+  menuView->Append(wxID_ANY, "&Reset View",
+      "Resets the viewport to the center.");
+
   wxMenu* menuHelp = new wxMenu;
   menuHelp->Append(wxID_ABOUT);
 
+
   wxMenuBar* menuBar = new wxMenuBar;
   menuBar->Append(menuFile, "&File");
+  menuBar->Append(menuView, "&View");
   menuBar->Append(menuHelp, "&Help");
 
   SetMenuBar(menuBar);
@@ -28,30 +34,40 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos,
 
   wxSplitterWindow* mainSplitter = new wxSplitterWindow(this, wxID_ANY,
       wxDefaultPosition, wxDefaultSize, wxSP_3D|wxSP_LIVE_UPDATE);
-  mainSplitter->SetSashGravity(0.25);
-  mainSplitter->SetMinimumPaneSize(1);
+  mainSplitter->SetSashGravity(0.10);
+  mainSplitter->SetMinimumPaneSize(50);
   mainSizer->Add(mainSplitter, 1, wxALL|wxEXPAND, 5);
 
-  wxWindow* canvasPanel = new Canvas(mainSplitter, wxID_ANY);
-
-  wxSplitterWindow* leftSplitter = new wxSplitterWindow(mainSplitter, wxID_ANY,
+  wxSplitterWindow* rightSplitter = new wxSplitterWindow(mainSplitter, wxID_ANY,
       wxDefaultPosition, wxDefaultSize, wxSP_THIN_SASH|wxSP_LIVE_UPDATE);
-  leftSplitter->SetSashGravity(1.0);
-  leftSplitter->SetMinimumPaneSize(1);
+  rightSplitter->SetSashGravity(1.0);
+  rightSplitter->SetMinimumPaneSize(150); 
 
-  wxWindow* propertiesPanel = new wxWindow(leftSplitter, wxID_ANY);
+  wxWindow* canvasPanel = new Canvas(rightSplitter, wxID_ANY);
+
+  wxWindow* propertiesPanel = new wxWindow(rightSplitter, wxID_ANY);
   wxStaticBoxSizer* propertiesSizer = new wxStaticBoxSizer(wxVERTICAL,
       propertiesPanel, "Properties");
   propertiesPanel->SetSizer(propertiesSizer);
 
+  rightSplitter->SplitVertically(canvasPanel, propertiesPanel);
+
+  wxSplitterWindow* leftSplitter = new wxSplitterWindow(mainSplitter, wxID_ANY,
+      wxDefaultPosition, wxDefaultSize, wxSP_THIN_SASH|wxSP_LIVE_UPDATE);
+  leftSplitter->SetSashGravity(0.5);
+
+  wxWindow* toolboxPanel = new wxWindow(leftSplitter, wxID_ANY);
+  wxStaticBoxSizer* toolboxSizer = new wxStaticBoxSizer(wxVERTICAL,
+      toolboxPanel, "Toolbox");
+  toolboxPanel->SetSizer(toolboxSizer);
+
   wxSplitterWindow* outputInputSplitter = new wxSplitterWindow(leftSplitter, wxID_ANY,
       wxDefaultPosition, wxDefaultSize, wxSP_THIN_SASH|wxSP_LIVE_UPDATE);
-  outputInputSplitter->SetSashGravity(1.0);
-  outputInputSplitter->SetMinimumPaneSize(1);
+  outputInputSplitter->SetSashGravity(0.5);
 
   wxWindow* inputPanel = new wxWindow(outputInputSplitter, wxID_ANY);
   wxStaticBoxSizer* inputSizer = new wxStaticBoxSizer(wxVERTICAL,
-      inputPanel, "Advanced Input Options");
+      inputPanel, "Inputs");
   inputPanel->SetSizer(inputSizer);
 
   wxWindow* outputPanel = new wxWindow(outputInputSplitter, wxID_ANY);
@@ -60,8 +76,10 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos,
   outputPanel->SetSizer(outputSizer);
 
   outputInputSplitter->SplitHorizontally(outputPanel, inputPanel);
-  leftSplitter->SplitHorizontally(propertiesPanel, outputInputSplitter);
-  mainSplitter->SplitVertically(leftSplitter, canvasPanel);
+
+  leftSplitter->SplitHorizontally(toolboxPanel, outputInputSplitter);
+
+  mainSplitter->SplitVertically(leftSplitter, rightSplitter);
 
   mainSizer->SetSizeHints(this);
   SetSizer(mainSizer);
