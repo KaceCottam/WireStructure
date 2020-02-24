@@ -9,7 +9,7 @@
 class Canvas : public wxWindow
 {
  public:
-  using wxWindow::wxWindow;
+  explicit Canvas(wxWindow* parent, wxWindowID id);
 
  private:
   const int m_space = 20;
