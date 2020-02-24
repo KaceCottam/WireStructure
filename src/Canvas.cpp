@@ -20,6 +20,7 @@ void Canvas::OnRightDown(wxMouseEvent& event)
 }
 void Canvas::OnRightUp(wxMouseEvent& event)
 {
+  if (!this->HasCapture()) return;
   this->ReleaseMouse();
   m_mouseClickedPlace = {};
   this->SetCursor(wxNullCursor);
@@ -36,6 +37,7 @@ void Canvas::OnMouseMove(wxMouseEvent& event)
 void Canvas::RenderBackground(wxDC& dc)
 {
   const auto [width, height] = this->GetSize();
+  //
   // TODO get this in config
   dc.SetBackground(*wxWHITE_BRUSH);
   dc.Clear();
