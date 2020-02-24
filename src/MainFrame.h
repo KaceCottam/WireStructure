@@ -14,6 +14,7 @@ class MainFrame : public wxFrame
  private:
   void OnExit(wxCommandEvent& event);
   void OnAbout(wxCommandEvent& event);
+  void OnConfigurationLoad(wxCommandEvent& event);
 
   DECLARE_EVENT_TABLE();
 };

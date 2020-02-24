@@ -1,7 +1,10 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 #include <wx/wx.h>
+
 #include <optional>
+
+#include "Configuration.h"
 
 class Canvas : public wxWindow
 {

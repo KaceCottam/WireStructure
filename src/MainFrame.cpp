@@ -3,6 +3,7 @@
 BEGIN_EVENT_TABLE(MainFrame, wxFrame)
   EVT_MENU(wxID_EXIT,  MainFrame::OnExit)
   EVT_MENU(wxID_ABOUT, MainFrame::OnAbout)
+  EVT_MENU(wxID_FILE, MainFrame::OnConfigurationLoad)
 END_EVENT_TABLE()
 
 MainFrame::MainFrame(const wxString& title, const wxPoint& pos,
@@ -10,6 +11,9 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos,
   : wxFrame(NULL, wxID_ANY, title, pos , size)
 {
   wxMenu* menuFile = new wxMenu;
+  menuFile->Append(wxID_FILE, "Load &Configuration File",
+      "Loads a color configuration file.");
+  menuFile->AppendSeparator();
   menuFile->Append(wxID_EXIT);
 
   wxMenu* menuView = new wxMenu;
@@ -34,7 +38,7 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos,
   wxSplitterWindow* mainSplitter = new wxSplitterWindow(this, wxID_ANY,
       wxDefaultPosition, wxDefaultSize, wxSP_3D|wxSP_LIVE_UPDATE);
   mainSplitter->SetSashGravity(0.10);
-  mainSplitter->SetMinimumPaneSize(50);
+  mainSplitter->SetMinimumPaneSize(300);
   mainSizer->Add(mainSplitter, 1, wxALL|wxEXPAND, 5);
 
   wxSplitterWindow* rightSplitter = new wxSplitterWindow(mainSplitter, wxID_ANY,
@@ -108,4 +112,24 @@ void MainFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
   wxMessageBox("This application is used to create and simulate circuit diagrams.",
       "About Wire Structure", wxOK|wxICON_INFORMATION);
+}
+
+void MainFrame::OnConfigurationLoad(wxCommandEvent& WXUNUSED(event))
+{
+  auto file = wxFileSelector("Please load a configuration file.", "config",
+      "WireStructure.config", "config");
+  if(file.IsEmpty())
+  {
+    SetStatusText("No configuration file selected.");
+  } else if(Configuration::GetInstance().LoadConfiguration(file))
+  {
+    wxString string;
+    string.Printf("Loaded configuration from \"%s\"!", file);
+    SetStatusText(string);
+  } else {
+    wxString string;
+    string.Printf("Failed to load configuration from \"%s\", loading default configuration.", file);
+    Configuration::GetInstance().LoadDefaultConfiguration();
+  }
+  Refresh();
 }
