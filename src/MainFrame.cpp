@@ -11,14 +11,34 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos,
   : wxFrame(NULL, wxID_ANY, title, pos , size)
 {
   wxMenu* menuFile = new wxMenu;
-  menuFile->Append(wxID_FILE, "Load &Configuration File",
-      "Loads a color configuration file.");
+  menuFile->Append(wxID_NEW, "&New Circuit", "Create a new circuit.");
+  menuFile->Append(wxID_SAVE, "&Save Circuit", "Save the current circuit.");
+  menuFile->Append(wxID_SAVEAS);
+  menuFile->AppendSeparator();
   menuFile->AppendSeparator();
   menuFile->Append(wxID_EXIT);
 
   wxMenu* menuView = new wxMenu;
   menuView->Append(wxID_ANY, "&Reset View",
       "Resets the viewport to the center.");
+  menuView->Append(wxID_FILE, "Load &Configuration File",
+      "Loads a color configuration file.");
+  menuView->AppendSeparator();
+  menuView->Append(wxID_ANY, "Wire &Colors",
+      "Color wires that are on red, and wires that are off green.", true);
+  menuView->Append(wxID_ANY, "&Boolean Algebra",
+      "Display boolean algebra of circuit at outputs.", true);
+
+  wxMenu* menuGridStyle = new wxMenu;
+  menuGridStyle->Append(wxID_PREVIEW, "Toggle &Grid", "Toggles the gridlines.",
+      true);
+  menuGridStyle->Check(wxID_PREVIEW, true);
+  menuGridStyle->AppendRadioItem(wxID_ANY, "Use &Line Grid",
+      "Makes the grid display with lines");
+  menuGridStyle->AppendRadioItem(wxID_ANY, "Use &Dot Grid",
+      "Makes the grid display with dots at the intersections");
+  menuView->AppendSubMenu(menuGridStyle, "Grid &Style",
+      "Change the style of the grid.");
 
   wxMenu* menuHelp = new wxMenu;
   menuHelp->Append(wxID_ABOUT);
