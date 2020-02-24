@@ -120,15 +120,16 @@ void MainFrame::OnConfigurationLoad(wxCommandEvent& WXUNUSED(event))
       "WireStructure.config", "config");
   if(file.IsEmpty())
   {
-    SetStatusText("No configuration file selected.");
+    PushStatusText("No configuration file selected.");
   } else if(Configuration::GetInstance().LoadConfiguration(file))
   {
     wxString string;
     string.Printf("Loaded configuration from \"%s\"!", file);
-    SetStatusText(string);
+    PushStatusText(string);
   } else {
     wxString string;
     string.Printf("Failed to load configuration from \"%s\", loading default configuration.", file);
+    PushStatusText(string);
     Configuration::GetInstance().LoadDefaultConfiguration();
   }
   Refresh();
