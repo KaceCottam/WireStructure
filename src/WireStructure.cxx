@@ -8,8 +8,8 @@ bool WireStructure::OnInit()
   wxString configStatus;
   if(wxApp::argv.GetArguments().Count() == 1)
   {
-    Configuration::GetInstance().LoadDefaultConfiguration();
     configStatus = "Loaded default configuration!";
+    Configuration::GetInstance().LoadDefaultConfiguration();
   } else {
     auto args = wxApp::argv.GetArguments();
     if(Configuration::GetInstance().LoadConfiguration(args[1]))
@@ -22,10 +22,8 @@ bool WireStructure::OnInit()
     }
   }
   wxFrame* parentFrame = new MainFrame("Wire Structure");
-  wxCommandEvent* myEvent = new wxCommandEvent(kcEVT_STATUS_BAR_UPDATE);
-  myEvent->SetString(configStatus);
+  wxLogMessage(configStatus);
   parentFrame->Show();
-  wxPostEvent(parentFrame, *myEvent);
 
   return true;
 }

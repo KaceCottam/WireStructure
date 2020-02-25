@@ -12,7 +12,7 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos,
   : wxFrame(NULL, wxID_ANY, title, pos , size)
 {
   Bind(wxEVT_TIMER, [&](wxTimerEvent& WXUNUSED(event))
-      { this->PopStatusText(); wxLogMessage("End Timer"); });
+      { this->PopStatusText(); });
 
   wxMenu* menuFile = new wxMenu;
   menuFile->Append(wxID_NEW, "&New Circuit", "Create a new circuit.");
@@ -163,7 +163,6 @@ void MainFrame::OnConfigurationLoad(wxCommandEvent& WXUNUSED(event))
 
 void MainFrame::OnStatusBarUpdate(wxCommandEvent& event)
 {
-  wxLogMessage("Timer Start");
   static wxTimer timer(this);
   this->PushStatusText(event.GetString());
   timer.StartOnce(5000);
