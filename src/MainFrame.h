@@ -4,6 +4,7 @@
 #include <wx/splitter.h>
 
 #include "Canvas.h"
+#include "Configuration.h"
 
 class MainFrame : public wxFrame
 {

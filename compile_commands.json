@@ -4,8 +4,6 @@
             "g++",
             "-c",
             "-std=c++17",
-            "-Isrc",
-            "-Iinclude",
             "-g",
             "-I/usr/local/lib/wx/include/gtk3-unicode-3.0",
             "-I/usr/local/include/wx-3.0",
@@ -15,19 +13,17 @@
             "-pthread",
             "-pthread",
             "-o",
-            "build/tests/tests.o",
-            "tests/tests.cpp"
+            "build/Configuration.o",
+            "src/Configuration.cpp"
         ],
         "directory": "/home/kc/Dev/WireStructure",
-        "file": "tests/tests.cpp"
+        "file": "src/Configuration.cpp"
     },
     {
         "arguments": [
             "g++",
             "-c",
             "-std=c++17",
-            "-Isrc",
-            "-Iinclude",
             "-g",
             "-I/usr/local/lib/wx/include/gtk3-unicode-3.0",
             "-I/usr/local/include/wx-3.0",
@@ -37,20 +33,22 @@
             "-pthread",
             "-pthread",
             "-o",
-            "build/tests/Gates.o",
-            "tests/Gates.cpp"
+            "build/MainFrame.o",
+            "src/MainFrame.cpp"
         ],
         "directory": "/home/kc/Dev/WireStructure",
-        "file": "tests/Gates.cpp"
+        "file": "src/MainFrame.cpp"
     },
     {
         "arguments": [
             "g++",
             "-c",
             "-std=c++17",
-            "build/Gates.o",
-            "build/Simple.o",
+            "-g",
             "-pthread",
+            "build/MainFrame.o",
+            "build/Configuration.o",
+            "build/Canvas.o",
             "-I/usr/local/lib/wx/include/gtk3-unicode-3.0",
             "-I/usr/local/include/wx-3.0",
             "-D_FILE_OFFSET_BITS=64",
@@ -70,6 +68,7 @@
             "g++",
             "-c",
             "-std=c++17",
+            "-g",
             "-I/usr/local/lib/wx/include/gtk3-unicode-3.0",
             "-I/usr/local/include/wx-3.0",
             "-D_FILE_OFFSET_BITS=64",
@@ -78,29 +77,10 @@
             "-pthread",
             "-pthread",
             "-o",
-            "build/Gates.o",
-            "src/Gates.cpp"
+            "build/Canvas.o",
+            "src/Canvas.cpp"
         ],
         "directory": "/home/kc/Dev/WireStructure",
-        "file": "src/Gates.cpp"
-    },
-    {
-        "arguments": [
-            "g++",
-            "-c",
-            "-std=c++17",
-            "-I/usr/local/lib/wx/include/gtk3-unicode-3.0",
-            "-I/usr/local/include/wx-3.0",
-            "-D_FILE_OFFSET_BITS=64",
-            "-DWXUSINGDLL",
-            "-D__WXGTK__",
-            "-pthread",
-            "-pthread",
-            "-o",
-            "build/Simple.o",
-            "src/Simple.cpp"
-        ],
-        "directory": "/home/kc/Dev/WireStructure",
-        "file": "src/Simple.cpp"
+        "file": "src/Canvas.cpp"
     }
 ]
