@@ -4,6 +4,7 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
   EVT_MENU(wxID_EXIT,  MainFrame::OnExit)
   EVT_MENU(wxID_ABOUT, MainFrame::OnAbout)
   EVT_MENU(wxID_FILE, MainFrame::OnConfigurationLoad)
+  EVT_MENU(wxID_DEFAULT, MainFrame::OnDefaultConfiguration)
   EVT_COMMAND(wxID_ANY, kcEVT_STATUS_BAR_UPDATE, MainFrame::OnStatusBarUpdate)
 END_EVENT_TABLE()
 
@@ -12,7 +13,7 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos,
   : wxFrame(NULL, wxID_ANY, title, pos , size)
 {
   Bind(wxEVT_TIMER, [&](wxTimerEvent& WXUNUSED(event))
-      { this->PopStatusText(); });
+      { this->SetStatusText("Ready!"); });
 
   wxMenu* menuFile = new wxMenu;
   menuFile->Append(wxID_NEW, "&New Circuit", "Create a new circuit.");
@@ -26,6 +27,8 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos,
       "Resets the viewport to the center.");
   menuView->Append(wxID_FILE, "Load &Configuration File",
       "Loads a color configuration file.");
+  menuView->Append(wxID_DEFAULT, "Load &Default Configuration",
+      "Loads the default color configuration.");
   menuView->AppendSeparator();
   menuView->Append(wxID_ANY, "Wire &Colors",
       "Color wires that are on red, and wires that are off green.", true);
@@ -55,7 +58,6 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos,
 
   CreateStatusBar();
   GetStatusBar()->SetId(StatusBarID);
-  SetStatusText("Ready!");
 
   wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
 
@@ -161,9 +163,19 @@ void MainFrame::OnConfigurationLoad(wxCommandEvent& WXUNUSED(event))
   Refresh();
 }
 
+void MainFrame::OnDefaultConfiguration(wxCommandEvent& WXUNUSED(event))
+{
+  Configuration::GetInstance().LoadDefaultConfiguration();
+  wxCommandEvent myEvent(kcEVT_STATUS_BAR_UPDATE);
+  myEvent.SetString("Default configuration loaded.");
+  wxPostEvent(this, myEvent);
+  Refresh();
+}
+
 void MainFrame::OnStatusBarUpdate(wxCommandEvent& event)
 {
   static wxTimer timer(this);
-  this->PushStatusText(event.GetString());
-  timer.StartOnce(5000);
+  static constexpr int timeToRun = 5000;
+  this->SetStatusText(event.GetString());
+  timer.StartOnce(timeToRun);
 }

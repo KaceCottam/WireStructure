@@ -22,7 +22,9 @@ bool WireStructure::OnInit()
     }
   }
   wxFrame* parentFrame = new MainFrame("Wire Structure");
-  wxLogMessage(configStatus);
+  wxCommandEvent event(kcEVT_STATUS_BAR_UPDATE);
+  event.SetString(configStatus);
+  wxPostEvent(parentFrame, event);
   parentFrame->Show();
 
   return true;

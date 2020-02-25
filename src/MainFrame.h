@@ -17,6 +17,7 @@ class MainFrame : public wxFrame
   void OnExit(wxCommandEvent& event);
   void OnAbout(wxCommandEvent& event);
   void OnConfigurationLoad(wxCommandEvent& event);
+  void OnDefaultConfiguration(wxCommandEvent& event);
   void OnStatusBarUpdate(wxCommandEvent& event);
 
   DECLARE_EVENT_TABLE();
