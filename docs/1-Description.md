@@ -7,14 +7,14 @@ can be placed. Sub-Circuits will be supported eventually.
 
 Wanted Features
 ---
-- [X] Generate a grid of 'nodes'
-- [ ] GUI controls, as well as keyboard where it makes sense.
+- [X] Generate a grid where we can place nodes
+- [X] GUI controls, as well as keyboard where it makes sense.
 - [X] Panning and Zooming on 'board'
 - [X] Toolbox for simple gates.
-- [X] Rotation of simple gates.
-- [X] Simulate electric charge going through the circuit
+- [ ] Rotation of simple gates.
+- [ ] Simulate electric charge going through the circuit
 - [ ] Sub-circuits
-- [ ] Cross-Platform, including Web
+- [X] Cross-Platform, including Web
 - [ ] Export to picture, video, and code
 - [ ] Wires that can go 'underneath' other wires
 
