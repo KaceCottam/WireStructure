@@ -18,6 +18,7 @@ double Canvas::GetXScaleFactor() const
 {
   const auto [rw, rh] = m_viewRegion.GetSize();
   const auto [w, h] = GetClientSize();
+
   return (double)rw/(double)w;
 }
 double Canvas::GetYScaleFactor() const
@@ -26,13 +27,17 @@ double Canvas::GetYScaleFactor() const
   const auto [w, h] = GetClientSize();
   return (double)rh/(double)h;
 }
+double Canvas::GetScaleFactor() const
+{
+  return GetXScaleFactor();
+}
 wxPoint Canvas::RegionToClient(const wxPoint& point) const
 {
-  return point * GetXScaleFactor() + m_viewRegion.GetTopLeft();
+  return point * GetScaleFactor() + m_viewRegion.GetTopLeft();
 }
 wxPoint Canvas::ClientToRegion(const wxPoint& point) const
 {
-  return (point - m_viewRegion.GetTopLeft()) * (1/GetXScaleFactor());
+  return (point - m_viewRegion.GetTopLeft()) * (1/GetScaleFactor());
 }
 
 void Canvas::OnResize(wxSizeEvent& event)
@@ -49,9 +54,8 @@ void Canvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 void Canvas::OnRightDown(wxMouseEvent& event)
 {
   CaptureMouse();
-  // need to calculate delta pos
-  m_mouseClickedPlace = ClientToRegion(event.GetPosition());
-  SetCursor(*wxCROSS_CURSOR);
+  m_mouseClickedPlace = event.GetPosition();
+  SetCursor(wxCURSOR_HAND);
 }
 void Canvas::OnRightUp(wxMouseEvent& WXUNUSED(event))
 {
@@ -65,31 +69,29 @@ void Canvas::OnMouseMove(wxMouseEvent& event)
   if(m_mouseClickedPlace)
   {
     // offset region
-    auto mouseClickedPlace = ClientToRegion(event.GetPosition());
+    auto mouseClickedPlace = event.GetPosition();
     auto posDelta = mouseClickedPlace - *m_mouseClickedPlace;
     m_viewRegion.Offset(-posDelta);
     m_mouseClickedPlace = mouseClickedPlace;
+  } else {
+    SetCursor(wxNullCursor);
   }
   Refresh();
 }
 void Canvas::OnWheel(wxMouseEvent& event)
 {
-  static int s_scaleFactor = 5;
   SetCursor(wxCURSOR_MAGNIFIER);
-  const auto rot = event.GetWheelRotation()/s_scaleFactor;
+  const auto rot = event.GetWheelRotation();
   auto box = m_viewRegion;
-  auto smallBox = GetClientRect();
-  smallBox.Deflate(smallBox.GetWidth() * 0.15);
-  smallBox.CenterIn(box);
-  box.Offset(ClientToRegion(event.GetPosition()));
-  rot > 0 ? box.Inflate(rot) : box.Deflate(-rot);
-  box.Union(smallBox);
+
+  if(GetScaleFactor() < 5) box.Inflate(rot);
+  else if(rot < 0) box.Inflate(rot);
+
   box.Union(GetClientRect());
 
   m_viewRegion = box;
 
   Refresh();
-  SetCursor(wxNullCursor);
 }
 
 void Canvas::RenderBackground(wxDC& dc)

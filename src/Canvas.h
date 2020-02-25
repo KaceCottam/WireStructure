@@ -5,6 +5,7 @@
 #include <optional>
 
 #include "Defs.h"
+#include "StatusBarEvent.h"
 
 class Canvas : public wxWindow
 {
@@ -18,6 +19,7 @@ class Canvas : public wxWindow
 
   double GetXScaleFactor() const;
   double GetYScaleFactor() const;
+  double GetScaleFactor() const;
   wxPoint RegionToClient(const wxPoint&) const;
   wxPoint ClientToRegion(const wxPoint&) const;
 
