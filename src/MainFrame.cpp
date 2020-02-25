@@ -51,6 +51,7 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos,
   SetMenuBar(menuBar);
 
   CreateStatusBar();
+  GetStatusBar()->SetId(StatusBarID);
   SetStatusText("Ready!");
 
   wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
@@ -140,17 +141,17 @@ void MainFrame::OnConfigurationLoad(wxCommandEvent& WXUNUSED(event))
       "WireStructure.config", "config");
   if(file.IsEmpty())
   {
-    PushStatusText("No configuration file selected.");
+    PushStatusText("Default configuration loaded.");
   } else if(Configuration::GetInstance().LoadConfiguration(file))
   {
     wxString string;
     string.Printf("Loaded configuration from \"%s\"!", file);
     PushStatusText(string);
   } else {
+    Configuration::GetInstance().LoadDefaultConfiguration();
     wxString string;
     string.Printf("Failed to load configuration from \"%s\", loading default configuration.", file);
     PushStatusText(string);
-    Configuration::GetInstance().LoadDefaultConfiguration();
   }
   Refresh();
 }

@@ -22,7 +22,8 @@ bool WireStructure::OnInit()
     }
   }
   wxFrame* parentFrame = new MainFrame("Wire Structure");
-  parentFrame->Show();
   parentFrame->PushStatusText(configStatus);
+  parentFrame->Show();
+
   return true;
 }

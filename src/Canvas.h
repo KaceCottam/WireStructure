@@ -12,12 +12,10 @@ class Canvas : public wxWindow
   explicit Canvas(wxWindow* parent, wxWindowID id);
 
  private:
-  const int m_space = 10;
-  wxRegion m_viewRegion;
+  const int m_space = 20;
+  wxRect m_viewRegion;
   std::optional<wxPoint> m_mouseClickedPlace;
 
-  wxPoint GetRegionTopLeft() const;
-  wxPoint GetRegionBottomRight() const;
   double GetXScaleFactor() const;
   double GetYScaleFactor() const;
   wxPoint RegionToClient(const wxPoint&) const;

@@ -37,7 +37,6 @@ class Configuration
       if(line.Find('=') == line.Length()) return false;
       wxString key, value;
       key = line.BeforeFirst('=', &value);
-      value = line.AfterFirst('#');
       if(value.Len() != 7) return false;
       int r = wxHexToDec(value(1, 2));
       int g = wxHexToDec(value(3, 4));
