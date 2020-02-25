@@ -4,17 +4,20 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
   EVT_MENU(wxID_EXIT,  MainFrame::OnExit)
   EVT_MENU(wxID_ABOUT, MainFrame::OnAbout)
   EVT_MENU(wxID_FILE, MainFrame::OnConfigurationLoad)
+  EVT_COMMAND(wxID_ANY, kcEVT_STATUS_BAR_UPDATE, MainFrame::OnStatusBarUpdate)
 END_EVENT_TABLE()
 
 MainFrame::MainFrame(const wxString& title, const wxPoint& pos,
     const wxSize& size)
   : wxFrame(NULL, wxID_ANY, title, pos , size)
 {
+  Bind(wxEVT_TIMER, [&](wxTimerEvent& WXUNUSED(event))
+      { this->PopStatusText(); wxLogMessage("End Timer"); });
+
   wxMenu* menuFile = new wxMenu;
   menuFile->Append(wxID_NEW, "&New Circuit", "Create a new circuit.");
   menuFile->Append(wxID_SAVE, "&Save Circuit", "Save the current circuit.");
   menuFile->Append(wxID_SAVEAS);
-  menuFile->AppendSeparator();
   menuFile->AppendSeparator();
   menuFile->Append(wxID_EXIT);
 
@@ -139,19 +142,29 @@ void MainFrame::OnConfigurationLoad(wxCommandEvent& WXUNUSED(event))
 {
   auto file = wxFileSelector("Please load a configuration file.", "config",
       "WireStructure.config", "config");
+  wxCommandEvent myEvent(kcEVT_STATUS_BAR_UPDATE);
   if(file.IsEmpty())
   {
-    PushStatusText("Default configuration loaded.");
+    myEvent.SetString("Default configuration loaded.");
   } else if(Configuration::GetInstance().LoadConfiguration(file))
   {
     wxString string;
     string.Printf("Loaded configuration from \"%s\"!", file);
-    PushStatusText(string);
+    myEvent.SetString(string);
   } else {
     Configuration::GetInstance().LoadDefaultConfiguration();
     wxString string;
     string.Printf("Failed to load configuration from \"%s\", loading default configuration.", file);
-    PushStatusText(string);
+    myEvent.SetString("Default configuration loaded.");
   }
+  wxPostEvent(this, myEvent);
   Refresh();
+}
+
+void MainFrame::OnStatusBarUpdate(wxCommandEvent& event)
+{
+  wxLogMessage("Timer Start");
+  static wxTimer timer(this);
+  this->PushStatusText(event.GetString());
+  timer.StartOnce(5000);
 }
