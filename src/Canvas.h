@@ -10,7 +10,7 @@
 class Canvas : public wxWindow
 {
  public:
-  explicit Canvas(wxWindow* parent, wxWindowID id);
+  explicit Canvas(wxWindow* parent, wxWindowID id = wxID_ANY);
 
  private:
   const int m_space = 20;

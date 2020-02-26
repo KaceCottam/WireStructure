@@ -10,6 +10,20 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos,
 
   m_mgr.SetManagedWindow(this);
 
+  wxPanel* properties = new wxPanel(this, wxID_ANY);
+  properties->SetSize(300,250);
+  wxPanel* toolbox = new wxPanel(this, wxID_ANY);
+  toolbox->SetSize(300,250);
+
+  m_notebookCenter = new wxAuiNotebook(this, wxID_FILE1);
+  wxStaticText* helpText = new wxStaticText(m_notebookCenter, wxID_ANY,
+      "Please go to 'File->New Canvas' in order to get started!");
+  m_notebookCenter->AddPage(helpText, "Welcome Screen", true);
+
+  m_mgr.AddPane(m_notebookCenter, wxCENTER, "Welcome Screen");
+  m_mgr.AddPane(properties, wxRIGHT, "Properties");
+  m_mgr.AddPane(toolbox, wxLEFT, "Toolbox");
+
   m_mgr.Update();
 }
 
@@ -24,28 +38,10 @@ void MainFrame::SetupMenuBar()
   menuFile->Append(wxID_EXIT);
 
   wxMenu* menuView = new wxMenu;
-  menuView->Append(ID_ResetWorkspace, "&Reset View",
-      "Resets the viewport to the center.");
   menuView->Append(ID_LoadConfiguration, "Load &Configuration File",
       "Loads a color configuration file.");
   menuView->Append(ID_ResetConfiguration, "Load &Default Configuration",
       "Loads the default color configuration.");
-  menuView->AppendSeparator();
-  menuView->Append(ID_ToggleWireColors, "Wire &Colors",
-      "Color wires that are on red, and wires that are off green.", true);
-  menuView->Append(ID_ToggleBooleanAlgebra, "&Boolean Algebra",
-      "Display boolean algebra of circuit at outputs.", true);
-
-  wxMenu* menuGridStyle = new wxMenu;
-  menuGridStyle->Append(ID_ToggleGrid, "Toggle &Grid", "Toggles the gridlines.",
-      true);
-  menuGridStyle->Check(ID_ToggleGrid, true);
-  menuGridStyle->AppendRadioItem(ID_CheckLineGrid, "Use &Line Grid",
-      "Makes the grid display with lines");
-  menuGridStyle->AppendRadioItem(ID_CheckDotGrid, "Use &Dot Grid",
-      "Makes the grid display with dots at the intersections");
-  menuView->AppendSubMenu(menuGridStyle, "Grid &Style",
-      "Change the style of the grid.");
 
   wxMenu* menuHelp = new wxMenu;
   menuHelp->Append(wxID_ABOUT);
@@ -65,23 +61,18 @@ void MainFrame::BindEvents()
         "Not Implemented", wxICON_ERROR);
   };
   Bind(wxEVT_MENU, [&](wxCommandEvent& WXUNUSED(event))
-      {
-        Canvas* canvas = new Canvas(this, wxID_ANY);
-        m_mgr.AddPane(canvas, wxCENTER, "Canvas");
-        m_mgr.Update();
-      }, ID_NewCanvas);
+    {
+      CanvasHolder* canvas = new CanvasHolder(this, wxID_ANY);
+      wxString canvasName;
+      canvasName.Printf("Canvas %d", -canvas->GetId());
+      m_notebookCenter->AddPage(canvas, canvasName, true);
+    }, ID_NewCanvas);
   Bind(wxEVT_MENU, notImplemented, ID_SaveCanvas);
   Bind(wxEVT_MENU, notImplemented, ID_ExportCanvas);
   Bind(wxEVT_MENU, notImplemented, ID_LoadCanvas);
   Bind(wxEVT_MENU, [&](wxCommandEvent& WXUNUSED(event)){ Close(); }, wxID_EXIT);
-  Bind(wxEVT_MENU, notImplemented, ID_ResetWorkspace);
   Bind(wxEVT_MENU, &MainFrame::OnLoadConfiguration, this, ID_LoadConfiguration);
   Bind(wxEVT_MENU, &MainFrame::OnResetConfiguration, this, ID_ResetConfiguration);
-  Bind(wxEVT_MENU, notImplemented, ID_ToggleWireColors);
-  Bind(wxEVT_MENU, notImplemented, ID_ToggleBooleanAlgebra);
-  Bind(wxEVT_MENU, notImplemented, ID_ToggleGrid);
-  Bind(wxEVT_MENU, notImplemented, ID_CheckLineGrid);
-  Bind(wxEVT_MENU, notImplemented, ID_CheckDotGrid);
   Bind(wxEVT_MENU,
     [](wxCommandEvent& WXUNUSED(event))
     {
@@ -110,7 +101,7 @@ void MainFrame::OnLoadConfiguration(wxCommandEvent& WXUNUSED(event))
     Configuration::GetInstance().LoadDefaultConfiguration();
     wxString string;
     string.Printf("Failed to load configuration from \"%s\", loading default configuration.", file);
-    myEvent.SetString("Default configuration loaded.");
+    myEvent.SetString(string);
   }
   wxPostEvent(this, myEvent);
   Refresh();

@@ -3,7 +3,7 @@
 #include <wx/wx.h>
 #include <wx/aui/aui.h>
 
-#include "Canvas.h"
+#include "CanvasHolder.h"
 #include "Configuration.h"
 #include "StatusBarEvent.h"
 #include "Defs.h"
@@ -16,6 +16,7 @@ class MainFrame : public wxFrame
 
  private:
   wxAuiManager m_mgr;
+  wxAuiNotebook* m_notebookCenter;
 
   void SetupMenuBar();
   void BindEvents();
