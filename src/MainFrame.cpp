@@ -1,47 +1,48 @@
 #include "MainFrame.h"
 
-BEGIN_EVENT_TABLE(MainFrame, wxFrame)
-  EVT_MENU(wxID_EXIT,  MainFrame::OnExit)
-  EVT_MENU(wxID_ABOUT, MainFrame::OnAbout)
-  EVT_MENU(wxID_FILE, MainFrame::OnConfigurationLoad)
-  EVT_MENU(wxID_DEFAULT, MainFrame::OnDefaultConfiguration)
-  EVT_COMMAND(wxID_ANY, kcEVT_STATUS_BAR_UPDATE, MainFrame::OnStatusBarUpdate)
-END_EVENT_TABLE()
-
 MainFrame::MainFrame(const wxString& title, const wxPoint& pos,
     const wxSize& size)
   : wxFrame(NULL, wxID_ANY, title, pos , size)
 {
-  Bind(wxEVT_TIMER, [&](wxTimerEvent& WXUNUSED(event))
-      { this->SetStatusText("Ready!"); });
+  SetupMenuBar();
+  BindEvents();
+  CreateStatusBar();
 
+  m_mgr.SetManagedWindow(this);
+
+  m_mgr.Update();
+}
+
+void MainFrame::SetupMenuBar()
+{
   wxMenu* menuFile = new wxMenu;
-  menuFile->Append(wxID_NEW, "&New Circuit", "Create a new circuit.");
-  menuFile->Append(wxID_SAVE, "&Save Circuit", "Save the current circuit.");
-  menuFile->Append(wxID_SAVEAS);
+  menuFile->Append(ID_NewCanvas, "&New Canvas\tCtrl-N", "Create a new canvas.");
+  menuFile->Append(ID_SaveCanvas, "&Save Canvas\tCtrl-S", "Save the current canvas.");
+  menuFile->Append(ID_ExportCanvas, "&Export Canvas\tCtrl-E", "Export the canvas to an image.");
+  menuFile->Append(ID_LoadCanvas, "&Load Canvas\tCtrl-L", "Load an old canvas.");
   menuFile->AppendSeparator();
   menuFile->Append(wxID_EXIT);
 
   wxMenu* menuView = new wxMenu;
-  menuView->Append(wxID_ANY, "&Reset View",
+  menuView->Append(ID_ResetWorkspace, "&Reset View",
       "Resets the viewport to the center.");
-  menuView->Append(wxID_FILE, "Load &Configuration File",
+  menuView->Append(ID_LoadConfiguration, "Load &Configuration File",
       "Loads a color configuration file.");
-  menuView->Append(wxID_DEFAULT, "Load &Default Configuration",
+  menuView->Append(ID_ResetConfiguration, "Load &Default Configuration",
       "Loads the default color configuration.");
   menuView->AppendSeparator();
-  menuView->Append(wxID_ANY, "Wire &Colors",
+  menuView->Append(ID_ToggleWireColors, "Wire &Colors",
       "Color wires that are on red, and wires that are off green.", true);
-  menuView->Append(wxID_ANY, "&Boolean Algebra",
+  menuView->Append(ID_ToggleBooleanAlgebra, "&Boolean Algebra",
       "Display boolean algebra of circuit at outputs.", true);
 
   wxMenu* menuGridStyle = new wxMenu;
-  menuGridStyle->Append(wxID_PREVIEW, "Toggle &Grid", "Toggles the gridlines.",
+  menuGridStyle->Append(ID_ToggleGrid, "Toggle &Grid", "Toggles the gridlines.",
       true);
-  menuGridStyle->Check(wxID_PREVIEW, true);
-  menuGridStyle->AppendRadioItem(wxID_ANY, "Use &Line Grid",
+  menuGridStyle->Check(ID_ToggleGrid, true);
+  menuGridStyle->AppendRadioItem(ID_CheckLineGrid, "Use &Line Grid",
       "Makes the grid display with lines");
-  menuGridStyle->AppendRadioItem(wxID_ANY, "Use &Dot Grid",
+  menuGridStyle->AppendRadioItem(ID_CheckDotGrid, "Use &Dot Grid",
       "Makes the grid display with dots at the intersections");
   menuView->AppendSubMenu(menuGridStyle, "Grid &Style",
       "Change the style of the grid.");
@@ -55,92 +56,44 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos,
   menuBar->Append(menuHelp, "&Help");
 
   SetMenuBar(menuBar);
-
-  CreateStatusBar();
-  GetStatusBar()->SetId(StatusBarID);
-
-  wxBoxSizer* mainSizer = new wxBoxSizer(wxVERTICAL);
-
-  wxSplitterWindow* mainSplitter = new wxSplitterWindow(this, wxID_ANY,
-      wxDefaultPosition, wxDefaultSize, wxSP_3D|wxSP_LIVE_UPDATE);
-  mainSplitter->SetSashGravity(0.10);
-  mainSplitter->SetMinimumPaneSize(300);
-  mainSizer->Add(mainSplitter, 1, wxALL|wxEXPAND, 5);
-
-  wxSplitterWindow* rightSplitter = new wxSplitterWindow(mainSplitter, wxID_ANY,
-      wxDefaultPosition, wxDefaultSize, wxSP_THIN_SASH|wxSP_LIVE_UPDATE);
-  rightSplitter->SetSashGravity(1.0);
-  rightSplitter->SetMinimumPaneSize(150); 
-
-  wxWindow* canvasPanel = new Canvas(rightSplitter, wxID_ANY);
-
-  wxWindow* propertiesPanel = new wxWindow(rightSplitter, wxID_ANY);
-  wxStaticBoxSizer* propertiesSizer = new wxStaticBoxSizer(wxVERTICAL,
-      propertiesPanel, "Properties");
-  propertiesPanel->SetSizer(propertiesSizer);
-
-  rightSplitter->SplitVertically(canvasPanel, propertiesPanel);
-
-  wxSplitterWindow* leftSplitter = new wxSplitterWindow(mainSplitter, wxID_ANY,
-      wxDefaultPosition, wxDefaultSize, wxSP_THIN_SASH|wxSP_LIVE_UPDATE);
-  leftSplitter->SetSashGravity(0.5);
-
-  wxWindow* toolboxPanel = new wxWindow(leftSplitter, wxID_ANY);
-  wxStaticBoxSizer* toolboxSizer = new wxStaticBoxSizer(wxVERTICAL,
-      toolboxPanel, "Toolbox");
-  toolboxPanel->SetSizer(toolboxSizer);
-
-  wxSplitterWindow* outputInputSplitter = new wxSplitterWindow(leftSplitter, wxID_ANY,
-      wxDefaultPosition, wxDefaultSize, wxSP_THIN_SASH|wxSP_LIVE_UPDATE);
-  outputInputSplitter->SetSashGravity(0.5);
-
-  wxWindow* inputPanel = new wxWindow(outputInputSplitter, wxID_ANY);
-  wxStaticBoxSizer* inputSizer = new wxStaticBoxSizer(wxVERTICAL,
-      inputPanel, "Inputs");
-  inputPanel->SetSizer(inputSizer);
-
-  wxWindow* outputPanel = new wxWindow(outputInputSplitter, wxID_ANY);
-  wxStaticBoxSizer* outputSizer = new wxStaticBoxSizer(wxVERTICAL,
-      outputPanel, "Outputs");
-  outputPanel->SetSizer(outputSizer);
-
-  outputInputSplitter->SplitHorizontally(outputPanel, inputPanel);
-
-  leftSplitter->SplitHorizontally(toolboxPanel, outputInputSplitter);
-
-  mainSplitter->SplitVertically(leftSplitter, rightSplitter);
-
-  mainSizer->SetSizeHints(this);
-  SetSizer(mainSizer);
-
-  // !PLAN
-  // Create a splitter window
-  //  left side is a splitter window, into Properties + Input/Output
-  //  Properties shows properties of currently selected element
-  // Input/Output is a splitter window
-  //  top is Output, bottom is Input
-  // Output: Show a list wherein for each x in outputs,
-  // show x's label, a graph of x's value over a function of time,
-  // show x's boolean algebra breakdown, as well as a variable window underneath
-  //  to make 1 letter names possible
-  // Input: Show a list wherein for each x in inputs,
-  // show x's label, a graph of x's value over a function of time t,
-  // double clicking on graph opens a dialog box where we can create the function
-  //  of x's value to our liking, from a table of 2 values (time, output level)
 }
-
-void MainFrame::OnExit(wxCommandEvent& WXUNUSED(event))
+void MainFrame::BindEvents()
 {
-  Close();
+  const auto notImplemented = [](wxCommandEvent& WXUNUSED(event))
+  {
+    wxMessageBox("This feature is currently not implemented.",
+        "Not Implemented", wxICON_ERROR);
+  };
+  Bind(wxEVT_MENU, [&](wxCommandEvent& WXUNUSED(event))
+      {
+        Canvas* canvas = new Canvas(this, wxID_ANY);
+        m_mgr.AddPane(canvas, wxCENTER, "Canvas");
+        m_mgr.Update();
+      }, ID_NewCanvas);
+  Bind(wxEVT_MENU, notImplemented, ID_SaveCanvas);
+  Bind(wxEVT_MENU, notImplemented, ID_ExportCanvas);
+  Bind(wxEVT_MENU, notImplemented, ID_LoadCanvas);
+  Bind(wxEVT_MENU, [&](wxCommandEvent& WXUNUSED(event)){ Close(); }, wxID_EXIT);
+  Bind(wxEVT_MENU, notImplemented, ID_ResetWorkspace);
+  Bind(wxEVT_MENU, &MainFrame::OnLoadConfiguration, this, ID_LoadConfiguration);
+  Bind(wxEVT_MENU, &MainFrame::OnResetConfiguration, this, ID_ResetConfiguration);
+  Bind(wxEVT_MENU, notImplemented, ID_ToggleWireColors);
+  Bind(wxEVT_MENU, notImplemented, ID_ToggleBooleanAlgebra);
+  Bind(wxEVT_MENU, notImplemented, ID_ToggleGrid);
+  Bind(wxEVT_MENU, notImplemented, ID_CheckLineGrid);
+  Bind(wxEVT_MENU, notImplemented, ID_CheckDotGrid);
+  Bind(wxEVT_MENU,
+    [](wxCommandEvent& WXUNUSED(event))
+    {
+      wxMessageBox("This application is used to create and simulate circuit diagrams.",
+          "Wire Structure", wxOK|wxICON_INFORMATION);
+    }, wxID_ABOUT);
+  Bind(wxEVT_MENU, &MainFrame::OnUpdateStatusBar, this, kcEVT_STATUS_BAR_UPDATE);
+  Bind(wxEVT_TIMER,
+      [&](wxTimerEvent& WXUNUSED(event)){ SetStatusText("Ready!"); });
 }
 
-void MainFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
-{
-  wxMessageBox("This application is used to create and simulate circuit diagrams.",
-      "About Wire Structure", wxOK|wxICON_INFORMATION);
-}
-
-void MainFrame::OnConfigurationLoad(wxCommandEvent& WXUNUSED(event))
+void MainFrame::OnLoadConfiguration(wxCommandEvent& WXUNUSED(event))
 {
   auto file = wxFileSelector("Please load a configuration file.", "config",
       "WireStructure.config", "config");
@@ -163,7 +116,7 @@ void MainFrame::OnConfigurationLoad(wxCommandEvent& WXUNUSED(event))
   Refresh();
 }
 
-void MainFrame::OnDefaultConfiguration(wxCommandEvent& WXUNUSED(event))
+void MainFrame::OnResetConfiguration(wxCommandEvent& WXUNUSED(event))
 {
   Configuration::GetInstance().LoadDefaultConfiguration();
   wxCommandEvent myEvent(kcEVT_STATUS_BAR_UPDATE);
@@ -172,10 +125,15 @@ void MainFrame::OnDefaultConfiguration(wxCommandEvent& WXUNUSED(event))
   Refresh();
 }
 
-void MainFrame::OnStatusBarUpdate(wxCommandEvent& event)
+void MainFrame::OnUpdateStatusBar(wxCommandEvent& event)
 {
   static wxTimer timer(this);
   static constexpr int timeToRun = 5000;
   this->SetStatusText(event.GetString());
   timer.StartOnce(timeToRun);
+}
+
+MainFrame::~MainFrame()
+{
+  m_mgr.UnInit();
 }

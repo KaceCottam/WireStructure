@@ -48,7 +48,7 @@ void Canvas::OnResize(wxSizeEvent& event)
 void Canvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 {
   wxClientDC dc(this);
-  Render(dc);
+  RenderBackground(dc);
 }
 
 void Canvas::OnRightDown(wxMouseEvent& event)
@@ -80,16 +80,17 @@ void Canvas::OnMouseMove(wxMouseEvent& event)
 }
 void Canvas::OnWheel(wxMouseEvent& event)
 {
+  static constexpr double maxFactor = 2;
+  static constexpr double minFactor = 0.5;
+
   SetCursor(wxCURSOR_MAGNIFIER);
-  const auto rot = event.GetWheelRotation();
-  auto box = m_viewRegion;
+  const auto rot = event.GetWheelRotation() / GetScaleFactor();
+  auto& box = m_viewRegion;
+  const auto sf = GetScaleFactor();
 
-  if(GetScaleFactor() < 5) box.Inflate(rot);
-  else if(rot < 0) box.Inflate(rot);
-
-  box.Union(GetClientRect());
-
-  m_viewRegion = box;
+  if(sf < maxFactor && sf > minFactor) box.Inflate(rot);
+  else if(rot < 0 && sf > minFactor) box.Inflate(rot); // Small limit
+  else if(rot > 0 && sf < maxFactor) box.Inflate(rot); // Big limit
 
   Refresh();
 }
@@ -100,17 +101,25 @@ void Canvas::RenderBackground(wxDC& dc)
   dc.SetPen(wxPen(CANVAS_GRID_COLOR, 2, wxPENSTYLE_SOLID));
 
   const auto [x1, y1] = m_viewRegion.GetTopLeft();
-  const auto [x2, y2] = m_viewRegion.GetBottomRight();
+  const auto [width, height] = GetClientSize();
+  const auto space = m_space*GetScaleFactor();
 
-  dc.SetLogicalOrigin(x1 % m_space, y1 % m_space);
-  dc.SetUserScale(GetXScaleFactor(), GetYScaleFactor());
+  dc.SetLogicalOrigin(std::fmod(x1, space), std::fmod(y1, space));
 
   Freeze();
   dc.Clear();
-  for(auto j = -m_space; j <= y2 - y1 + m_space; j+=m_space)
-    dc.DrawLine(-m_space, j, x2 - x1 + m_space, j);
-  for(auto i = -m_space; i <= x2 - x1 + m_space; i+=m_space)
-    dc.DrawLine(i, -m_space, i, y2 - y1 + m_space);
+  if(gridType == LINE)
+  {
+    for(auto j = -space; j <= height + space; j += space)
+      dc.DrawLine(-space, j, width + space, j);
+    for(auto i = -space; i <= width + space; i += space)
+      dc.DrawLine(i, -space, i, height + space);
+  } else if(gridType == DOTMATRIX)
+  {
+    for(auto i = -space; i <= width + space; i += space)
+      for(auto j = -space; j <= height + space; j += space)
+        dc.DrawPoint(i, j);
+  }
   Thaw();
 }
 

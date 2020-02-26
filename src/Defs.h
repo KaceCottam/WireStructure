@@ -4,7 +4,6 @@
 extern wxColourDatabase* wxTheColourDatabase;
 enum WindowIDs
 {
-  StatusBarID = wxID_HIGHEST + 1
 };
 #define CANVAS_BACKGROUND_COLOR wxTheColourDatabase->Find("CANVAS_BACKGROUND_COLOR")
 #define CANVAS_GRID_COLOR wxTheColourDatabase->Find("CANVAS_GRID_COLOR")

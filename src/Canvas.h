@@ -14,6 +14,10 @@ class Canvas : public wxWindow
 
  private:
   const int m_space = 20;
+  enum
+  {
+    HIDDEN, LINE, DOTMATRIX
+  } gridType{LINE};
   wxRect m_viewRegion;
   std::optional<wxPoint> m_mouseClickedPlace;
 

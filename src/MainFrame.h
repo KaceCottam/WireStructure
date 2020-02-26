@@ -1,7 +1,7 @@
 #ifndef MAINFRAME_H
 #define MAINFRAME_H
 #include <wx/wx.h>
-#include <wx/splitter.h>
+#include <wx/aui/aui.h>
 
 #include "Canvas.h"
 #include "Configuration.h"
@@ -14,13 +14,35 @@ class MainFrame : public wxFrame
       const wxSize& size = wxDefaultSize);
 
  private:
-  void OnExit(wxCommandEvent& event);
-  void OnAbout(wxCommandEvent& event);
-  void OnConfigurationLoad(wxCommandEvent& event);
-  void OnDefaultConfiguration(wxCommandEvent& event);
-  void OnStatusBarUpdate(wxCommandEvent& event);
 
-  DECLARE_EVENT_TABLE();
+  enum MainFrameMenuEvents
+  {
+    ID_NewCanvas,
+    ID_SaveCanvas,
+    ID_ExportCanvas,
+    ID_LoadCanvas,
+
+    ID_ResetWorkspace,
+    ID_LoadConfiguration,
+    ID_ResetConfiguration,
+    ID_ToggleWireColors,
+    ID_ToggleBooleanAlgebra,
+
+    ID_ToggleGrid,
+    ID_CheckLineGrid,
+    ID_CheckDotGrid
+  };
+
+  wxAuiManager m_mgr;
+
+  void SetupMenuBar();
+  void BindEvents();
+
+  void OnLoadConfiguration(wxCommandEvent& event);
+  void OnResetConfiguration(wxCommandEvent& event);
+  void OnUpdateStatusBar(wxCommandEvent& event);
+
+  ~MainFrame();
 };
 #endif // ! MAINFRAME_H
 

@@ -15,7 +15,7 @@ OBJS      := ${SRCS:${SRCDIR}/%.cpp=${OBJDIR}/%.o}
 # Extra Arguments
 COMPILE_ARGS :=## Extra arguments for compilation
 LINKING_ARGS :=-pthread## Extra arguments for linking
-WX_WIDGETS   :=`wx-config --cxxflags --libs`
+WX_WIDGETS   :=`wx-config --cxxflags --libs std,aui`
 # Misc
 EXEC_MAINS    := ${SRC_MAINS:${SRCDIR}/%.cxx=${BINDIR}/%}
 DEBUG         :=1## Compile with debug mode
