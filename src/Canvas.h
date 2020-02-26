@@ -21,6 +21,8 @@ class Canvas : public wxWindow
   wxRect m_viewRegion;
   std::optional<wxPoint> m_mouseClickedPlace;
 
+  void BindEvents();
+
   double GetXScaleFactor() const;
   double GetYScaleFactor() const;
   double GetScaleFactor() const;
@@ -33,11 +35,11 @@ class Canvas : public wxWindow
   void OnRightUp(wxMouseEvent& event);
   void OnMouseMove(wxMouseEvent& event);
   void OnWheel(wxMouseEvent& event);
+  void OnRequestAddMenu();
+  void OnRequestDeleteMenu();
 
   void RenderBackground(wxDC& dc);
   void Render(wxDC& dc);
-
-  DECLARE_EVENT_TABLE()
 };
 #endif // ! CANVAS_H
 

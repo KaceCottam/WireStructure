@@ -19,6 +19,8 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos,
   wxStaticText* helpText = new wxStaticText(m_notebookCenter, wxID_ANY,
       "Please go to 'File->New Canvas' in order to get started!");
   m_notebookCenter->AddPage(helpText, "Welcome Screen", true);
+  wxAuiSimpleTabArt* art = new wxAuiSimpleTabArt;
+  m_notebookCenter->SetArtProvider(art);
 
   m_mgr.AddPane(m_notebookCenter, wxCENTER, "Welcome Screen");
   m_mgr.AddPane(properties, wxRIGHT, "Properties");
@@ -79,9 +81,17 @@ void MainFrame::BindEvents()
       wxMessageBox("This application is used to create and simulate circuit diagrams.",
           "Wire Structure", wxOK|wxICON_INFORMATION);
     }, wxID_ABOUT);
-  Bind(wxEVT_MENU, &MainFrame::OnUpdateStatusBar, this, kcEVT_STATUS_BAR_UPDATE);
+  Bind(kcEVT_STATUS_BAR_UPDATE, &MainFrame::OnUpdateStatusBar, this);
   Bind(wxEVT_TIMER,
       [&](wxTimerEvent& WXUNUSED(event)){ SetStatusText("Ready!"); });
+  Bind(wxEVT_AUI_PANE_ACTIVATED, [&](wxAuiManagerEvent& event)
+    {
+      if(event.GetPane()->dock_direction == wxCENTER)
+      {
+        // This event came from the notebook.
+        m_notebookCenter->GetCurrentPage()
+      }
+    });
 }
 
 void MainFrame::OnLoadConfiguration(wxCommandEvent& WXUNUSED(event))
@@ -119,8 +129,8 @@ void MainFrame::OnResetConfiguration(wxCommandEvent& WXUNUSED(event))
 void MainFrame::OnUpdateStatusBar(wxCommandEvent& event)
 {
   static wxTimer timer(this);
-  static constexpr int timeToRun = 5000;
-  this->SetStatusText(event.GetString());
+  static constexpr int timeToRun = 5000; // 5 seconds
+  SetStatusText(event.GetString());
   timer.StartOnce(timeToRun);
 }
 

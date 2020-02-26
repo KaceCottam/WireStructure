@@ -1,17 +1,19 @@
 #include "Canvas.h"
 
-BEGIN_EVENT_TABLE(Canvas, wxWindow)
-  EVT_SIZE(Canvas::OnResize)
-  EVT_ERASE_BACKGROUND(Canvas::OnEraseBackground)
-  EVT_RIGHT_DOWN(Canvas::OnRightDown)
-  EVT_RIGHT_UP(Canvas::OnRightUp)
-  EVT_MOTION(Canvas::OnMouseMove)
-  EVT_MOUSEWHEEL(Canvas::OnWheel)
-END_EVENT_TABLE()
-
 Canvas::Canvas(wxWindow* parent, wxWindowID id)
   : wxWindow(parent, id), m_viewRegion{GetClientRect()}
 {
+  BindEvents();
+}
+
+void Canvas::BindEvents()
+{
+  Bind(wxEVT_SIZE, &Canvas::OnResize, this);
+  Bind(wxEVT_ERASE_BACKGROUND, &Canvas::OnEraseBackground, this);
+  Bind(wxEVT_RIGHT_DOWN, &Canvas::OnRightDown, this);
+  Bind(wxEVT_RIGHT_UP, &Canvas::OnRightUp, this);
+  Bind(wxEVT_MOTION, &Canvas::OnMouseMove, this);
+  Bind(wxEVT_MOUSEWHEEL, &Canvas::OnWheel, this);
 }
 
 double Canvas::GetXScaleFactor() const
@@ -80,11 +82,11 @@ void Canvas::OnMouseMove(wxMouseEvent& event)
 }
 void Canvas::OnWheel(wxMouseEvent& event)
 {
-  static constexpr double maxFactor = 2;
-  static constexpr double minFactor = 0.5;
+  static constexpr double maxFactor = 5;
+  static constexpr double minFactor = 0.80;
 
   SetCursor(wxCURSOR_MAGNIFIER);
-  const auto rot = event.GetWheelRotation() / GetScaleFactor();
+  const auto rot = event.GetWheelRotation();
   auto& box = m_viewRegion;
   const auto sf = GetScaleFactor();
 
@@ -93,6 +95,14 @@ void Canvas::OnWheel(wxMouseEvent& event)
   else if(rot > 0 && sf < maxFactor) box.Inflate(rot); // Big limit
 
   Refresh();
+}
+void Canvas::OnRequestAddMenu()
+{
+  wxLogMessage("Adding menu");
+}
+void Canvas::OnRequestDeleteMenu()
+{
+  wxLogMessage("Deleting menu");
 }
 
 void Canvas::RenderBackground(wxDC& dc)

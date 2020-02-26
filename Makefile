@@ -28,6 +28,7 @@ ifeq "${VERBOSE}" "1"
 	CXXFLAGS += -v
 endif
 
+.SECONDARY:
 .PHONY: default
 default: help
 
