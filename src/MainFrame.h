@@ -6,6 +6,7 @@
 #include "Canvas.h"
 #include "Configuration.h"
 #include "StatusBarEvent.h"
+#include "Defs.h"
 
 class MainFrame : public wxFrame
 {
@@ -14,25 +15,6 @@ class MainFrame : public wxFrame
       const wxSize& size = wxDefaultSize);
 
  private:
-
-  enum MainFrameMenuEvents
-  {
-    ID_NewCanvas,
-    ID_SaveCanvas,
-    ID_ExportCanvas,
-    ID_LoadCanvas,
-
-    ID_ResetWorkspace,
-    ID_LoadConfiguration,
-    ID_ResetConfiguration,
-    ID_ToggleWireColors,
-    ID_ToggleBooleanAlgebra,
-
-    ID_ToggleGrid,
-    ID_CheckLineGrid,
-    ID_CheckDotGrid
-  };
-
   wxAuiManager m_mgr;
 
   void SetupMenuBar();

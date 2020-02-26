@@ -2,9 +2,6 @@
 #define DEFS_H
 #include <wx/wx.h>
 extern wxColourDatabase* wxTheColourDatabase;
-enum WindowIDs
-{
-};
 #define CANVAS_BACKGROUND_COLOR wxTheColourDatabase->Find("CANVAS_BACKGROUND_COLOR")
 #define CANVAS_GRID_COLOR wxTheColourDatabase->Find("CANVAS_GRID_COLOR")
 #define WIRE_ON_COLOR wxTheColourDatabase->Find("WIRE_ON_COLOR")
