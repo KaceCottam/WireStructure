@@ -7,7 +7,9 @@ CanvasHolder::CanvasHolder(wxWindow* parent, wxWindowID id)
   SetSizer(sizer);
 
   wxSplitterWindow* oic = new wxSplitterWindow(this);
+  oic->SetWindowStyle(wxSP_3D|wxSP_LIVE_UPDATE);
   oic->SetSashGravity(0.25);
+  oic->SetMinimumPaneSize(100);
 
   Canvas* canvas = new Canvas(oic);
 
