@@ -3,25 +3,21 @@
 CanvasHolder::CanvasHolder(wxWindow* parent, wxWindowID id)
   : wxWindow{parent, id}
 {
-  wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
-  SetSizer(sizer);
+  m_mgr.SetManagedWindow(this);
 
-  wxSplitterWindow* oic = new wxSplitterWindow(this);
-  oic->SetWindowStyle(wxSP_3D|wxSP_LIVE_UPDATE);
-  oic->SetSashGravity(0.25);
-  oic->SetMinimumPaneSize(100);
+  Canvas* canvas = new Canvas(this);
 
-  Canvas* canvas = new Canvas(oic);
+  wxPanel* properties = new wxPanel(this, wxID_ANY, wxDefaultPosition, {300, 250});
+  wxPanel* toolbox = new wxPanel(this, wxID_ANY, wxDefaultPosition, {300, 250});
 
-  wxSplitterWindow* oi = new wxSplitterWindow(oic);
-  oi->SetSashGravity(0.5);
-  oi->SetMinimumPaneSize(300);
+  m_mgr.AddPane(canvas, wxCENTER);
+  m_mgr.AddPane(properties, wxRIGHT, "Properties");
+  m_mgr.AddPane(toolbox, wxRIGHT, "Toolbox");
 
-  wxStaticText* outputPanel = new wxStaticText(oi, wxID_ANY, "Outputs");
-  wxStaticText* inputPanel = new wxStaticText(oi, wxID_ANY, "Inputs");
+  m_mgr.Update();
+}
 
-  oi->SplitHorizontally(outputPanel, inputPanel);
-  oic->SplitVertically(oi, canvas);
-
-  sizer->Add(oic, 1, wxEXPAND|wxCENTER, 10);
+CanvasHolder::~CanvasHolder()
+{
+  m_mgr.UnInit();
 }

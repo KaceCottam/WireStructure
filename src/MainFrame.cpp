@@ -10,11 +10,6 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos,
 
   m_mgr.SetManagedWindow(this);
 
-  wxPanel* properties = new wxPanel(this, wxID_ANY);
-  properties->SetSize(300,250);
-  wxPanel* toolbox = new wxPanel(this, wxID_ANY);
-  toolbox->SetSize(300,250);
-
   m_notebookCenter = new wxAuiNotebook(this, wxID_FILE1);
   wxStaticText* helpText = new wxStaticText(m_notebookCenter, wxID_ANY,
       "Please go to 'File->New Canvas' in order to get started!");
@@ -23,8 +18,6 @@ MainFrame::MainFrame(const wxString& title, const wxPoint& pos,
   m_notebookCenter->SetArtProvider(art);
 
   m_mgr.AddPane(m_notebookCenter, wxCENTER, "Welcome Screen");
-  m_mgr.AddPane(properties, wxRIGHT, "Properties");
-  m_mgr.AddPane(toolbox, wxLEFT, "Toolbox");
 
   m_mgr.Update();
 }
@@ -84,14 +77,14 @@ void MainFrame::BindEvents()
   Bind(kcEVT_STATUS_BAR_UPDATE, &MainFrame::OnUpdateStatusBar, this);
   Bind(wxEVT_TIMER,
       [&](wxTimerEvent& WXUNUSED(event)){ SetStatusText("Ready!"); });
-  Bind(wxEVT_AUI_PANE_ACTIVATED, [&](wxAuiManagerEvent& event)
-    {
-      if(event.GetPane()->dock_direction == wxCENTER)
-      {
+  //Bind(wxEVT_AUI_PANE_ACTIVATED, [&](wxAuiManagerEvent& event)
+    //{
+      //if(event.GetPane()->dock_direction == wxCENTER)
+      //{
         // This event came from the notebook.
-        m_notebookCenter->GetCurrentPage()
-      }
-    });
+        //m_notebookCenter->GetCurrentPage();
+      //}
+    //});
 }
 
 void MainFrame::OnLoadConfiguration(wxCommandEvent& WXUNUSED(event))
