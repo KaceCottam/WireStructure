@@ -11,11 +11,9 @@ class GateHolder : public wxWindow
  private:
   bool m_selected = false;
   wxTextCtrl* m_labelText;
-  wxBitmap* m_bitmap = nullptr;
 
   void BindEvents();
 
-  void OnPaint(wxPaintEvent& event);
   void OnLeftDClick(wxMouseEvent& event);
   void OnMouseEnter(wxMouseEvent& event);
   void OnMouseLeave(wxMouseEvent& event);

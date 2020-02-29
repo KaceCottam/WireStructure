@@ -7,11 +7,13 @@ GateHolder::GateHolder(wxFrame* frame, wxWindowID id, const wxString& label)
 
 void GateHolder::BindEvents()
 {
+  Bind(wxEVT_PAINT, &GateHolder::OnPaint, this);
+  Bind(wxEVT_LEFT_DCLICK, &GateHolder::OnLeftDClick, this);
+  Bind(wxEVT_ENTER_WINDOW, &GateHolder::OnMouseEnter, this);
+  Bind(wxEVT_LEAVE_WINDOW, &GateHolder::OnMouseLeave, this);
+  Bind(wxEVT_CONTEXT_MENU, &GateHolder::OnMenu, this);
 }
 
-void  GateHolder::OnPaint(wxPaintEvent& event)
-{
-}
 void GateHolder::OnLeftDClick(wxMouseEvent& event)
 {
 }
