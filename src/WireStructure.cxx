@@ -17,7 +17,7 @@ bool WireStructure::OnInit()
       configStatus.Printf("Loaded configuration from \"%s\"!", args[1]);
     } else
     {
-      configStatus.Printf("Failed to load configuration from \"%s\", loading default configuration.", args[1]);
+    configStatus.Printf("Failed to load configuration from \"%s\", loading default configuration.", args[1]);
       Configuration::GetInstance().LoadDefaultConfiguration();
     }
   }
