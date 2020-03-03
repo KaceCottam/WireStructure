@@ -56,7 +56,7 @@ void Canvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 void Canvas::OnRightDown(wxMouseEvent& event)
 {
   CaptureMouse();
-  m_mouseClickedPlace = event.GetPosition();
+  m_mouseClickedPlace = event.GetPosition() * (1/GetScaleFactor());
   SetCursor(wxCURSOR_HAND);
 }
 void Canvas::OnRightUp(wxMouseEvent& WXUNUSED(event))
@@ -71,7 +71,7 @@ void Canvas::OnMouseMove(wxMouseEvent& event)
   if(m_mouseClickedPlace)
   {
     // offset region
-    auto mouseClickedPlace = event.GetPosition();
+    auto mouseClickedPlace = event.GetPosition() * (1/GetScaleFactor());
     auto posDelta = mouseClickedPlace - *m_mouseClickedPlace;
     m_viewRegion.Offset(-posDelta);
     m_mouseClickedPlace = mouseClickedPlace;
@@ -83,7 +83,7 @@ void Canvas::OnMouseMove(wxMouseEvent& event)
 void Canvas::OnWheel(wxMouseEvent& event)
 {
   static constexpr double maxFactor = 5;
-  static constexpr double minFactor = 0.80;
+  static constexpr double minFactor = 1.00;
 
   SetCursor(wxCURSOR_MAGNIFIER);
   const auto rot = event.GetWheelRotation();
@@ -111,10 +111,11 @@ void Canvas::RenderBackground(wxDC& dc)
   dc.SetPen(wxPen(CANVAS_GRID_COLOR, 2, wxPENSTYLE_SOLID));
 
   const auto [x1, y1] = m_viewRegion.GetTopLeft();
-  const auto [width, height] = GetClientSize();
-  const auto space = m_space*GetScaleFactor();
+  const auto [width, height] = GetClientSize() * GetScaleFactor();
+  const auto space = m_space;
 
   dc.SetLogicalOrigin(std::fmod(x1, space), std::fmod(y1, space));
+  dc.SetLogicalScale(GetXScaleFactor(), GetYScaleFactor());
 
   Freeze();
   dc.Clear();
