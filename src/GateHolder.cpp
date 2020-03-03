@@ -1,4 +1,4 @@
-#include "GateStructure.h"
+#include "GateHolder.h"
 
 GateHolder::GateHolder(wxFrame* frame, wxWindowID id, const wxString& label)
   : wxWindow{frame, id}, m_labelText{new wxTextCtrl(frame, id)}
@@ -7,7 +7,6 @@ GateHolder::GateHolder(wxFrame* frame, wxWindowID id, const wxString& label)
 
 void GateHolder::BindEvents()
 {
-  Bind(wxEVT_PAINT, &GateHolder::OnPaint, this);
   Bind(wxEVT_LEFT_DCLICK, &GateHolder::OnLeftDClick, this);
   Bind(wxEVT_ENTER_WINDOW, &GateHolder::OnMouseEnter, this);
   Bind(wxEVT_LEAVE_WINDOW, &GateHolder::OnMouseLeave, this);

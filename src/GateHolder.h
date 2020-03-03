@@ -1,5 +1,5 @@
-#ifndef GATESTRUCTURE_H
-#define GATESTRUCTURE_H
+#ifndef GATEHOLDER_H
+#define GATEHOLDER_H
 #include <wx/wx.h>
 #include "VisualGates.h"
 class GateHolder : public wxWindow
@@ -19,5 +19,5 @@ class GateHolder : public wxWindow
   void OnMouseLeave(wxMouseEvent& event);
   void OnMenu(wxContextMenuEvent& event);
 };
-#endif // ! GATESTRUCTURE_H
+#endif // ! GATEHOLDER_H
 
