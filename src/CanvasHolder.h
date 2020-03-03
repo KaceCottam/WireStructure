@@ -9,8 +9,11 @@ class CanvasHolder : public wxWindow
  public:
   explicit CanvasHolder(wxWindow* parent, wxWindowID id = wxID_ANY);
 
+  Canvas* GetCanvas();
+
  private:
   wxAuiManager m_mgr;
+  Canvas* m_canvas;
 
   ~CanvasHolder();
 };

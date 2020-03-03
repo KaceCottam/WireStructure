@@ -96,14 +96,6 @@ void Canvas::OnWheel(wxMouseEvent& event)
 
   Refresh();
 }
-void Canvas::OnRequestAddMenu()
-{
-  wxLogMessage("Adding menu");
-}
-void Canvas::OnRequestDeleteMenu()
-{
-  wxLogMessage("Deleting menu");
-}
 
 void Canvas::RenderBackground(wxDC& dc)
 {

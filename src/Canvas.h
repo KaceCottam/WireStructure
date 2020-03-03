@@ -35,8 +35,6 @@ class Canvas : public wxWindow
   void OnRightUp(wxMouseEvent& event);
   void OnMouseMove(wxMouseEvent& event);
   void OnWheel(wxMouseEvent& event);
-  void OnRequestAddMenu();
-  void OnRequestDeleteMenu();
 
   void RenderBackground(wxDC& dc);
   void Render(wxDC& dc);
