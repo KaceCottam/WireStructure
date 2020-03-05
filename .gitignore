@@ -3,3 +3,5 @@ build
 WireStructure
 include/
 backs
+node_modules
+package-lock.json
