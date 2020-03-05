@@ -33,6 +33,10 @@ double Canvas::GetScaleFactor() const
 {
   return GetXScaleFactor();
 }
+wxPoint Canvas::SnapToGrid(const wxPoint& point) const
+{
+  return {point.x % m_space, point.y % m_space};
+}
 wxPoint Canvas::RegionToClient(const wxPoint& point) const
 {
   return point * GetScaleFactor() + m_viewRegion.GetTopLeft();

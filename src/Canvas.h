@@ -26,6 +26,7 @@ class Canvas : public wxWindow
   double GetXScaleFactor() const;
   double GetYScaleFactor() const;
   double GetScaleFactor() const;
+  wxPoint SnapToGrid(const wxPoint&) const;
   wxPoint RegionToClient(const wxPoint&) const;
   wxPoint ClientToRegion(const wxPoint&) const;
 
