@@ -1,0 +1,46 @@
+@startuml
+
+skinparam shadowing false
+skinparam defaultFontSize 18
+skinparam state {
+  BorderColor black
+  BackgroundColor white
+}
+
+title Roadmap
+
+state V1 as "V1.0 Drawable Circuits"
+V1 : Drawing of circuit diagrams, with some basic gates, multiplexers.
+V1 : The goal at this point is to be able to draw a MIPS architecture diagram, like as presented in the picture below.
+V1 : <img:http://www.cise.ufl.edu/~mssz/CompOrg/Fig4.16-MIPS-MCDP-Diagr.gif>
+
+state V11 as "V1.1 Variable Inputs"
+V11 : Variable-input gates for ""AND"", ""OR"", ""NAND"", ""XOR"", ""XNOR"", ""MULTIPLEXER"", etc.
+
+state V12 as "V1.2 Logic Circuits"
+V12 : Adding on to drawing: We can now simulate basic on and off functionality through wires.
+V12 : We should be able to color wires based on their state (if wanted) and we should be able to generate input sequences through manual activation.
+V12 : The goal at this point is to simulate basic logic circuits that use single-bit wires.
+
+state V13 as "V1.3 Input Modeling"
+V13 : Generate input sequences using function-based activation (such as a waveform).
+
+state V14 as "V1.4 Boolean Algebra Rendering"
+V14 : See resulting boolean algebra at the output.
+V14 : Insert a sequence of gates using boolean algebra.
+
+state V15 as "V1.5 Computer Architecture"
+V15 : We should be able to make wires with multiple bits, and split those wires.
+V15 : The goal at this point is to fully simulate a MIPS architecture diagram.
+
+state V2 as "V2.0 More than Logic"
+V2 : We should be able to add other circuit components based in physics, as well as measure voltage, current, etc.
+
+V1 --> V11
+V11 --> V12
+V12 --> V13
+V13 --> V14
+V14 --> V15
+V15 --> V2
+
+@enduml
