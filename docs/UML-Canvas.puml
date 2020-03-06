@@ -1,0 +1,94 @@
+@startuml
+
+skinparam shadowing false
+skinparam ClassAttributeIconSize 0
+skinparam Class {
+  BorderColor blue
+  BackgroundColor white
+}
+skinparam defaultFontSize 18
+hide circle
+title Canvas Structure
+abstract class Gate <<abstract>>{
+  Gate()
+  Gate(...)
+
+  +{static}Create(...) Gate
+
+  #List<Gate> inputs
+  #List<Gate> outputs
+
+  +AddInput(Gate) void
+  +AddOutput(Gate) void
+
+  +Connect(Gate to) void
+  +{static}Connect(Gate from, Gate to) void
+  +{static}Connect(List<Gate> gates) void
+  +Disconnect(Gate to) void
+  +{static}Disconnect(Gate from, Gate to) void
+  +{static}Disconnect(List<Gate> gates) void
+
+  +{abstract}Render(wxDC) void
+  ~{abstract}GetAnchorPoints() List<wxPoint>
+
+  #RenderAnchorPoints() void
+
+  #OnMouseEnter(wxMouseEvent) void
+  #OnMouseLeave(wxMouseEvent) void
+  #OnLeftDown(wxMouseEvent) void
+  #OnLeftUp(wxMouseEvent) void
+  #OnWindowUpdate(wxIdleEvent) void
+}
+
+Gate "2..8" ..() "1" NotGate     : 1 in, 1 out
+Gate "3..8" ..() "1" AndGate     : 2-7 in, 1 out
+Gate "3..8" ..() "1" OrGate      : 2-7 in, 1 out
+Gate "3..8" ..() "1" XorGate     : 2-7 in, 1 out
+Gate "3..8" ..() "1" NorGate     : 2-7 in, 1 out
+Gate "3..8" ..() "1" XnorGate    : 2-7 in, 1 out
+Gate "1..8" ..() "1" Input       : 0 in, 1-8 out
+Gate "1"    ..() "1" Output      : 1 in, 0 out
+Gate "4..n" ..() "1" Multiplexer : 3-n in, 1 out
+
+class GateLabel{
+  +String m_text
+
+  GateLabel(String defaultText)
+  GateLabel(String defaultText, ...)
+
+  +{static}Create(String defaultText, ...)
+
+  +OnChangeLabel(String text) void
+}
+
+GateHolder *-- "1" Gate
+GateHolder *-- "1" GateLabel
+
+class Canvas{
+  +List<Gate> m_children
+
+  Canvas()
+  Canvas(...)
+  +{static}Create(...) Canvas
+
+  +AddGate(Gate, wxPoint pos)
+}
+  
+Canvas o-- "n" GateHolder
+
+class CanvasHolder{
+  +Canvas* m_canvas
+  CanvasHolder()
+  CanvasHolder(...)
+  +Create(...) CanvasHolder
+  -~CanvasHolder()
+}
+CanvasHolder *-- "1" Canvas
+
+Gate --|> wxWindow
+GateHolder --|> wxWindow
+GateLabel --|> wxWindow
+Canvas --|> wxWindow
+CanvasHolder --|> wxWindow
+
+@enduml

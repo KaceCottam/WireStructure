@@ -48,7 +48,9 @@ wxPoint Canvas::ClientToRegion(const wxPoint& point) const
 
 void Canvas::OnResize(wxSizeEvent& event)
 {
-  m_viewRegion = {GetClientRect()};
+  auto crect = GetClientRect();
+  crect.Offset(m_viewRegion.GetPosition());
+  m_viewRegion = {crect};
   Refresh();
 }
 void Canvas::OnEraseBackground(wxEraseEvent& WXUNUSED(event))

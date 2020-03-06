@@ -14,7 +14,7 @@ class Configuration
 
   void LoadDefaultConfiguration()
   {
-    wxTheColourDatabase->AddColour("CANVAS_BACKGROUND_COLOR" , wxSystemSettings::GetColour(wxSYS_COLOUR_DESKTOP));
+    wxTheColourDatabase->AddColour("CANVAS_BACKGROUND_COLOR" , wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
     wxTheColourDatabase->AddColour("CANVAS_GRID_COLOR" , wxSystemSettings::GetColour(wxSYS_COLOUR_INFOBK));
     wxTheColourDatabase->AddColour("WIRE_ON_COLOR" , wxSystemSettings::GetColour(wxSYS_COLOUR_3DHIGHLIGHT));
     wxTheColourDatabase->AddColour("WIRE_OFF_COLOR" , wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW));
