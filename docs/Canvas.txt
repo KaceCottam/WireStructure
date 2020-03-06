@@ -1,5 +1,4 @@
 @startuml
-
 skinparam shadowing false
 skinparam ClassAttributeIconSize 0
 skinparam Class {
@@ -8,7 +7,9 @@ skinparam Class {
 }
 skinparam defaultFontSize 18
 hide circle
+
 title Canvas Structure
+
 abstract class Gate <<abstract>>{
   Gate()
   Gate(...)
@@ -40,15 +41,15 @@ abstract class Gate <<abstract>>{
   #OnWindowUpdate(wxIdleEvent) void
 }
 
-Gate "2..8" ..() "1" NotGate     : 1 in, 1 out
-Gate "3..8" ..() "1" AndGate     : 2-7 in, 1 out
-Gate "3..8" ..() "1" OrGate      : 2-7 in, 1 out
-Gate "3..8" ..() "1" XorGate     : 2-7 in, 1 out
-Gate "3..8" ..() "1" NorGate     : 2-7 in, 1 out
-Gate "3..8" ..() "1" XnorGate    : 2-7 in, 1 out
-Gate "1..8" ..() "1" Input       : 0 in, 1-8 out
-Gate "1"    ..() "1" Output      : 1 in, 0 out
-Gate "4..n" ..() "1" Multiplexer : 3-n in, 1 out
+Gate "2..8" ..() "1" Not
+Gate "3..8" ..() "1" And
+Gate "3..8" ..() "1" Or
+Gate "3..8" ..() "1" Xor
+Gate "3..8" ..() "1" Nor
+Gate "3..8" ..() "1" Xnor
+Gate "1..8" ..() "1" Input
+Gate "1"    ..() "1" Output
+Gate "4..n" ..() "1" Mux
 
 class GateLabel{
   +String m_text
@@ -90,5 +91,4 @@ GateHolder --|> wxWindow
 GateLabel --|> wxWindow
 Canvas --|> wxWindow
 CanvasHolder --|> wxWindow
-
 @enduml
