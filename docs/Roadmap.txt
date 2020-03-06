@@ -12,7 +12,7 @@ title Roadmap
 state V1 as "V1.0 Drawable Circuits"
 V1 : Drawing of circuit diagrams, with some basic gates, multiplexers.
 V1 : The goal at this point is to be able to draw a MIPS architecture diagram, like as presented in the picture below.
-V1 : <img:http://www.cise.ufl.edu/~mssz/CompOrg/Fig4.16-MIPS-MCDP-Diagr.gif>
+V1 : <img:https://mhaseebmlk.files.wordpress.com/2016/01/f0519.gif>
 
 state V11 as "V1.1 Variable Inputs"
 V11 : Variable-input gates for ""AND"", ""OR"", ""NAND"", ""XOR"", ""XNOR"", ""MULTIPLEXER"", etc.
