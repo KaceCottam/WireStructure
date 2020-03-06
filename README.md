@@ -98,5 +98,5 @@ The interface has customizable color schemes.
 ![Light interface](./docs/interface-solarized-light.png)
 
 [docs/UML-Canvas.md](docs/UML-Canvas.md)
-![Canvas Structure](http://www.plantuml.com/plantuml/proxy?src=https://raw.github.com/KaceCottam/WireStructure/master/docs/UML-Canvas.pumd)
+![Canvas Structure](http://www.plantuml.com/plantuml/proxy?src=https://raw.github.com/KaceCottam/WireStructure/master/docs/UML-Canvas.txt)
 
