@@ -5,53 +5,8 @@
             "-c",
             "-std=c++17",
             "-g",
-            "-pthread",
-            "build/StatusBarEvent.o",
-            "build/MainFrame.o",
-            "build/Configuration.o",
-            "build/Canvas.o",
-            "-I/usr/local/lib/wx/include/gtk3-unicode-3.0",
-            "-I/usr/local/include/wx-3.0",
-            "-D_FILE_OFFSET_BITS=64",
-            "-DWXUSINGDLL",
-            "-D__WXGTK__",
-            "-pthread",
-            "-pthread",
-            "-o",
-            "bin/WireStructure",
-            "src/WireStructure.cxx"
-        ],
-        "directory": "/home/kc/Dev/WireStructure",
-        "file": "src/WireStructure.cxx"
-    },
-    {
-        "arguments": [
-            "g++",
-            "-c",
-            "-std=c++17",
-            "-g",
-            "-I/usr/local/lib/wx/include/gtk3-unicode-3.0",
-            "-I/usr/local/include/wx-3.0",
-            "-D_FILE_OFFSET_BITS=64",
-            "-DWXUSINGDLL",
-            "-D__WXGTK__",
-            "-pthread",
-            "-pthread",
-            "-o",
-            "build/MainFrame.o",
-            "src/MainFrame.cpp"
-        ],
-        "directory": "/home/kc/Dev/WireStructure",
-        "file": "src/MainFrame.cpp"
-    },
-    {
-        "arguments": [
-            "g++",
-            "-c",
-            "-std=c++17",
-            "-g",
-            "-I/usr/local/lib/wx/include/gtk3-unicode-3.0",
-            "-I/usr/local/include/wx-3.0",
+            "-I/usr/lib/wx/include/gtk3-unicode-3.1",
+            "-I/usr/include/wx-3.1",
             "-D_FILE_OFFSET_BITS=64",
             "-DWXUSINGDLL",
             "-D__WXGTK__",
@@ -61,7 +16,7 @@
             "build/StatusBarEvent.o",
             "src/StatusBarEvent.cpp"
         ],
-        "directory": "/home/kc/Dev/WireStructure",
+        "directory": "/home/kace/Dev/WireStructure",
         "file": "src/StatusBarEvent.cpp"
     },
     {
@@ -70,8 +25,56 @@
             "-c",
             "-std=c++17",
             "-g",
-            "-I/usr/local/lib/wx/include/gtk3-unicode-3.0",
-            "-I/usr/local/include/wx-3.0",
+            "-pthread",
+            "build/Canvas.o",
+            "build/CanvasHolder.o",
+            "build/Configuration.o",
+            "build/GateHolder.o",
+            "build/MainFrame.o",
+            "build/StatusBarEvent.o",
+            "build/VisualGates.o",
+            "-I/usr/lib/wx/include/gtk3-unicode-3.1",
+            "-I/usr/include/wx-3.1",
+            "-D_FILE_OFFSET_BITS=64",
+            "-DWXUSINGDLL",
+            "-D__WXGTK__",
+            "-pthread",
+            "-pthread",
+            "-o",
+            "bin/WireStructure",
+            "src/WireStructure.cxx"
+        ],
+        "directory": "/home/kace/Dev/WireStructure",
+        "file": "src/WireStructure.cxx"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-g",
+            "-I/usr/lib/wx/include/gtk3-unicode-3.1",
+            "-I/usr/include/wx-3.1",
+            "-D_FILE_OFFSET_BITS=64",
+            "-DWXUSINGDLL",
+            "-D__WXGTK__",
+            "-pthread",
+            "-pthread",
+            "-o",
+            "build/VisualGates.o",
+            "src/VisualGates.cpp"
+        ],
+        "directory": "/home/kace/Dev/WireStructure",
+        "file": "src/VisualGates.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-g",
+            "-I/usr/lib/wx/include/gtk3-unicode-3.1",
+            "-I/usr/include/wx-3.1",
             "-D_FILE_OFFSET_BITS=64",
             "-DWXUSINGDLL",
             "-D__WXGTK__",
@@ -81,7 +84,7 @@
             "build/Canvas.o",
             "src/Canvas.cpp"
         ],
-        "directory": "/home/kc/Dev/WireStructure",
+        "directory": "/home/kace/Dev/WireStructure",
         "file": "src/Canvas.cpp"
     },
     {
@@ -90,8 +93,8 @@
             "-c",
             "-std=c++17",
             "-g",
-            "-I/usr/local/lib/wx/include/gtk3-unicode-3.0",
-            "-I/usr/local/include/wx-3.0",
+            "-I/usr/lib/wx/include/gtk3-unicode-3.1",
+            "-I/usr/include/wx-3.1",
             "-D_FILE_OFFSET_BITS=64",
             "-DWXUSINGDLL",
             "-D__WXGTK__",
@@ -101,7 +104,67 @@
             "build/Configuration.o",
             "src/Configuration.cpp"
         ],
-        "directory": "/home/kc/Dev/WireStructure",
+        "directory": "/home/kace/Dev/WireStructure",
         "file": "src/Configuration.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-g",
+            "-I/usr/lib/wx/include/gtk3-unicode-3.1",
+            "-I/usr/include/wx-3.1",
+            "-D_FILE_OFFSET_BITS=64",
+            "-DWXUSINGDLL",
+            "-D__WXGTK__",
+            "-pthread",
+            "-pthread",
+            "-o",
+            "build/MainFrame.o",
+            "src/MainFrame.cpp"
+        ],
+        "directory": "/home/kace/Dev/WireStructure",
+        "file": "src/MainFrame.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-g",
+            "-I/usr/lib/wx/include/gtk3-unicode-3.1",
+            "-I/usr/include/wx-3.1",
+            "-D_FILE_OFFSET_BITS=64",
+            "-DWXUSINGDLL",
+            "-D__WXGTK__",
+            "-pthread",
+            "-pthread",
+            "-o",
+            "build/CanvasHolder.o",
+            "src/CanvasHolder.cpp"
+        ],
+        "directory": "/home/kace/Dev/WireStructure",
+        "file": "src/CanvasHolder.cpp"
+    },
+    {
+        "arguments": [
+            "g++",
+            "-c",
+            "-std=c++17",
+            "-g",
+            "-I/usr/lib/wx/include/gtk3-unicode-3.1",
+            "-I/usr/include/wx-3.1",
+            "-D_FILE_OFFSET_BITS=64",
+            "-DWXUSINGDLL",
+            "-D__WXGTK__",
+            "-pthread",
+            "-pthread",
+            "-o",
+            "build/GateHolder.o",
+            "src/GateHolder.cpp"
+        ],
+        "directory": "/home/kace/Dev/WireStructure",
+        "file": "src/GateHolder.cpp"
     }
 ]

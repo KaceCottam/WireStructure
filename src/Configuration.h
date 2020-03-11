@@ -38,9 +38,11 @@ class Configuration
       wxString key, value;
       key = line.BeforeFirst('=', &value);
       if(value.Len() != 7) return false;
-      int r = wxHexToDec(value(1, 2));
-      int g = wxHexToDec(value(3, 4));
-      int b = wxHexToDec(value(5, 6));
+      // TODO add sanity checks here
+      unsigned long r, g, b;
+      value.Mid(1, 2).ToULong(&r, 16);
+      value.Mid(3, 2).ToULong(&g, 16);
+      value.Mid(5, 2).ToULong(&b, 16);
       wxTheColourDatabase->AddColour(key, wxColour(r, g, b));
     }
     return true;
